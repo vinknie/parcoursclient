@@ -57,4 +57,10 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+
+    public function createUser(){
+        
+        return view('createUser');
+    }
 }
