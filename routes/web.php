@@ -31,6 +31,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/createCategory', [CategoryController::class,'createCategory'])->name('createCategory');
     Route::get('/dashboard/category', [CategoryController::class,'category'])->name('category');
     Route::get('/dashboard/verbatim', [CategoryController::class,'verbatim'])->name('verbatim');
+    Route::post('/dashboard/createCategory/createCat', [CategoryController::class,'createCat']);
+    Route::post('/dashboard/createCategory/createVerba', [CategoryController::class,'createVerba']);
 });
 
 
