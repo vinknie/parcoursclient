@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="grid grid-rows-3 grid-flow-col gap-4">
-    <div class="row-span-6 ">
+    <div class="row-span-6 text-3xl">
         <h1>Créer une étape</h1>
     @if (\Session::has('success'))
       
@@ -69,11 +69,6 @@
             <button id="btncreate" type="submit" class="btn btn-success">Modifier</button>    
         </form>
     </div>
-  </div>
-
-
-
-
-
+</div>
 
 @endsection
