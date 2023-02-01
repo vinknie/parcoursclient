@@ -72,10 +72,7 @@
                                 <a class="nav-link" href="#">About</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Portfolio</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Contact</a>
+                                <a class="nav-link" href="{{ route('profile.edit') }}">Profil</a>
                             </li>
                             {{-- logout button --}}
                             <li class="nav-item">

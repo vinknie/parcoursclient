@@ -59,8 +59,9 @@ class ProfileController extends Controller
     }
 
 
-    public function createUser(){
-        
+    public function createUser()
+    {
+
         return view('createUser');
     }
 }
