@@ -16,7 +16,6 @@
 </head>
 
 <body>
-
     <div class="wrapper d-flex align-items-stretch">
         <nav id="sidebar">
             <div class="p-4 pt-5">
@@ -79,6 +78,15 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Contact</a>
+                            </li>
+                            {{-- logout button --}}
+                            <li class="nav-item">
+                                <form action="{{ route('logout') }}" method="post">
+                                    @csrf
+                                    <button type="submit" class="nav-link bg-transparent border-0">
+                                        {{ __('Log Out') }}
+                                    </button>
+                                </form>
                             </li>
                         </ul>
                     </div>
