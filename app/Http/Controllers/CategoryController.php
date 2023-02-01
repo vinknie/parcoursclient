@@ -15,7 +15,9 @@ class CategoryController extends Controller
      */
     public function createCategory()
     {
-       return view('createCategory');
+        $getCategory = Category::all();
+
+       return view('createCategory', compact('getCategory'));
     }
 
     public function category()
@@ -28,4 +30,32 @@ class CategoryController extends Controller
        return view('verbatim');
     }
 
+    public function createCat(Request $request){
+        $existingCategory = Category::where('title', $request->title)->first();
+        if ($existingCategory) {
+            return redirect()->back()->with('error', 'Une étape avec ce titre existe déjà');
+        }
+
+        $category = new Category();
+        $category->title = $request->title;
+
+        $category->save();
+
+        return redirect()->back()->with('success', 'L\'étape a bien été créé'); 
+    }
+
+    public function CreateVerba(Request $request){
+        $existingVerba = Verbatim::where('verbatim',$request->verbatim)->first();
+        if ($existingVerba) {
+            return redirect()->back()->with('error1', 'Un verbatim avec cette intitulé existe déjà');
+        }
+
+        $verba = new Verbatim();
+        $verba->id_category = $request->id_category;
+        $verba->verbatim = $request->verbatim;
+
+        $verba->save();
+
+        return redirect()->back()->with('success1', 'L\'étape a bien été créé'); 
+    }
 }
