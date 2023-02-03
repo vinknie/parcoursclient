@@ -13,6 +13,9 @@
 
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    {{-- manual javascript --}}
+    <script src="{{ asset('js/app.js') }}" defer></script>
     @vite('resources/css/app.css')
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
