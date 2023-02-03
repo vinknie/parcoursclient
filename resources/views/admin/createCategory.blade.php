@@ -29,7 +29,7 @@
                 <label class="labels">Titre de l'étape</label>
                 <input class="form-control" type="text" name="title" required="">
             
-            <button id="btncreate" type="submit" class="btn btn-success">Modifier</button>    
+            <button id="btncreate" type="submit" class="btn btn-success">Créer</button>    
         </form>
     </div>
     <div class="row-span-6 ">
@@ -66,7 +66,7 @@
                 <label class="labels">Intitulé du verbatim</label>
                 <input class="form-control" type="text" name="verbatim" required="">
             
-            <button id="btncreate" type="submit" class="btn btn-success">Modifier</button>    
+            <button id="btncreate" type="submit" class="btn btn-success">Créer</button>    
         </form>
     </div>
 </div>
