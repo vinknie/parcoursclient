@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -62,7 +64,8 @@ class ProfileController extends Controller
 
     public function createUser(){
         
-        return view('admin.createUser');
+        $getCategory = Category::all();
+        return view('admin.createUser' ,compact('getCategory'));
 
     }
 }
