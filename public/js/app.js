@@ -1,11 +1,11 @@
 // toggle submenu sidebar
 function displayPageSubmenu() {
   var pageSubmenu = document.getElementById("pageSubmenu");
-  if (pageSubmenu.style.display === "block") {
-    pageSubmenu.style.display = "none";
+  if (pageSubmenu.classList.contains('block')) {
+    pageSubmenu.classList.add('hidden');
   } else {
-    pageSubmenu.style.display = "block";
-    pageSubmenu.classList.remove('collapse')
+    pageSubmenu.classList.add('block');
+    pageSubmenu.classList.remove('collapse');
   }
 }
 
@@ -13,5 +13,3 @@ function displayPageSubmenu() {
 document.querySelector("a.dropdown-toggle").addEventListener("click", function() {
   displayPageSubmenu();
 });
-
-console.log('hi')
