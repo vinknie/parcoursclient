@@ -32,13 +32,15 @@ class CategoryController extends Controller
                 ->get();
 
         $noCategoryCount = Verbatim::whereNull('id_category')->count();
+        $getCategory = Category::all();
 
-    return view('admin.category', compact('categories','noCategoryCount'));
+    return view('admin.category', compact('categories','noCategoryCount','getCategory'));
     }
 
     public function verbatim()
     {
-       return view('admin.verbatim');
+        $getCategory = Category::all();
+       return view('admin.verbatim',compact('getCategory'));
     }
 
     public function createCat(Request $request){
@@ -75,8 +77,9 @@ class CategoryController extends Controller
 
         $getverbatim = DB::select('select id_verbatim ,verbatim from verbatim where id_category =' .$id_category);
 
+        $getCategory = Category::all();
 
-        return view('admin.category', compact('getcategory','getverbatim'));
+        return view('admin.category', compact('getcategory','getverbatim','getCategory'));
     }
 
     public function updateCat(Request $request,$id_category){

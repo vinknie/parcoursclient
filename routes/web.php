@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NoteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,9 +21,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class,'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -36,10 +37,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/category/editcategory/{id_category}',[CategoryController::class,'editCategory'])->name('admin.editCategory');
     Route::post('/dashboard/category/updatecategory/{id_category}',[CategoryController::class,'updateCat'])->name('admin.updateCat');
     Route::post('/dashboard/category/updateVerbatim',[CategoryController::class,'updateVerba'])->name('admin.updateVerba');
-
     Route::get('/dashboard/category/editverbatim',[CategoryController::class,'editVerbatimWithoutCat'])->name('admin.verbatimsWithoutCategory');
-
     Route::post('/dashboard/category/updateVerbatimWithoutCat',[CategoryController::class,'updateVerbatimWithoutCat'])->name('admin.updateVerbatimWithoutCat');
+
+    Route::get('/dashboard/note/{id_category}',[NoteController::class,'show'])->name('admin.noteVerba');
 });
 
 

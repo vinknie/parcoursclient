@@ -33,8 +33,15 @@
                         <a href="{{ route('admin.category') }}">Liste des catégories et des verbatims</a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.verbatim') }}">Noter les verbatims</a>
-                    </li>
+                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Noter les verbatim</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu">
+                          @foreach($getCategory as $category)
+                          <li>
+                            <a href="{{ route('admin.noteVerba',['id_category' => $category->id_category]) }}">{{ $category->title }}</a>
+                          </li>
+                          @endforeach
+                        </ul>
+                      </li>
                 </ul>
 
                 <div class="footer">
