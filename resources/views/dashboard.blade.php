@@ -17,7 +17,9 @@
     <div class="wrapper d-flex align-items-stretch">
         <nav id="sidebar">
             <div class="p-4 pt-5">
-                <a href="#" class="img logo rounded-circle mb-5" style=""></a>
+                <a href="{{ route('profile.edit') }}" class="img logo rounded-circle mb-5"
+                    style="background: url({{ asset('images/admin.jpg') }}) left top / cover no-repeat">
+                </a>
                 <ul class="list-unstyled components mb-5">
                     <li>
                         <a href="{{ route('createUser') }}">Créer un utilisateur</a>
@@ -38,8 +40,7 @@
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                         Copyright &copy;<script>
                             document.write(new Date().getFullYear());
-                        </script> All rights reserved | This template is made with <i class="icon-heart"
-                            aria-hidden="true"></i> by <a href="" target="_blank">Colorlib.com</a>
+                        </script> All rights reserved
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                     </p>
                 </div>
