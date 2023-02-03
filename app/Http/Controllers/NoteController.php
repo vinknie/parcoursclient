@@ -15,6 +15,8 @@ class NoteController extends Controller
         $category = Category::where('id_category', $id_category)->first();
         $getCategory = Category::all();
 
-        return view('admin.noteVerba', compact('category','getCategory'));
+        $getverbatim = DB::select('select id_verbatim ,verbatim, positif , neutre , negatif from verbatim where id_category =' . $id_category);
+
+        return view('admin.noteVerba', compact('category','getCategory','getverbatim'));
     }
 }
