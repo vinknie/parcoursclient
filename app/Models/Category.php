@@ -14,4 +14,9 @@ class Category extends Model
 
     protected $fillable =['title'];
 
+
+    public function verbatim(){
+        return $this->hasMany('App\Models\Verbatim');
+    }
+
 }

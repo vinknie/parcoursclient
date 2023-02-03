@@ -59,9 +59,13 @@ class ProfileController extends Controller
     }
 
 
+
     public function createUser()
     {
 
-        return view('createUser');
+        $getCategory = Category::all();
+        return view('admin.createUser', compact('getCategory'));
+
+        return view('admin.createUser');
     }
 }
