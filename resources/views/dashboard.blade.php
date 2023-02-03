@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     @vite('resources/css/app.css')
@@ -20,27 +22,26 @@
                 <a href="#" class="img logo rounded-circle mb-5" style=""></a>
                 <ul class="list-unstyled components mb-5">
                     <li>
-                        <a href="{{ route('createUser') }}">Créer un utilisateur</a>
+                        <a href="{{ route('admin.createUser') }}">Créer un utilisateur</a>
                     </li>
                     <li>
-                        <a href="{{ route('createCategory') }}">Créer les catégories et les verbatims</a>
+                        <a href="{{ route('admin.createCategory') }}">Créer les catégories et les verbatims</a>
                     </li>
                     <li>
-                        <a href="{{ route('category') }}">Liste des catégories et des verbatims</a>
+                        <a href="{{ route('admin.category') }}">Liste des catégories et des verbatims</a>
                     </li>
                     <li>
-                        <a href="{{ route('verbatim') }}">Noter les verbatims</a>
+                        <a href="{{ route('admin.verbatim') }}">Noter les verbatims</a>
                     </li>
                 </ul>
 
                 <div class="footer">
                     <p>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        
                         Copyright &copy;<script>
                             document.write(new Date().getFullYear());
-                        </script> All rights reserved | This template is made with <i class="icon-heart"
-                            aria-hidden="true"></i> by <a href="" target="_blank">Colorlib.com</a>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        </script> All rights reserved | Prij
+                        
                     </p>
                 </div>
 
