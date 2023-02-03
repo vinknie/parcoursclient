@@ -19,7 +19,9 @@
     <div class="wrapper d-flex align-items-stretch">
         <nav id="sidebar">
             <div class="p-4 pt-5">
-                <a href="#" class="img logo rounded-circle mb-5" style=""></a>
+                <a href="{{ route('profile.edit') }}" class="img logo rounded-circle mb-5"
+                    style="background: url({{ asset('images/admin.jpg') }}) left top / cover no-repeat">
+                </a>
                 <ul class="list-unstyled components mb-5">
                     <li>
                         <a href="{{ route('admin.createUser') }}">Créer un utilisateur</a>
@@ -41,7 +43,6 @@
                         Copyright &copy;<script>
                             document.write(new Date().getFullYear());
                         </script> All rights reserved | Prij
-                        
                     </p>
                 </div>
 
