@@ -17,29 +17,19 @@
                         <a href="{{ route('admin.category') }}">Liste des catégories et des verbatims</a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.verbatim') }}">Noter les verbatims</a>
-                    </li>
-
-                    <li>
-                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false"
-                            class="dropdown-toggle">Pages</a>
+                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Noter les verbatim</a>
                         <ul class="collapse list-unstyled" id="pageSubmenu">
-                            <li>
-                                <a href="#">Page 1</a>
-                            </li>
-                            <li>
-                                <a href="#">Page 2</a>
-                            </li>
-                            <li>
-                                <a href="#">Page 3</a>
-                            </li>
+                          @foreach($getCategory as $category)
+                          <li>
+                            <a href="{{ route('admin.noteVerba',['id_category' => $category->id_category]) }}">{{ $category->title }}</a>
+                          </li>
+                          @endforeach
                         </ul>
-                    </li>
+                      </li>
                 </ul>
 
                 <div class="footer">
                     <p>
-
                         Copyright &copy;<script>
                             document.write(new Date().getFullYear());
                         </script> All rights reserved | Prij
