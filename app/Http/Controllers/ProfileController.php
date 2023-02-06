@@ -21,8 +21,10 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $getCategory = Category::all();
+
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $request->user(), 'getCategory' => $getCategory
         ]);
     }
 
@@ -52,6 +54,12 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+
+        // admin account cant be deleted
+        if ($user['role'] === 'admin') {
+            return redirect()->back()->with('status', 'user-not-deleted');
+        };
+
         Auth::logout();
         $user->delete();
         $request->session()->invalidate();
@@ -73,8 +81,6 @@ class ProfileController extends Controller
             'name'      => 'required|max:255',
             'email'     => 'required|max:255|unique:users'
         ]);
-
-
 
         $password = Str::random(8);
 
