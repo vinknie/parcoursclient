@@ -9,30 +9,52 @@
                 style="background: url({{ asset('images/admin.jpg') }}) left center / cover no-repeat">
             </a>
             <ul class="divide-y divide-solid divide-slate-600">
+
+
                 @if(Auth::user()->role == 'admin')
-                <li class="py-4">
-                    <a href="{{ route('admin.createUser') }}">Créer un utilisateur</a>
+                <li class="py-2">
+                    <x-responsive-nav-link :href="route('admin.createUser')"
+                        :active="request()->routeIs('admin.createUser')">
+                        {{ __('Créer un utilisateur') }}
+                    </x-responsive-nav-link>
+                    @endif
+                </li>
+
+                <li class="py-2">
+                    <x-responsive-nav-link :href="route('admin.createCategory')"
+                        :active="request()->routeIs('admin.createCategory')">
+                        {{ __('Créer les catégories et les verbatims') }}
+                    </x-responsive-nav-link>
+                </li>
+
+                <li class="py-2">
+                    <x-responsive-nav-link :href="route('admin.category')"
+                        :active="request()->routeIs('admin.category')">
+                        {{ __('Liste des catégories et des verbatims') }}
+                    </x-responsive-nav-link>
+                </li>
+
+                <li class="py-2">
+                    @if (Route::currentRouteNamed(null) || str_contains(Route::currentRouteName(),'note'))
+                    <x-responsive-nav-link href="#pageSubmenu" :active=true data-toggle="collapse" aria-expanded="false"
+                        class="dropdown-toggle">
+                        {{ __('Noter les verbatim') }}
+                    </x-responsive-nav-link>
+                    @else
+                    <x-responsive-nav-link href="#pageSubmenu" :active="false" data-toggle="collapse"
+                        aria-expanded="false" class="dropdown-toggle">
+                        {{ __('Noter les verbatim') }}
+                    </x-responsive-nav-link>
                 </li>
                 @endif
-                <li class="py-4">
-                    <a href="{{ route('admin.createCategory') }}">Créer les catégories et les verbatims</a>
-                </li>
-                <li class="py-4">
-                    <a href="{{ route('admin.category') }}">Liste des catégories et des verbatims</a>
-                </li>
-                <li class="py-4">
-                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Noter
-                        les verbatim
-                    </a>
-                    <ul class="collapse list-unstyled" id="pageSubmenu">
-                        @foreach($getCategory as $category)
-                        <li class="py-4 px-2 text-white">
-                            <a href="{{ route('admin.noteVerba',['id_category' => $category->id_category]) }}">{{
-                                $category->title }}</a>
-                        </li>
-                        @endforeach
-                    </ul>
-                </li>
+                <ul class="collapse list-unstyled" id="pageSubmenu">
+                    @foreach($getCategory as $category)
+                    <li class="py-2 px-2 text-white">
+                        <a href="{{ route('admin.noteVerba',['id_category' => $category->id_category]) }}">{{
+                            $category->title }}</a>
+                    </li>
+                    @endforeach
+                </ul>
             </ul>
 
             <div class="mt-10">
