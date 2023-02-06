@@ -108,6 +108,7 @@
             </form>
         @endforeach
     @else
+    <span> * Déplacé les cartes pour modifier l'ordre des étapes qui apparaitront dans le graphique</span>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 category-list">
         @foreach ($categories as $category)
             <div class="bg-white rounded-lg shadow-lg category-card" data-id="{{ $category->id_category }}">
@@ -156,7 +157,11 @@
                         },
                         success: function(data) {
                             console.log("AJAX call success");
-                            return true;
+                            $('.category-card').each(function(i) {
+                                $(this).find('.text-lg.font-medium').text((i + 1) + '. ' + $(this).find('.text-lg.font-medium').text().split('.')[1]);
+                                return true;
+                            });
+                            // return true;
                         }
                     });
                 }
