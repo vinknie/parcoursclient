@@ -15,7 +15,7 @@ class NoteController extends Controller
         $category = Category::where('id_category', $id_category)->first();
         $getCategory = Category::all();
 
-        $getverbatim = DB::select('select id_verbatim ,verbatim, positif , neutre , negatif from verbatim where id_category =' . $id_category);
+        $getverbatim = DB::select('select id_verbatim ,verbatim, positif , neutre , negatif , position from verbatim where id_category =' . $id_category);
 
         return view('admin.noteVerba', compact('category','getCategory','getverbatim'));
     }
@@ -55,4 +55,46 @@ class NoteController extends Controller
 
         return redirect()->back();
     }
+
+    public function decreasepositif(Request $request, $id_verbatim)
+    {
+        $verbatim = Verbatim::findOrFail($id_verbatim);
+    
+        $positif = $request->input('positif');
+        $value = $request->input('value');
+    
+        if ($verbatim->positif > 0) {
+            $verbatim->update([$positif => $verbatim->positif - 1]);
+        }
+    
+        return redirect()->back();
+    }
+
+    public function decreaseneutre(Request $request, $id_verbatim)
+    {
+        $verbatim = Verbatim::findOrFail($id_verbatim);
+    
+        $neutre = $request->input('neutre');
+        $value = $request->input('value');
+    
+        if ($verbatim->neutre > 0) {
+            $verbatim->update([$neutre => $verbatim->neutre - 1]);
+        }
+    
+        return redirect()->back();
+    }
+    public function decreasenegatif(Request $request, $id_verbatim)
+    {
+        $verbatim = Verbatim::findOrFail($id_verbatim);
+    
+        $negatif = $request->input('negatif');
+        $value = $request->input('value');
+    
+        if ($verbatim->negatif > 0) {
+            $verbatim->update([$negatif => $verbatim->negatif - 1]);
+        }
+    
+        return redirect()->back();
+    }
+
 }

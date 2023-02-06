@@ -62,20 +62,23 @@ class CategoryController extends Controller
     }
 
     public function CreateVerba(Request $request)
-    {
-        $existingVerba = Verbatim::where('verbatim', $request->verbatim)->where('id_category', $request->id_category)->first();
-        if ($existingVerba) {
-            return redirect()->back()->with('error1', 'Un verbatim avec cette intitulé existe déjà dans cette étape');
-        }
-
-        $verba = new Verbatim();
-        $verba->id_category = $request->id_category;
-        $verba->verbatim = $request->verbatim;
-
-        $verba->save();
-
-        return redirect()->back()->with('success1', 'Le verbatim a bien été créé');
+{
+    $existingVerba = Verbatim::where('verbatim', $request->verbatim)->where('id_category', $request->id_category)->first();
+    if ($existingVerba) {
+        return redirect()->back()->with('error1', 'Un verbatim avec cette intitulé existe déjà dans cette étape');
     }
+
+    $verba = new Verbatim();
+    $verba->id_category = $request->id_category;
+    $verba->verbatim = $request->verbatim;
+
+    $lastVerbatim = Verbatim::where('id_category', $request->id_category)->orderBy('position', 'desc')->first();
+    $verba->position = $lastVerbatim ? $lastVerbatim->position + 1 : 1;
+
+    $verba->save();
+
+    return redirect()->back()->with('success1', 'Le verbatim a bien été créé');
+}
 
     public function editCategory($id_category)
     {
