@@ -89,6 +89,7 @@
             <form class="mt-5" action="{{ route('admin.updateVerbatimWithoutCat') }}" method="post">
                 @csrf
                 <div class="form-group">
+                    
                     <label class="labels">Etape du Verbatim</label>
                     <select class="form-control" name="id_category[]">
                         <option value="">--Selectionner l'étape--</option>
@@ -107,11 +108,11 @@
             </form>
         @endforeach
     @else
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 category-list">
         @foreach ($categories as $category)
-            <div class="bg-white rounded-lg shadow-lg">
+            <div class="bg-white rounded-lg shadow-lg category-card" data-id="{{ $category->id_category }}">
                 <div class="p-6 flex justify-between">
-                    <h3 class="text-lg font-medium">{{ $category->title }}</h3>
+                    <h3 class="text-lg font-medium">{{ $category->position }}. {{ $category->title }}</h3>
                     <a href="{{ route('admin.editCategory', ['id_category' => $category->id_category]) }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
                         <i class="fa-regular fa-pen-to-square"></i>
                     </a>
@@ -120,6 +121,7 @@
                     <p class="text-gray-600">{{ $category->verbatim_count }} verbatims</p>
                 </div>
             </div>
+
         @endforeach
         <div class="bg-white rounded-lg shadow-lg">
             <div class="p-6 flex justify-between">
@@ -134,5 +136,35 @@
         </div>
     </div> 
     @endif
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        $(function() {
+            $( ".category-list" ).sortable({
+                update: function(event, ui) {
+                    var positions = [];
+                    $('.category-card').each(function(i) {
+                        positions[i] = $(this).data('id');
+                    });
+                    $.ajax({
+                        type: 'POST',
+                        url: '/dashboard/category/update-category-positions',
+                        data: {
+                            positions: positions,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function(data) {
+                            console.log("AJAX call success");
+                            return true;
+                        }
+                    });
+                }
+            });
+            $( ".category-list" ).disableSelection();
+        });
+    </script>
+
+   
 
 @endsection

@@ -28,7 +28,7 @@ class CategoryController extends Controller
         $categories = DB::table('category')
             ->leftJoin('verbatim', 'category.id_category', '=', 'verbatim.id_category')
             ->select('category.*', DB::raw('count(verbatim.id_verbatim) as verbatim_count'))
-            ->groupBy('category.id_category')
+            ->groupBy('category.position')
             ->get();
 
         $noCategoryCount = Verbatim::whereNull('id_category')->count();
@@ -52,6 +52,9 @@ class CategoryController extends Controller
 
         $category = new Category();
         $category->title = $request->title;
+
+        $lastCategory = Category::orderBy('position', 'desc')->first();
+        $category->position = $lastCategory ? $lastCategory->position + 1 : 1;
 
         $category->save();
 
@@ -133,4 +136,16 @@ class CategoryController extends Controller
         }
         return redirect()->back()->with('success1', 'Les verbatims ont bien été modifié');
     }
+
+
+    public function updateCategoryPositions(Request $request)
+    {
+        $positions = $request->positions;
+        foreach ($positions as $index => $id_category) {
+            Category::where('id_category', $id_category)->update(['position' => $index + 1]);
+        }
+        return response()->json(['success' => true]);
+    }
+
+
 }

@@ -47,6 +47,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/dashboard/updateneutre/{id_verbatim}', [NoteController::class,'updateneutre'])->name('admin.updateneutre');
     Route::patch('/dashboard/updatenegatif/{id_verbatim}', [NoteController::class,'updatenegatif'])->name('admin.updatenegatif');
 
+    Route::post('/dashboard/category/update-category-positions',[CategoryController::class,'updateCategoryPositions'])->name('admin.updateCategoryPositions');
+
 });
 
 
