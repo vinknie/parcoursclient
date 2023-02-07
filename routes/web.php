@@ -52,6 +52,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/dashboard/updatepositif/{id_verbatim}', [NoteController::class, 'updatepositif'])->name('admin.updatepositif');
     Route::patch('/dashboard/updateneutre/{id_verbatim}', [NoteController::class, 'updateneutre'])->name('admin.updateneutre');
     Route::patch('/dashboard/updatenegatif/{id_verbatim}', [NoteController::class, 'updatenegatif'])->name('admin.updatenegatif');
+    Route::patch('/dashboard/decreasepositif/{id_verbatim}', [NoteController::class, 'decreasepositif'])->name('admin.decreasepositif');
+    Route::patch('/dashboard/decreaseneutre/{id_verbatim}', [NoteController::class, 'decreaseneutre'])->name('admin.decreaseneutre');
+    Route::patch('/dashboard/decreasenegatif/{id_verbatim}', [NoteController::class, 'decreasenegatif'])->name('admin.decreasenegatif');
+    
+    Route::post('/dashboard/category/update-category-positions',[CategoryController::class,'updateCategoryPositions'])->name('admin.updateCategoryPositions');
+
+    Route::post('/dashboard/note/update-verbatim-positions',[NoteController::class,'updatePositionVerba'])->name('admin.updatePositionVerba');
+
 });
 
 require __DIR__ . '/auth.php';

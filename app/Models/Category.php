@@ -12,8 +12,17 @@ class Category extends Model
     protected $table = 'category';
     protected $primaryKey = 'id_category';
 
-    protected $fillable =['title'];
+    protected $fillable =['title','position'];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($category) {
+            $lastCategory = static::orderBy('position', 'desc')->first();
+            $category->position = $lastCategory ? $lastCategory->position + 1 : 1;
+        });
+    }
 
     public function verbatim(){
         return $this->hasMany('App\Models\Verbatim');
