@@ -140,7 +140,9 @@
             </form>
         @endforeach
     @else
+    @if(Auth::check() && Auth::user()->role === 'admin' ? true : false)
     <span> * Déplacé les cartes pour modifier l'ordre des étapes qui apparaitront dans le graphique</span>
+    @endif
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 category-list">
         @foreach ($categories as $category)
             <div class="bg-white rounded-lg shadow-lg category-card" data-id="{{ $category->id_category }}">
@@ -174,7 +176,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
 
-        var isAdmin = {{ auth()->check() && auth()->user() === 'admin' ? 'true' : 'false' }};
+var isAdmin = {{ Auth::check() && Auth::user()->role === 'admin' ? true : false }};
 
         $(function() {
         if (isAdmin) {
