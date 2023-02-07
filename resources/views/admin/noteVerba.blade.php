@@ -82,7 +82,7 @@
                         <input type="hidden" name="negatif" value="negatif">
                         <input type="hidden" name="value" value="{{ $verbatim->negatif - 1 }}">
 
-                        <button class="bg-red-500 hover:bg-red-400 text-white font-bold py-1 px-2 rounded">
+                        <button class="bg-red-500 hover:bg-red-400 text-white font-bold py-1 px-2 rounded" id="decrease-button">
                             <i class="fa-solid fa-minus"></i>
                         </button>
                     </form>
@@ -104,10 +104,14 @@
     @endforeach
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-<script>
-    $(function() {
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+
+    var isAdmin = {{ auth()->check() && auth()->user() === 'admin' ? 'true' : 'false' }};
+        $(function() {
+            if (isAdmin) {
             $( ".category-list" ).sortable({
                 update: function(event, ui) {
                     var positions = [];
@@ -134,6 +138,9 @@
                 }
             });
             $( ".category-list" ).disableSelection();
+        }
+
+
         });
 </script>
 
