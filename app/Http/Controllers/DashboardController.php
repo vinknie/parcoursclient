@@ -18,9 +18,23 @@ class DashboardController extends Controller
         $getCategory            = Category::all();
         $categoryWithVerbatim   = DB::table('verbatim')
             ->join('category', 'verbatim.id_category', '=', 'category.id_category')
-            ->select('verbatim.*', 'category.title', 'category.id_category')
-            ->groupBy('category.id_category')
-            ->get();
+            ->select('verbatim.positif', 'verbatim.negatif', 'verbatim.verbatim', 'category.title', 'category.id_category')
+            ->get()
+            ->groupBy('id_category')
+            ->map(function ($item) {
+                return [
+                    'title' => $item->first()->title,
+                    'positif' => $item->pluck('positif')->toArray(),
+                    'negatif' => $item->pluck('negatif')->toArray(),
+                    'verbatim' => $item->pluck('verbatim')->toArray(),
+                    // 'data' => $item->map(function ($data) {
+                    //     return [
+                    //         'positif' => $data->positif,
+                    //         'verbatim' => $data->verbatim,
+                    //     ];
+                    // })->toArray(),
+                ];
+            });
 
         // $positif = DB::table('verbatim')
         //     ->join('category', 'verbatim.id_category', '=', 'category.id_category')
@@ -34,6 +48,6 @@ class DashboardController extends Controller
         //     ->toArray();
 
 
-        return view('dashboard', compact('getCategory', 'categoryWithVerbatim'));
+        return view('admin.dashboard', compact('getCategory', 'categoryWithVerbatim'));
     }
 }
