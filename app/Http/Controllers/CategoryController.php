@@ -134,6 +134,9 @@ class CategoryController extends Controller
                 $getverbatim->id_category = $request->id_category[$key];
                 $getverbatim->verbatim = $request->verbatim[$key];
 
+                $lastVerbatim = Verbatim::where('id_category', $request->id_category[$key])->orderBy('position', 'desc')->first();
+                $getverbatim->position = $lastVerbatim ? $lastVerbatim->position + 1 : 1;
+                
                 $getverbatim->save();
             }
         }

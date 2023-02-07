@@ -7,6 +7,8 @@ use App\Models\Verbatim;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Log;
+
 class NoteController extends Controller
 {
 
@@ -97,4 +99,14 @@ class NoteController extends Controller
         return redirect()->back();
     }
 
+    public function updatePositionVerba(Request $request)
+    {
+        $positions = $request->positions;
+    
+        foreach ($positions as $index => $id_verbatim) {
+            Verbatim::where('id_verbatim', $id_verbatim)->update(['position' => $index + 1]);
+        }
+   
+        return response()->json(['success' => true]);
+    }
 }
