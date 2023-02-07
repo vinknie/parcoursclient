@@ -17,7 +17,13 @@ class NoteController extends Controller
         $category = Category::where('id_category', $id_category)->first();
         $getCategory = Category::all();
 
-        $getverbatim = DB::select('select id_verbatim ,verbatim, positif , neutre , negatif , position from verbatim where id_category =' . $id_category);
+        // $getverbatim = DB::select('select id_verbatim ,verbatim, positif , neutre , negatif , position from verbatim where id_category =' . $id_category);
+
+        $getverbatim = DB::table('verbatim')
+            ->select('id_verbatim' ,'verbatim', 'positif' , 'neutre' , 'negatif' , 'position')
+            ->where('id_category','=', $id_category)
+            ->groupBy('position')
+            ->get();
 
         return view('admin.noteVerba', compact('category','getCategory','getverbatim'));
     }

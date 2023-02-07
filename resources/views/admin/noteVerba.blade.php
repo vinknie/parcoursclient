@@ -2,8 +2,11 @@
 
 @section('content')
 
-<h1>{{ $category->title }}</h1>
-<div class="category-list">
+@if(Auth::check() && Auth::user()->role === 'admin' ? true : false)
+<span> * Déplacé les cartes pour modifier l'ordre des étapes qui apparaitront dans le graphique</span>
+@endif
+    <h1>{{ $category->title }}</h1>
+    <div class="category-list">
     @foreach ($getverbatim as $verbatim)
 
     <div class=" rounded overflow-hidden shadow-lg m-4 category-card" data-id="{{ $verbatim->id_verbatim }}">
@@ -109,7 +112,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
 
-    var isAdmin = {{ auth()->check() && auth()->user() === 'admin' ? 'true' : 'false' }};
+    var isAdmin = {{ Auth::check() && Auth::user()->role === 'admin' ? true : false }};
         $(function() {
             if (isAdmin) {
             $( ".category-list" ).sortable({
@@ -129,7 +132,7 @@
                             console.log("AJAX call success");
                             $('.category-card').each(function(i) {
                                 $(this).find('.text-lg.font-medium').text((i + 1) + '. ' + $(this).find('.text-lg.font-medium').text().split('.')[1]);
-                                // return true;
+                                return true;
                                 console.log(data);
                                 
                             });
@@ -142,6 +145,20 @@
 
 
         });
-</script>
+
+
+       
+        document.addEventListener("DOMContentLoaded", function(event) { 
+            var scrollpos = localStorage.getItem('scrollpos');
+            if (scrollpos) window.scrollTo(0, scrollpos);
+        });
+
+        window.onbeforeunload = function(e) {
+            localStorage.setItem('scrollpos', window.scrollY);
+        };
+
+        
+    </script>
 
 @endsection
+
