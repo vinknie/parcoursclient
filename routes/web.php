@@ -58,6 +58,8 @@ Route::middleware('auth')->group(function () {
     
     Route::post('/dashboard/category/update-category-positions',[CategoryController::class,'updateCategoryPositions'])->name('admin.updateCategoryPositions');
 
+    Route::post('/dashboard/note/update-verbatim-positions',[NoteController::class,'updatePositionVerba'])->name('admin.updatePositionVerba');
+
 });
 
 require __DIR__ . '/auth.php';

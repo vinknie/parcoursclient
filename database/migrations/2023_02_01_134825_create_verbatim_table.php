@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('verbatim', function (Blueprint $table) {
             $table->bigIncrements('id_verbatim');
-            $table->bigInteger('id_category')->unsigned();
+            $table->bigInteger('id_category')->unsigned()->nullable();
             $table->string('verbatim');
             $table->bigInteger('positif');
             $table->bigInteger('neutre');

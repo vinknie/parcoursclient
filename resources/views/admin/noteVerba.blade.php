@@ -1,14 +1,16 @@
 @extends('dashboard')
 
 @section('content')
-    <h1>{{ $category->title }}</h1>
 
+    <h1>{{ $category->title }}</h1>
+    <div class="category-list">
     @foreach ($getverbatim as $verbatim)
-        <div class=" rounded overflow-hidden shadow-lg m-4">
+    
+        <div class=" rounded overflow-hidden shadow-lg m-4 category-card" data-id="{{ $verbatim->id_verbatim }}">
 
 
             <div class="px-6 py-4 flex justify-between">
-                <div class="font-bold text-xl mb-2">{{  $verbatim->position  }}. {{ $verbatim->verbatim }}</div>
+                <h3 class="text-lg font-medium">{{ $verbatim->position }}. {{ $verbatim->verbatim }}</h3>
 
                 <div class="flex items-center">
                     <div>
@@ -98,5 +100,41 @@
                
             </div>
         </div>
+   
     @endforeach
+ </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        $(function() {
+            $( ".category-list" ).sortable({
+                update: function(event, ui) {
+                    var positions = [];
+                    $('.category-card').each(function(i) {
+                        positions[i] = $(this).data('id');
+                    });
+                    $.ajax({
+                        type: 'POST',
+                        url: '/dashboard/note/update-verbatim-positions',
+                        data: {
+                            positions: positions,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function(data) {
+                            console.log("AJAX call success");
+                            $('.category-card').each(function(i) {
+                                $(this).find('.text-lg.font-medium').text((i + 1) + '. ' + $(this).find('.text-lg.font-medium').text().split('.')[1]);
+                                // return true;
+                                console.log(data);
+                                
+                            });
+                        }
+                    });
+                }
+            });
+            $( ".category-list" ).disableSelection();
+        });
+    </script>
+
 @endsection
