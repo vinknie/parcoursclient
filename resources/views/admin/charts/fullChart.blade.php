@@ -1,12 +1,10 @@
 @extends('master')
 @section('content')
 
-
-<div class="chartWrapper">
-    <canvas id="myChart" height="30" width="50"></canvas>
+<div class="bg-gray-100">
+    <canvas id="myChart"></canvas>
 </div>
 </div>
-
 <script>
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
@@ -14,6 +12,7 @@
         data: {
             labels: [
                 @foreach($categoryWithVerbatim as $key => $catWithVerb)
+                '{{ $catWithVerb['title'] }}',
                 @foreach($catWithVerb['verbatim'] as $verbatim)
                 '{{ $verbatim }}',
                 @endforeach
@@ -23,8 +22,6 @@
                 {
                 label: 'Positif',
                 backgroundColor: '#3c7cc4',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1,
                 borderRadius: 30,
                 barThickness: 16,
                 stack: 'Stack 0',
@@ -34,12 +31,14 @@
                     {{ $positif.',' }}
                     @endforeach
                     @endforeach
-                ]
+                ],
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top'
+                }
             },{
                 label: 'Negatif',
                 backgroundColor: '#c4042c',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1,
                 borderRadius: 30,
                 barThickness: 16,
                 stack: 'Stack 0',
@@ -49,23 +48,33 @@
                 {{ '-'.$negatif.',' }}
                 @endforeach
                 @endforeach
-                ]
+                ],
+                datalabels: {
+                    anchor: 'start',
+                    align: 'bottom',
+                }
             },
         ]
         },
+        plugins: [ChartDataLabels],
         options: {
             // responsive: false,
             scales: {
                 y: {
+                    max: {{ $highestLowest->highest + 4}},
+                    min: -{{ $highestLowest->lowest + 2}},
                     ticks: {
                         beginAtZero: true,
+                        stepSize: 0.5
                     },
                     stacked: true,
                     grid: {
                         drawOnChartArea: false,
-                    }
+                    },
+                    display: false
                 },
                 x: {
+                    // max: 12,
                     position:'top',
                     grid: {
                         display:false,

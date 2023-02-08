@@ -69,7 +69,7 @@
 
         <!-- Page Content  -->
         <div id="content" class="w-full md:w-5/6">
-            <div class="container">
+            <div class="mx-auto">
                 @yield('content')
             </div>
         </div>
