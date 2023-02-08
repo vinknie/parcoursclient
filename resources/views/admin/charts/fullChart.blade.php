@@ -2,10 +2,10 @@
 @section('content')
 
 
-<div class="chart-container">
-    <canvas id="myChart" class="w-full"></canvas>
+<div class="chartWrapper">
+    <canvas id="myChart" height="30" width="50"></canvas>
 </div>
-
+</div>
 
 <script>
     var ctx = document.getElementById('myChart').getContext('2d');
@@ -13,7 +13,6 @@
         type: 'bar',
         data: {
             labels: [
-                // list of all verbatims
                 @foreach($categoryWithVerbatim as $key => $catWithVerb)
                 @foreach($catWithVerb['verbatim'] as $verbatim)
                 '{{ $verbatim }}',
@@ -55,16 +54,22 @@
         ]
         },
         options: {
-            responsive: false,
+            // responsive: false,
             scales: {
-                y: [{
+                y: {
                     ticks: {
                         beginAtZero: true,
                     },
-                    stacked: true
-                }],
+                    stacked: true,
+                    grid: {
+                        drawOnChartArea: false,
+                    }
+                },
                 x: {
                     position:'top',
+                    grid: {
+                        display:false,
+                    }
                 },
             },
         }
