@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Verbatim;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -55,6 +56,8 @@ class DashboardController extends Controller
                 ];
             });
 
-        return view('admin.charts.fullChart', compact('getCategory', 'categoryWithVerbatim'));
+        $highestLowest = Verbatim::select(DB::raw('MAX(positif) as highest, MAX(negatif) as lowest'))->first();
+
+        return view('admin.charts.fullChart', compact('getCategory', 'categoryWithVerbatim', 'highestLowest'));
     }
 }

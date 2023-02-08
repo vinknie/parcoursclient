@@ -13,3 +13,7 @@ function displayPageSubmenu() {
 document.querySelector("a.dropdown-toggle").addEventListener("click", function() {
   displayPageSubmenu();
 });
+
+
+
+// chart js

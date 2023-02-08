@@ -2,7 +2,7 @@
 @section('content')
 
 
-<div class="chart-container">
+<div class="">
     <canvas id="myChart" class="w-full"></canvas>
 </div>
 
