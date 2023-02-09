@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Verbatim;
+use App\Models\Dialogue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -20,7 +21,9 @@ class CategoryController extends Controller
     {
         $getCategory = Category::all();
 
-        return view('admin.createCategory', compact('getCategory'));
+        $getVerbatim = Verbatim::all();
+
+        return view('admin.createCategory', compact('getCategory','getVerbatim'));
     }
 
     public function category()
@@ -153,5 +156,23 @@ class CategoryController extends Controller
         return response()->json(['success' => true]);
     }
 
+
+    public function createDialogue(Request $request)
+    {
+     
+        $existingDial1 = Dialogue::where('dialogue', $request->dialogue)->where('id_verbatim', $request->id_verbatim)->first();
+       
+        if($existingDial1){
+            return redirect()->back()->with('error2', 'Un dialogue avec cette intitulé existe déjà dans ce verbatim');
+        }
+    
+        $dial = new Dialogue();
+        $dial->id_verbatim = $request->id_verbatim;
+        $dial->dialogue = $request->dialogue;
+    
+        $dial->save();
+    
+        return redirect()->back()->with('success2', 'Le dialogue a bien été créé');
+    }
 
 }
