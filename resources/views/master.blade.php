@@ -1,8 +1,8 @@
 <x-app-layout>
-
     <div class="flex flex-wrap md:flex-no-wrap min-h-screen">
 
         {{-- sidebar --}}
+        @if (!request()->is('chart/full'))
         <nav class="w-none md:w-1/6 bg-gray-800 text-slate-50 p-5">
 
             <a href="{{ route('profile.edit') }}" class="block h-36 w-36 rounded-full mx-auto my-12"
@@ -65,10 +65,11 @@
                 </p>
             </div>
         </nav>
+        @endif
 
         <!-- Page Content  -->
         <div id="content" class="w-full md:w-5/6">
-            <div class="container">
+            <div class="mx-auto">
                 @yield('content')
             </div>
         </div>
