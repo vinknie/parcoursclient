@@ -47,7 +47,58 @@ class DashboardController extends Controller
         //     ->pluck('verbatim.negatif')
         //     ->toArray();
 
+    
+        $totalEachVerbatim   = DB::table('verbatim')
+        ->join('category', 'verbatim.id_category', '=', 'category.id_category')
+        ->select(
+            'verbatim.positif', 
+            'verbatim.negatif',
+            'verbatim.neutre', 
+            'verbatim.verbatim',
+            'verbatim.position', 
+            'category.title', 
+            'category.id_category',
+            'category.position',
+            DB::raw('sum(verbatim.positif + verbatim.negatif + verbatim.neutre) as total')
+        )
+        ->orderBy('category.position','asc')
+        ->orderBy('verbatim.position','asc')
+        ->groupBy('verbatim.id_verbatim')
+        ->get();
 
-        return view('admin.dashboard', compact('getCategory', 'categoryWithVerbatim'));
+        $totalEachCategory   = DB::table('verbatim')
+        ->join('category', 'verbatim.id_category', '=', 'category.id_category')
+        ->select(
+            'category.title', 
+            'category.id_category',
+            'category.position',
+            DB::raw('sum(verbatim.positif + verbatim.negatif + verbatim.neutre) as total')
+        )
+        ->orderBy('category.position','asc')
+        ->orderBy('verbatim.position','asc')
+        ->groupBy('category.id_category')
+        ->get();
+
+        foreach ($totalEachVerbatim as $verbatim) {
+            foreach ($totalEachCategory as $category) {
+                if ($verbatim->id_category === $category->id_category) {
+                    $percent = ($verbatim->total / $category->total) * 100;
+                }
+            }
+            $verbatim->percent = $percent;
+        }
+       
+
+        return view('admin.dashboard', compact('getCategory', 'categoryWithVerbatim','totalEachVerbatim','totalEachCategory','percent'));
     }
+
+    // public function getPercentage(){
+
+    //     $percent   = DB::table('verbatim')
+    //     ->join('category', 'verbatim.id_category', '=', 'category.id_category')
+    //     ->select('verbatim.positif', 'verbatim.negatif', 'verbatim.verbatim', 'category.title', 'category.id_category')
+    //     ->get();
+ 
+    //     return view ('admin.dashboard',compact('percent'));
+    // }
 }
