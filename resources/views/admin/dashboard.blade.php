@@ -6,7 +6,6 @@
     <canvas id="myChart" class="w-full"></canvas>
 </div>
 
-
 <script>
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
@@ -71,4 +70,12 @@
     });
 
 </script>
+
+
+
+<h1>Percentage</h1>
+{{-- @dd($totalEachVerbatim,$totalEachCategory,$percent) --}}
+
+
+
 @endsection

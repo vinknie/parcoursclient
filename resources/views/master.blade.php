@@ -61,7 +61,7 @@
                 <p>
                     Copyright &copy;<script>
                         document.write(new Date().getFullYear());
-                    </script> All rights reserved | Prij
+                    </script> All rights reserved </br> Parcours Client Version 1.0
                 </p>
             </div>
         </nav>
