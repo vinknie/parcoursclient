@@ -3,21 +3,25 @@
 <div class="border-4 ">
     <canvas id="myChart" class="bg-red-100 m-2"></canvas>
 </div>
-
 {{-- @php
-echo '
-<pre>';
-foreach($categoryWithVerbatim as $test) {
-    var_dump($test['title']);
-};
-echo '</pre>'; --}}
-{{-- @endphp --}}
-{{-- @foreach($categoryWithVerbatim as $catWithVerb)
-{{ $catWithVerb['title'] }} |
+    $test = 0;
+@endphp
+
+@foreach($verbatimCountByCategory as $countByCategory)
+        @php $test += $countByCategory->total_by_cat @endphp
+        {{ $test}}
 @endforeach --}}
 
-<script>
-    // the category names
+{{-- @php
+$test = 0;
+@endphp
+@foreach($verbatimCountByCategory as $countByCategory)
+    @php 
+        $test += $countByCategory->total_by_cat;
+    @endphp
+@endforeach --}}
+<script> 
+    // multiple labels Plugin
     const subLabels = {
         id: 'subLabels',
         afterDatasetsDraw(chart, args, pluginOptions) {
@@ -25,71 +29,90 @@ echo '</pre>'; --}}
             ctx.save();
 
             @foreach($categoryWithVerbatim as $key => $catWithVerb)
-            console.log('{{$catWithVerb['title']}}')
-                subLabelText("{{$catWithVerb['title']}}", width / {{count($categoryWithVerbatim)}}  * {{$key}})
+                subLabelText("{!! $catWithVerb['title'] !!}", width / 5.3  * {{ $catWithVerb['catPosition'][0]}})
             @endforeach
 
             function subLabelText(text, x) {
                 ctx.font = 'bolder 12px sans-serif';
                 ctx.textAlign = 'center';
+                ctx.fillStyle = 'rgba(102,102,102,1)';
                 ctx.fillText(text, x + left, bottom + 20);
             }
         }
     }
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [
-                @foreach($categoryWithVerbatim as $key => $catWithVerb)
-                    @foreach($catWithVerb['verbatim'] as $verbatim)
-                        '{{ $verbatim }}',
-                    @endforeach
+
+   // arbitaryLine Plugin
+    const arbitaryLine = {
+        id : 'arbitaryLine',
+        beforeDraw(chart, args, options) {
+            const {ctx, chartArea : {top, right, bottom, left, width, height}, scales: {x, y}} = chart;
+            ctx.save();
+
+            // how to draw
+            ctx.strokeStyle = options.arbitaryLineColor;
+            ctx.strokeRect(x.getPixelForValue(options.xPosition), top, 0, bottom);
+            
+            // where to draw
+            ctx.restore();
+        }
+    }
+
+    // data block
+    const data = {
+        labels: [
+            @foreach($categoryWithVerbatim as $key => $catWithVerb)
+                @foreach($catWithVerb['verbatim'] as $verbatim)
+                    '{{ $verbatim }}',
                 @endforeach
-            ],
-            datasets: [
-                {
-                    label: 'Positif',
-                    backgroundColor: '#3c7cc4',
-                    borderRadius: 30,
-                    barThickness: 16,
-                    stack: 'Stack 0',
-                    data: [
-                        @foreach($categoryWithVerbatim as $key=> $catWithVerb)
-                            @foreach($catWithVerb['positif'] as $positif)
-                                {{ $positif.',' }}
-                            @endforeach
+            @endforeach
+        ],
+        datasets: [
+            {
+                label: 'Positif',
+                backgroundColor: '#3c7cc4',
+                borderRadius: 30,
+                barThickness: 16,
+                stack: 'Stack 0',
+                data: [
+                    @foreach($categoryWithVerbatim as $key=> $catWithVerb)
+                        @foreach($catWithVerb['positif'] as $positif)
+                            {{ $positif.',' }}
                         @endforeach
-                    ],
-                    datalabels: {
-                    anchor: 'end',
-                    align: 'top'
-                    }
-                },
-                {
-                    label: 'Negatif',
-                    backgroundColor: '#c4042c',
-                    borderRadius: 30,
-                    barThickness: 16,
-                    stack: 'Stack 0',
-                    data: [
-                        @foreach($categoryWithVerbatim as $key=> $catWithVerb)
-                            @foreach($catWithVerb['negatif'] as $negatif)
-                                {{ '-'.$negatif.',' }}
-                            @endforeach
                         @endforeach
-                    ],
-                    datalabels: {
+                ],
+                datalabels: {
+                anchor: 'end',
+                align: 'top'
+                }
+            },
+            {
+                label: 'Negatif',
+                backgroundColor: '#c4042c',
+                borderRadius: 30,
+                barThickness: 16,
+                stack: 'Stack 0',
+                data: [
+                    @foreach($categoryWithVerbatim as $key=> $catWithVerb)
+                        @foreach($catWithVerb['negatif'] as $negatif)
+                            {{ '-'.$negatif.',' }}
+                        @endforeach
+                    @endforeach
+                ],
+                datalabels: {
                     anchor: 'start',
                     align: 'bottom',
-                    }
-                },
-            ]
-        },
-        plugins: [ChartDataLabels, subLabels],
+                }
+            },
+        ]
+    }
+   
+    // config block
+    const config = {
+        type: 'bar',
+        data: data,
+        plugins: [ChartDataLabels, subLabels, arbitaryLine],
         options: {
-            // responsive: false,
-            layout: {
+             layout: {
                 padding: 50
             },
             scales: {
@@ -107,14 +130,22 @@ echo '</pre>'; --}}
                     display: false
                 },
                 x: {
-                    // max: 12,
                     position:'top',
                     grid: {
                         display:false,
-                    }
+                    },
                 },
-            },  
+            },
+            plugins : {
+                arbitaryLine: {
+                    arbitaryLineColor : 'blue',
+                    xPosition: 2
+                }
+            }
         }
-    });
+    }
+
+    const myChart = new Chart(document.getElementById('myChart'), config);
+   
 </script>
 @endsection

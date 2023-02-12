@@ -68,6 +68,7 @@ class DashboardController extends Controller
         foreach ($totalEachVerbatim as $verbatim) {
             foreach ($totalEachCategory as $category) {
                 if ($verbatim->id_category === $category->id_category) {
+                    // ## bug 1
                     $percent = ($verbatim->total / $category->total) * 100;
                 }
             }
@@ -84,7 +85,14 @@ class DashboardController extends Controller
         $getCategory            = Category::all();
         $categoryWithVerbatim   = DB::table('verbatim')
             ->join('category', 'verbatim.id_category', '=', 'category.id_category')
-            ->select('verbatim.positif', 'verbatim.negatif', 'verbatim.verbatim', 'category.title', 'category.id_category')
+            ->select(
+                'verbatim.positif',
+                'verbatim.negatif',
+                'verbatim.verbatim',
+                'category.title',
+                'category.id_category',
+                'category.position',
+            )
             ->orderBy('verbatim.position', 'asc')
             ->orderBy('category.position', 'asc')
             ->get()
@@ -95,12 +103,19 @@ class DashboardController extends Controller
                     'positif' => $item->pluck('positif')->toArray(),
                     'negatif' => $item->pluck('negatif')->toArray(),
                     'verbatim' => $item->pluck('verbatim')->toArray(),
+                    'catPosition' => $item->pluck('position')
                 ];
             });
 
+        $verbatimCountByCategory = Verbatim::selectRaw('count(*) as total_by_cat')
+            ->join('category', 'verbatim.id_category', '=', 'category.id_category')
+            ->orderBy('category.position', 'asc')
+            ->orderBy('verbatim.position', 'asc')
+            ->groupBy('verbatim.id_category')
+            ->get();
 
         $highestLowest = Verbatim::select(DB::raw('MAX(positif) as highest, MAX(negatif) as lowest'))->first();
 
-        return view('admin.charts.fullChart', compact('getCategory', 'categoryWithVerbatim', 'highestLowest'));
+        return view('admin.charts.fullChart', compact('getCategory', 'categoryWithVerbatim', 'highestLowest', 'verbatimCountByCategory'));
     }
 }
