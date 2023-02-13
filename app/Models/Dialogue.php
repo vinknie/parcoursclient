@@ -13,4 +13,6 @@ class Dialogue extends Model
     protected $primaryKey = 'id_dialogue';
 
     protected $fillable =['id_category','id_verbatim','dialogue','positif','neutre','negatif'];
+
+    
 }

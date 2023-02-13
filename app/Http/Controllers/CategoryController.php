@@ -36,8 +36,9 @@ class CategoryController extends Controller
 
         $noCategoryCount = Verbatim::whereNull('id_category')->count();
         $getCategory = Category::all();
+        $getVerbatim = Verbatim::all();
 
-    return view('admin.category', compact('categories','noCategoryCount','getCategory'));
+    return view('admin.category', compact('categories','noCategoryCount','getCategory','getVerbatim'));
     }
 
     public function verbatim()
@@ -156,12 +157,10 @@ class CategoryController extends Controller
         return response()->json(['success' => true]);
     }
 
-
     public function createDialogue(Request $request)
     {
-     
         $existingDial1 = Dialogue::where('dialogue', $request->dialogue)->where('id_verbatim', $request->id_verbatim)->first();
-       
+    
         if($existingDial1){
             return redirect()->back()->with('error2', 'Un dialogue avec cette intitulé existe déjà dans ce verbatim');
         }
@@ -169,10 +168,30 @@ class CategoryController extends Controller
         $dial = new Dialogue();
         $dial->id_verbatim = $request->id_verbatim;
         $dial->dialogue = $request->dialogue;
+        if ($request->input('sentiment') === 'positif') {
+            $dial->positif = 1;
+            Verbatim::where('id_verbatim', $request->id_verbatim)->increment('positif');
+        } elseif ($request->input('sentiment') === 'neutre') {
+            $dial->neutre = 1;
+            Verbatim::where('id_verbatim', $request->id_verbatim)->increment('neutre');
+        } elseif ($request->input('sentiment') === 'negatif') {
+            $dial->negatif = 1;
+            Verbatim::where('id_verbatim', $request->id_verbatim)->increment('negatif');
+        }
     
         $dial->save();
     
         return redirect()->back()->with('success2', 'Le dialogue a bien été créé');
+    }
+
+
+
+    //Delete Function 
+    public function deleteCat($id_category){
+
+        $deleteCat = Category::find($id_category)->delete();
+
+        return redirect()->back()->with('delete', 'Etapes supprimé , les verbatims de la catégory se trouve dans "sans étape"');
     }
 
 }

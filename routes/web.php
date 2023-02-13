@@ -49,7 +49,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/category/updateVerbatimWithoutCat', [CategoryController::class, 'updateVerbatimWithoutCat'])->name('admin.updateVerbatimWithoutCat');
 
     Route::post('/dashboard/createCategory/createDialogue', [CategoryController::class, 'createDialogue']);
-  
+    
+    Route::get('dashboard/category/deletecategory/{id_category}',[CategoryController::class, 'deleteCat'])->name('admin.deleteCat');
 
     Route::get('/dashboard/note/{id_category}', [NoteController::class, 'show'])->name('admin.noteVerba');
 

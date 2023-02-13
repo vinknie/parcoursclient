@@ -20,12 +20,12 @@
                     @endif
                 </li>
 
-                <li class="py-2">
+                {{-- <li class="py-2">
                     <x-responsive-nav-link :href="route('admin.createCategory')"
                         :active="request()->routeIs('admin.createCategory')">
                         {{ __('Créer les catégories et les verbatims') }}
                     </x-responsive-nav-link>
-                </li>
+                </li> --}}
 
                 <li class="py-2">
                     <x-responsive-nav-link :href="route('admin.category')"
