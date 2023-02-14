@@ -75,7 +75,7 @@
 
 <h1>Percentage</h1>
 
-{{-- @dd($totalEachVerbatim) --}}
+{{-- @dd($totalEachVerbatim,$totalEachCategory) --}}
 
 
 
