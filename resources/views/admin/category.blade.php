@@ -1,14 +1,16 @@
 @extends('master')
 <style>
     .category-card {
-  transition: transform 0.2s ease-out;
-  transform: scale(1);
-}
-    .category-card:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-  transform: scale(1.05);
-  z-index: 10;
+        transition: transform 0.2s ease-out;
+        transform: scale(1);
     }
+
+    .category-card:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+        transform: scale(1.05);
+        z-index: 10;
+    }
+
     #myPopup,
     #myPopup1,
     #myPopup3 {
@@ -165,11 +167,11 @@
             </div>
         </div>
     @elseif (Route::currentRouteName() == 'admin.verbatimsWithoutCategory')
-    <div class="text-left mb-6 ml-6 mt-6">
-        <a href="{{ route('admin.category') }}"
-            class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded"><i
-                class="fa-solid fa-arrow-left-long"></i></a>
-    </div>
+        <div class="text-left mb-6 ml-6 mt-6">
+            <a href="{{ route('admin.category') }}"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded"><i
+                    class="fa-solid fa-arrow-left-long"></i></a>
+        </div>
         @if (\Session::has('success1'))
             <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
                 class="bg-teal-100 border border-teal-400 text-green-700 px-4 py-3 rounded relative" role="alert">
@@ -322,167 +324,170 @@
                     </div>
                 </div>
                 @if (\Session::has('success1'))
-            <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
-                class="bg-teal-100 border border-teal-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-                <span class="block sm:inline">{!! \Session::get('success1') !!}</span>
-                <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
-                    <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20">
-                        <title>Close</title>
-                        <path
-                            d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
-                    </svg>
-                </span>
-            </div>
-        @endif
-        @if (\Session::has('error1'))
-            <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
-                class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                <span class="block sm:inline">{!! \Session::get('error1') !!}</span>
-                <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
-                    <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20">
-                        <title>Close</title>
-                        <path
-                            d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
-                    </svg>
-                </span>
-            </div>
-        @endif
-        <div id="myPopup3" class="popup3">
-            <div class="popup-content">
-                <span class="close3">&times;</span>
-                <div class="text-center text-3xl">
-                    <h1 class="font-medium text-gray-900">Créer un dialogue</h1>
+                    <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
+                        class="bg-teal-100 border border-teal-400 text-green-700 px-4 py-3 rounded relative"
+                        role="alert">
+                        <span class="block sm:inline">{!! \Session::get('success1') !!}</span>
+                        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                            <svg class="fill-current h-6 w-6 text-green-500" role="button"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <title>Close</title>
+                                <path
+                                    d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+                            </svg>
+                        </span>
+                    </div>
+                @endif
+                @if (\Session::has('error1'))
+                    <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
+                        class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <span class="block sm:inline">{!! \Session::get('error1') !!}</span>
+                        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                            <svg class="fill-current h-6 w-6 text-red-500" role="button"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <title>Close</title>
+                                <path
+                                    d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+                            </svg>
+                        </span>
+                    </div>
+                @endif
+                <div id="myPopup3" class="popup3">
+                    <div class="popup-content">
+                        <span class="close3">&times;</span>
+                        <div class="text-center text-3xl">
+                            <h1 class="font-medium text-gray-900">Créer un dialogue</h1>
+                        </div>
+                        <form class="bg-white p-6 rounded-lg mt-5"
+                            action="{{ url('/dashboard/createCategory/createDialogue') }}" method="post"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <div class="mb-4">
+                                <label class="block text-gray-700 font-medium mb-2">Etape du dialogue</label>
+                                <select class="form-control" name="">
+                                    <option value="">--Selectionner l'étape--</option>
+                                    @foreach ($getCategory as $category)
+                                        <option value="{{ $category->id_category }}"> {{ $category->title }} </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 font-medium mb-2">Verbatim du dialogue</label>
+                                <select class="form-control" name="id_verbatim">
+                                    <option value="">--Selectionner le verbatim--</option>
+                                    @foreach ($getVerbatim as $verbatim)
+                                        <option value="{{ $verbatim->id_verbatim }}"> {{ $verbatim->verbatim }} </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 font-medium mb-2">Intitulé du dialogue</label>
+                                <input class="form-control" type="text" name="dialogue" required="">
+                            </div>
+                            <div class="form-group">
+                                <label class="block text-gray-700 font-medium mb-2"for="sentiment">Sentiment:</label>
+                                <div>
+                                    <input type="radio" id="positif" name="sentiment" value="positif">
+                                    <label for="positif">Positif</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="neutre" name="sentiment" value="neutre">
+                                    <label for="neutre">Neutre</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="negatif" name="sentiment" value="negatif">
+                                    <label for="negatif">Négatif</label>
+                                </div>
+                            </div>
+                            <button id="btncreate" type="submit"
+                                class="btn btn-success bg-green-500 text-white py-2 px-4 rounded-full mt-5 hover:bg-green-600">Créer</button>
+                        </form>
+                    </div>
                 </div>
-                <form class="bg-white p-6 rounded-lg mt-5" action="{{ url('/dashboard/createCategory/createDialogue') }}" method="post"
-                    enctype="multipart/form-data">
-                    @csrf
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-medium mb-2">Etape du dialogue</label>
-                        <select class="form-control" name="">
-                            <option value="">--Selectionner l'étape--</option>
-                            @foreach ($getCategory as $category)
-                            <option value="{{ $category->id_category }}"> {{ $category->title }} </option>
-                            @endforeach
-                        </select>
+                @if (\Session::has('success2'))
+                    <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
+                        class="bg-teal-100 border border-teal-400 text-green-700 px-4 py-3 rounded relative"
+                        role="alert">
+                        <span class="block sm:inline">{!! \Session::get('success2') !!}</span>
+                        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                            <svg class="fill-current h-6 w-6 text-green-500" role="button"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <title>Close</title>
+                                <path
+                                    d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+                            </svg>
+                        </span>
                     </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-medium mb-2">Verbatim du dialogue</label>
-                        <select class="form-control" name="id_verbatim">
-                            <option value="">--Selectionner le verbatim--</option>
-                            @foreach ($getVerbatim as $verbatim)
-                            <option value="{{ $verbatim->id_verbatim }}"> {{ $verbatim->verbatim }} </option>
-                            @endforeach
-                        </select>
+                @endif
+                @if (\Session::has('error2'))
+                    <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
+                        class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <span class="block sm:inline">{!! \Session::get('error2') !!}</span>
+                        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                            <svg class="fill-current h-6 w-6 text-red-500" role="button"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <title>Close</title>
+                                <path
+                                    d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+                            </svg>
+                        </span>
                     </div>
-                    <div class="mb-4">
-                    <label class="block text-gray-700 font-medium mb-2">Intitulé du dialogue</label>
-                    <input class="form-control" type="text" name="dialogue" required="">
+                @endif
+                @if (\Session::has('delete'))
+                    <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
+                        class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <span class="block sm:inline">{!! \Session::get('delete') !!}</span>
+                        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                            <svg class="fill-current h-6 w-6 text-red-500" role="button"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <title>Close</title>
+                                <path
+                                    d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+                            </svg>
+                        </span>
                     </div>
-                    <div class="form-group">
-                        <label  class="block text-gray-700 font-medium mb-2"for="sentiment">Sentiment:</label>
-                        <div>
-                            <input type="radio" id="positif" name="sentiment" value="positif">
-                            <label for="positif">Positif</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="neutre" name="sentiment" value="neutre">
-                            <label for="neutre">Neutre</label>
-                        </div>
-                        <div>
-                            <input type="radio" id="negatif" name="sentiment" value="negatif">
-                            <label for="negatif">Négatif</label>
-                        </div>
-                    </div>
-                    <button id="btncreate" type="submit"
-                        class="btn btn-success bg-green-500 text-white py-2 px-4 rounded-full mt-5 hover:bg-green-600">Créer</button>
-                </form>
-            </div>
-        </div>
-        @if (\Session::has('success2'))
+                @endif
+            @endif
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 category-list">
+                @foreach ($categories as $category)
+                
+                    <div class="bg-white rounded-lg shadow-lg category-card" data-id="{{ $category->id_category }}">
+                        <div class="p-6 flex justify-between">
+                            <h3 class="text-lg font-medium truncate-text">{{ $category->position }}.
+                                {{ $category->title }}</h3>
+                            <div class="">
+                                <a href="{{ route('admin.editCategory', ['id_category' => $category->id_category]) }}"
+                                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 m-1 rounded">
+                                    <i class="fa-solid fa-pen-to-square "></i>
+                                </a>
+                                <a href="{{ route('admin.deleteCat', ['id_category' => $category->id_category]) }}"
+                                    class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4  m-1 rounded"
+                                    onclick="return confirm('etes vous sur de vouloir supprimé? ')">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </div>
 
-        <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
-            class="bg-teal-100 border border-teal-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-            <span class="block sm:inline">{!! \Session::get('success2') !!}</span>
-            <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
-                <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20">
-                    <title>Close</title>
-                    <path
-                        d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
-                </svg>
-            </span>
-        </div>
-        @endif
-        @if (\Session::has('error2'))
 
-    <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
-        class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-        <span class="block sm:inline">{!! \Session::get('error2') !!}</span>
-        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
-            <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20">
-                <title>Close</title>
-                <path
-                    d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
-            </svg>
-        </span>
-    </div>
-    @endif
-    @if (\Session::has('delete'))
 
-    <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
-        class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-        <span class="block sm:inline">{!! \Session::get('delete') !!}</span>
-        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
-            <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20">
-                <title>Close</title>
-                <path
-                    d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
-            </svg>
-        </span>
-    </div>
-    @endif
-    @endif
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 category-list">
-        @foreach ($categories as $category)
-            <div class="bg-white rounded-lg shadow-lg category-card" data-id="{{ $category->id_category }}">
-                <div class="p-6 flex justify-between">
-                    <h3 class="text-lg font-medium truncate-text">{{ $category->position }}. {{ $category->title }}</h3>
-                    <div class="">
-                            <a href="{{ route('admin.editCategory', ['id_category' => $category->id_category]) }}"
-                            class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 m-1 rounded">
-                            <i class="fa-solid fa-pen-to-square "></i>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-600">{{ $category->verbatim_count }} verbatims</p>
+                        </div>
+                    </div>
+                @endforeach
+                <div class="bg-white rounded-lg shadow-lg ">
+                    <div class="p-6 flex justify-between">
+                        <h3 class="text-lg font-medium">Verbatims sans étape</h3>
+                        <a href="{{ route('admin.verbatimsWithoutCategory') }}"
+                            class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                            <i class="fa-regular fa-pen-to-square"></i>
                         </a>
-                        <a href="{{ route('admin.deleteCat', ['id_category' => $category->id_category]) }}"
-                            class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4  m-1 rounded" onclick="return confirm('etes vous sur de vouloir supprimé? ')">
-                            <i class="fa-solid fa-trash"></i>
-                        </a>
                     </div>
-                    
-                    
-
-                </div>
-                <div class="p-6">
-                    <p class="text-gray-600">{{ $category->verbatim_count }} verbatims</p>
+                    <div class="p-6">
+                        <p class="text-gray-600">{{ $noCategoryCount }} verbatims</p>
+                    </div>
                 </div>
             </div>
-        @endforeach
-        <div class="bg-white rounded-lg shadow-lg ">
-            <div class="p-6 flex justify-between">
-                <h3 class="text-lg font-medium">Verbatims sans étape</h3>
-                <a href="{{ route('admin.verbatimsWithoutCategory') }}"
-                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                    <i class="fa-regular fa-pen-to-square"></i>
-                </a>
-            </div>
-            <div class="p-6">
-                <p class="text-gray-600">{{ $noCategoryCount }} verbatims</p>
-            </div>
-        </div>
-    </div>
     @endif
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
