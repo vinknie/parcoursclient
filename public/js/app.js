@@ -9,8 +9,8 @@ function displayPageSubmenu() {
   }
 }
 
-
-document.querySelector("a.dropdown-toggle").addEventListener("click", function() {
+const submenu = document.querySelector("a.dropdown-toggle")
+if(submenu) submenu.addEventListener("click", function() {
   displayPageSubmenu();
 });
 
