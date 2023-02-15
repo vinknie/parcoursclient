@@ -1,19 +1,23 @@
+
+
 // toggle submenu sidebar
-function displayPageSubmenu() {
-  var pageSubmenu = document.getElementById("pageSubmenu");
-  if (pageSubmenu.classList.contains('block')) {
-    pageSubmenu.classList.add('hidden');
-  } else {
-    pageSubmenu.classList.add('block');
-    pageSubmenu.classList.remove('collapse');
-  }
-}
+// function displayPageSubmenu() {
+//   const pageSubmenu = document.getElementById("pageSubmenu");
+//   if (pageSubmenu.classList.contains('block')) {
+//     pageSubmenu.classList.toggle('hidden');
+//     localStorage.setItem('submenu', 'hidden');
+//   } else {
+//     pageSubmenu.classList.add('block');
+//     pageSubmenu.classList.remove('collapse');
+//     localStorage.setItem('submenu', 'block')
+//   }
+// }
 
-const submenu = document.querySelector("a.dropdown-toggle")
-if(submenu) submenu.addEventListener("click", function() {
-  displayPageSubmenu();
+
+const submenuBtn = document.querySelector("a.dropdown-toggle");
+const pageSubmenu = document.getElementById("pageSubmenu");
+
+
+if(submenuBtn) submenuBtn.addEventListener("click", function() {
+  pageSubmenu.classList.toggle('collapse');
 });
-
-
-
-// chart js
