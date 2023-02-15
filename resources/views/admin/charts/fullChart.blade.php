@@ -63,77 +63,82 @@
 </head>
 
 <body class="relative">
-    <a href="{{ URL::previous() }}"><i
-            class="fa-solid fa-xmark fixed z-10 top-0 right-0 text-4xl text-gray-500 cursor-pointer"></i></a>
+    @foreach($totalEachVerbatim as $test)
+    {{ $test->percent }}
+    @endforeach
+    <a href="{{ URL::previous() }}">
+        <i class="fa-solid fa-xmark fixed z-10 top-0 right-0 text-4xl text-gray-500 cursor-pointer"></i>
+    </a>
     <div class="chartContainer border-4">
         <div class="chartContainerBody">
             <canvas id="myChart" class="m-2"></canvas>
         </div>
     </div>
 
-    {{-- @php
-    $test = 0;
-    @endphp
 
-    @foreach($verbatimCountByCategory as $countByCategory)
-    @php $test += $countByCategory->total_by_cat @endphp
-    {{ $test}}
-    @endforeach --}}
-
-    {{-- @php
-    $test = 0;
-    @endphp
-    @foreach($verbatimCountByCategory as $countByCategory)
-    @php
-    $test += $countByCategory->total_by_cat;
-    @endphp
-    @endforeach --}}
     <script>
         // multiple labels Plugin
-    const subLabels = {
-        id: 'subLabels',
-        afterDatasetsDraw(chart, args, pluginOptions) {
-            const { ctx, chartArea: {left, right, top, bottom, width, height}} = chart;
-            ctx.save();
+    let verbatimCountByCategory = {!! json_encode($verbatimCountByCategory) !!};
+    let categoryWithVerbatim = {!! json_encode($categoryWithVerbatim) !!}
+    // const subLabels = {
+    //     id: 'subLabels',
+    //     afterDatasetsDraw(chart, args, pluginOptions) {
+    //         const { ctx, chartArea: {left, right, top, bottom, width, height}} = chart;
 
-            @foreach($categoryWithVerbatim as $key => $catWithVerb)
-                subLabelText("{!! $catWithVerb['title'] !!}", width / {{ count($categoryWithVerbatim) }}  * {{ $catWithVerb['catPosition'][0]}})
-            @endforeach
-
-            function subLabelText(text, x) {
-                ctx.font = 'bolder 12px sans-serif';
-                ctx.textAlign = 'center';
-                ctx.fillStyle = 'rgba(102,102,102,1)';
-                ctx.fillText(text, x + left, top + 10);
-            }
-        }
-    }
-
-   // arbitaryLine Plugin
-    // const arbitaryLine = {
-    //     id : 'arbitaryLine',
-    //     beforeDraw(chart, args, options) {
-    //         const {ctx, chartArea : {top, right, bottom, left, width, height}, scales: {x, y}} = chart;
+    //         let xPosition = [];
+    //         verbatimCountByCategory.forEach((num) => {
+    //             xPosition.push( width / num['total_by_cat']);
+    //         })
+            
     //         ctx.save();
 
-    //         // how to draw
-    //         ctx.strokeStyle = options.arbitaryLineColor;
-    //         ctx.strokeRect(x.getPixelForValue(options.xPosition), top, 0, bottom);
+    //         // displaying category names (calling subLabelText())
+    //         for(const key in categoryWithVerbatim) {
+    //             subLabelText(categoryWithVerbatim[key]['title'], width / Object.keys(categoryWithVerbatim).length  * categoryWithVerbatim[key]['catPosition'][0])
+    //         }
+
+    //         function subLabelText(text, x) {
+    //             ctx.font = 'bolder 12px sans-serif';
+    //             ctx.textAlign = 'center';
+    //             ctx.fillStyle = 'rgba(102,102,102,1)';
+    //             // verbatimCountByCategory.forEach(num => {
+    //             //     ctx.fillText(text, x +  num['total_by_cat'], top + 10);
+    //             // })
+    //             ctx.fillText(text, x +  left, top + 10);
+    //         }
+    //         // end of displaying category names
             
-    //         // where to draw
+    //         ctx.strokeStyle  = 'lightgray';
+    //         [left, right].forEach(x => {
+    //             ctx.beginPath();
+    //             ctx.moveTo(x, 100);
+    //             ctx.lineTo(x, top + 20);
+    //             ctx.stroke();
+    //         });
+            
+    //         // console.log(xPosition)
+    //         xPosition.forEach(x => {
+    //             console.log(x)
+    //             ctx.beginPath();
+    //             // verbatimCountByCategory.forEach(num => {
+
+    //             ctx.moveTo(x, top);
+    //             ctx.lineTo(x, top + 20);
+    //             ctx.stroke();
+    //         })
     //         ctx.restore();
     //     }
     // }
 
     // data block
     const data = {
-        labels: [
-            @foreach($categoryWithVerbatim as $key => $catWithVerb)
-                @foreach($catWithVerb['verbatim'] as $verbatim)
-                    '{{ $verbatim }}',
-                @endforeach
-            @endforeach
-        ],
+        // labels: [
+        //     @foreach($categoryWithVerbatim as $key => $catWithVerb)
+        //         @foreach($catWithVerb['verbatim'] as $verbatim)
+        //             '{{ $verbatim }}',
+        //         @endforeach
+        //     @endforeach
+        // ],
         datasets: [
             {
                 label: 'Positif',
@@ -178,7 +183,7 @@
     const config = {
         type: 'bar',
         data: data,
-        plugins: [ChartDataLabels, subLabels],
+        plugins: [ChartDataLabels],
         options: {
             responsive: true,
             maintainAspectRatio: false,
@@ -200,11 +205,25 @@
                     display: false 
                 },
                 x: {
+                    labels: [
+                                @foreach($categoryWithVerbatim as $key => $catWithVerb)
+                                    @foreach($catWithVerb['verbatim'] as $verbatim)
+                                        '{{ $verbatim }}',
+                                    @endforeach
+                                @endforeach
+                            ],
                     position:'top',
                     grid: {
                         display:false,
                     },
                 },
+                x2: {
+                    labels: [
+                        @foreach($categoryWithVerbatim as $key => $catWithVerb)
+                                        '{{ $catWithVerb['title'] }}',
+                                @endforeach
+                    ]
+                }
             },
             plugins : {
                 arbitaryLine: {
@@ -218,11 +237,11 @@
     const myChart = new Chart(document.getElementById('myChart'), config);
 
     const chartContainerBody = document.querySelector('.chartContainerBody');
-    const totalLabels  = myChart.data.labels.length 
-        if(totalLabels > 7) {
-            const newWidth = '100vw' + ((totalLabels - 7) * 100)
-            chartContainerBody.style.width = newWidth + 'vw'
-        }
+    // const totalLabels  = myChart.data.labels.length 
+    //     if(totalLabels > 7) {
+    //         const newWidth = '100vw' + ((totalLabels - 7) * 100)
+    //         chartContainerBody.style.width = newWidth + 'vw'
+    //     }
     </script>
 
 

@@ -34,7 +34,7 @@ class DashboardController extends Controller
                 ];
             });
 
-        $totalEachVerbatim   = DB::table('verbatim')
+        $totalEachVerbatim      = DB::table('verbatim')
             ->join('category', 'verbatim.id_category', '=', 'category.id_category')
             ->select(
                 'verbatim.positif',
@@ -85,8 +85,8 @@ class DashboardController extends Controller
     // fullchart page
     public function fullChart()
     {
-        $getCategory            = Category::all();
-        $categoryWithVerbatim   = DB::table('verbatim')
+        $getCategory                = Category::all();
+        $categoryWithVerbatim       = DB::table('verbatim')
             ->join('category', 'verbatim.id_category', '=', 'category.id_category')
             ->select(
                 'verbatim.positif',
@@ -110,7 +110,7 @@ class DashboardController extends Controller
                 ];
             });
 
-        $verbatimCountByCategory = Verbatim::selectRaw('count(*) as total_by_cat')
+        $verbatimCountByCategory    = Verbatim::selectRaw('count(*) as total_by_cat')
             ->join('category', 'verbatim.id_category', '=', 'category.id_category')
             ->orderBy('category.position', 'asc')
             ->orderBy('verbatim.position', 'asc')
@@ -119,6 +119,51 @@ class DashboardController extends Controller
 
         $highestLowest = Verbatim::select(DB::raw('MAX(positif) as highest, MAX(negatif) as lowest'))->first();
 
-        return view('admin.charts.fullChart', compact('getCategory', 'categoryWithVerbatim', 'highestLowest', 'verbatimCountByCategory'));
+        $totalEachVerbatim   = DB::table('verbatim')
+            ->join('category', 'verbatim.id_category', '=', 'category.id_category')
+            ->select(
+                'verbatim.positif',
+                'verbatim.negatif',
+                'verbatim.neutre',
+                'verbatim.verbatim',
+                'verbatim.position',
+                'category.title',
+                'category.id_category',
+                'category.position',
+                DB::raw('sum(verbatim.positif + verbatim.negatif + verbatim.neutre) as total')
+            )
+            ->orderBy('category.position', 'asc')
+            ->orderBy('verbatim.position', 'asc')
+            ->groupBy('verbatim.id_verbatim')
+            ->get();
+
+        $totalEachCategory   = DB::table('verbatim')
+            ->join('category', 'verbatim.id_category', '=', 'category.id_category')
+            ->select(
+                'category.title',
+                'category.id_category',
+                'category.position',
+                DB::raw('sum(verbatim.positif + verbatim.negatif + verbatim.neutre) as total')
+            )
+            ->orderBy('category.position', 'asc')
+            ->orderBy('verbatim.position', 'asc')
+            ->groupBy('category.id_category')
+            ->get();
+
+
+        foreach ($totalEachVerbatim as $verbatim) {
+            foreach ($totalEachCategory as $category) {
+                if ($verbatim->id_category === $category->id_category) {
+                    if ($category->total > 0) {
+                        $percent = ($verbatim->total / $category->total) * 100;
+                    } else {
+                        $percent = 0;
+                    }
+                }
+            }
+            $verbatim->percent = $percent;
+        }
+
+        return view('admin.charts.fullChart', compact('getCategory', 'categoryWithVerbatim', 'highestLowest', 'verbatimCountByCategory', 'totalEachVerbatim', 'percent'));
     }
 }
