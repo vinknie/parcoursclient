@@ -243,7 +243,7 @@
                     labels: [
                         @foreach($categoryWithVerbatim as $key => $catWithVerb)
                             @foreach($catWithVerb['verbatim'] as $verbatim)
-                                '{{ $verbatim }}',
+                                "{{ $verbatim }}",
                             @endforeach
                         @endforeach
                             ],
@@ -257,7 +257,7 @@
                 x2: {
                     labels: [
                         @foreach($totalEachVerbatim as $test)
-                            '{{number_format((float) $test->percent , 2, '.', '')}}',
+                            "{{number_format((float) $test->percent , 2, '.', '')}}",
                         @endforeach
                     ],
                     grid: {
@@ -274,7 +274,7 @@
                     labels: [
                         @foreach($categoryWithVerbatim as $catWithVerb)
                             @foreach($catWithVerb['verbatim'] as $test)
-                            '{{ $catWithVerb['title'] }}', 
+                            "{{ $catWithVerb['title'] }}", 
                             @endforeach
                         @endforeach
                     ],
