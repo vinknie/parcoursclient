@@ -50,7 +50,6 @@
                 <ul class="collapse list-unstyled" id="pageSubmenu">
                     @foreach($getCategory as $category)
                     <li class="py-2 px-2 text-white">
-                        <a href="{{ route('admin.noteVerba',['id_category' => $category->id_category]) }}">{{
                             $category->title }}</a>
                     </li>
                     @endforeach

@@ -23,6 +23,7 @@
 
     {{-- Chart Js --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js"></script>
+
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"
         integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig=="
@@ -58,6 +59,10 @@
         #myChart {
             height: 95vh !important;
             width: 100vw !important;
+        }
+
+        .tenzin {
+            background: red !important;
         }
     </style>
 </head>
@@ -213,6 +218,12 @@
             },
         ]
     }
+
+    // @foreach($categoryWithVerbatim as $catWithVerb)
+    //     @foreach($catWithVerb['verbatim'] as $length)
+    //         '{{ $catWithVerb['title'] }}',
+    //     @endforeach
+    // @endforeach
    
     // config block
     const config = {
@@ -273,16 +284,16 @@
                 x3: {
                     labels: [
                         @foreach($categoryWithVerbatim as $catWithVerb)
+
                             @foreach($catWithVerb['verbatim'] as $test)
                             "{{ $catWithVerb['title'] }}", 
+
                             @endforeach
                         @endforeach
                     ],
                     grid: {
-                        // display: false
+                        display: true,
                     },
-                    barPercentage: 5,
-                    categoryPercentage: 21
                 }, 
             },
             plugins : {
