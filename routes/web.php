@@ -66,7 +66,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/note/update-verbatim-positions', [NoteController::class, 'updatePositionVerba'])->name('admin.updatePositionVerba');
 
     Route::post('/dashboard/note/get-dialogues',[NoteController::class, 'getDialogues']);
-
+    Route::patch('/dashboard/resetvalues/{id_verbatim}',[NoteController::class,'resetValues'])->name('admin.resetvalues');
 });
 // test
 Route::get('/chart/full', [DashboardController::class, 'fullChart'])->name('fullChart');

@@ -131,4 +131,17 @@ class NoteController extends Controller
     return response()->json($dialogues);
 }
 
+public function resetValues($id_verbatim)
+{
+    $verbatim = Verbatim::findOrFail($id_verbatim);
+
+    $verbatim->update([
+        'positif' => 0,
+        'neutre' => 0,
+        'negatif' => 0
+    ]);
+
+    return redirect()->back();
+}
+
 }

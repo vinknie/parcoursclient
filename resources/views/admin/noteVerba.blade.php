@@ -86,6 +86,9 @@
                     </form>
                     
                 </div>
+                <div>
+                    
+                </div>
             </div>
 
         </div>
@@ -131,6 +134,25 @@
             </form>
 
         </div>
+        @if(Auth::check() && Auth::user()->role === 'admin')
+        <form action="{{ route('admin.resetvalues', $verbatim->id_verbatim) }}" method="POST">
+            @csrf
+            @method('PATCH')
+           
+            <button onclick="return confirm('Etes vous sur de vouloir Reset les notes?')" type="submit" id="reset" class="text-dark font-bold py-3 px-5 m-1"><i class="fa-solid fa-rotate-left"></i>
+            </button>
+            <span class="hide">Reset</span>
+        </form>
+        <style>
+            .hide {
+                display: none;
+                }
+            #reset:hover  + .hide {
+            display: inline;
+            color: red;
+            }
+        </style>
+        @endif
     </div>
    
     @endforeach
