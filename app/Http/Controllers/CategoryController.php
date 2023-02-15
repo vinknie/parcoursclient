@@ -20,10 +20,9 @@ class CategoryController extends Controller
     public function createCategory()
     {
         $getCategory = Category::all();
-
         $getVerbatim = Verbatim::all();
 
-        return view('admin.createCategory', compact('getCategory','getVerbatim'));
+        return view('admin.createCategory', compact('getCategory', 'getVerbatim'));
     }
 
     public function category()
@@ -35,16 +34,16 @@ class CategoryController extends Controller
             ->get();
 
         $noCategoryCount = Verbatim::whereNull('id_category')->count();
-        $getCategory = Category::all();
+        $getCategory = Category::orderBy('position')->get();
         $getVerbatim = Verbatim::all();
 
-    return view('admin.category', compact('categories','noCategoryCount','getCategory','getVerbatim'));
+        return view('admin.category', compact('categories', 'noCategoryCount', 'getCategory', 'getVerbatim'));
     }
 
     public function verbatim()
     {
         $getCategory = Category::all();
-       return view('admin.verbatim',compact('getCategory'));
+        return view('admin.verbatim', compact('getCategory'));
     }
 
     public function createCat(Request $request)
@@ -66,23 +65,23 @@ class CategoryController extends Controller
     }
 
     public function CreateVerba(Request $request)
-{
-    $existingVerba = Verbatim::where('verbatim', $request->verbatim)->where('id_category', $request->id_category)->first();
-    if ($existingVerba) {
-        return redirect()->back()->with('error1', 'Un verbatim avec cette intitulé existe déjà dans cette étape');
+    {
+        $existingVerba = Verbatim::where('verbatim', $request->verbatim)->where('id_category', $request->id_category)->first();
+        if ($existingVerba) {
+            return redirect()->back()->with('error1', 'Un verbatim avec cette intitulé existe déjà dans cette étape');
+        }
+
+        $verba = new Verbatim();
+        $verba->id_category = $request->id_category;
+        $verba->verbatim = $request->verbatim;
+
+        $lastVerbatim = Verbatim::where('id_category', $request->id_category)->orderBy('position', 'desc')->first();
+        $verba->position = $lastVerbatim ? $lastVerbatim->position + 1 : 1;
+
+        $verba->save();
+
+        return redirect()->back()->with('success1', 'Le verbatim a bien été créé');
     }
-
-    $verba = new Verbatim();
-    $verba->id_category = $request->id_category;
-    $verba->verbatim = $request->verbatim;
-
-    $lastVerbatim = Verbatim::where('id_category', $request->id_category)->orderBy('position', 'desc')->first();
-    $verba->position = $lastVerbatim ? $lastVerbatim->position + 1 : 1;
-
-    $verba->save();
-
-    return redirect()->back()->with('success1', 'Le verbatim a bien été créé');
-}
 
     public function editCategory($id_category)
     {
@@ -92,7 +91,7 @@ class CategoryController extends Controller
 
         $getCategory = Category::all();
 
-        return view('admin.category', compact('getcategory','getverbatim','getCategory'));
+        return view('admin.category', compact('getcategory', 'getverbatim', 'getCategory'));
     }
 
     public function updateCat(Request $request, $id_category)
@@ -140,7 +139,7 @@ class CategoryController extends Controller
 
                 $lastVerbatim = Verbatim::where('id_category', $request->id_category[$key])->orderBy('position', 'desc')->first();
                 $getverbatim->position = $lastVerbatim ? $lastVerbatim->position + 1 : 1;
-                
+
                 $getverbatim->save();
             }
         }
@@ -160,11 +159,11 @@ class CategoryController extends Controller
     public function createDialogue(Request $request)
     {
         $existingDial1 = Dialogue::where('dialogue', $request->dialogue)->where('id_verbatim', $request->id_verbatim)->first();
-    
-        if($existingDial1){
+
+        if ($existingDial1) {
             return redirect()->back()->with('error2', 'Un dialogue avec cette intitulé existe déjà dans ce verbatim');
         }
-    
+
         $dial = new Dialogue();
         $dial->id_verbatim = $request->id_verbatim;
         $dial->dialogue = $request->dialogue;
@@ -178,20 +177,20 @@ class CategoryController extends Controller
             $dial->negatif = 1;
             Verbatim::where('id_verbatim', $request->id_verbatim)->increment('negatif');
         }
-    
+
         $dial->save();
-    
+
         return redirect()->back()->with('success2', 'Le dialogue a bien été créé');
     }
 
 
 
     //Delete Function 
-    public function deleteCat($id_category){
+    public function deleteCat($id_category)
+    {
 
         $deleteCat = Category::find($id_category)->delete();
 
         return redirect()->back()->with('delete', 'Etapes supprimé , les verbatims de la catégory se trouve dans "sans étape"');
     }
-
 }

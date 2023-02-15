@@ -63,9 +63,6 @@
 </head>
 
 <body class="relative">
-    @foreach($totalEachVerbatim as $test)
-    {{ $test->percent }}
-    @endforeach
     <a href="{{ URL::previous() }}">
         <i class="fa-solid fa-xmark fixed z-10 top-0 right-0 text-4xl text-gray-500 cursor-pointer"></i>
     </a>
@@ -126,6 +123,44 @@
     //             ctx.lineTo(x, top + 20);
     //             ctx.stroke();
     //         })
+    //         ctx.restore();
+    //     }
+    // }
+
+
+    // const percentageLabels = {
+    //     id: 'percentageLabels',
+    //     afterDatasetsDraw(chart, args, pluginOptions) {
+    //         const { ctx, chartArea: {left, right, top, bottom, width, height}} = chart;
+
+    //         let percentData = [
+    //             @foreach($totalEachVerbatim as $test)
+    //                 '{{number_format((float) $test->percent , 2, '.', '')}}',
+    //             @endforeach
+    //         ];
+
+    //         const xCenter = (left + right) / 2;
+    //         const yCenter = bottom + 20;
+
+    //         ctx.save();
+    //         ctx.textBaseline = 'middle';
+    //         ctx.textAlign = 'center';
+
+    //         // console.log(percentData.length)
+    //         for (let i = 0; i < percentData.length; i++) {
+    //             const x = xCenter + (i - percentData.length / 2 + 0.5) * 120;
+    //             const y = yCenter;
+
+    //             // Draw circle
+    //             ctx.beginPath();
+    //             ctx.arc(x, y, 15, 0, 2 * Math.PI);
+    //             ctx.fillStyle = 'blue';
+    //             ctx.fill();
+
+    //             // Draw text
+    //             ctx.fillStyle = 'white';
+    //             ctx.fillText(percentData[i], x, y);
+    //         }
     //         ctx.restore();
     //     }
     // }
@@ -206,24 +241,49 @@
                 },
                 x: {
                     labels: [
-                                @foreach($categoryWithVerbatim as $key => $catWithVerb)
-                                    @foreach($catWithVerb['verbatim'] as $verbatim)
-                                        '{{ $verbatim }}',
-                                    @endforeach
-                                @endforeach
+                        @foreach($categoryWithVerbatim as $key => $catWithVerb)
+                            @foreach($catWithVerb['verbatim'] as $verbatim)
+                                '{{ $verbatim }}',
+                            @endforeach
+                        @endforeach
                             ],
                     position:'top',
                     grid: {
                         display:false,
                     },
                 },
+
+                // percentage labels
                 x2: {
                     labels: [
-                        @foreach($categoryWithVerbatim as $key => $catWithVerb)
-                                        '{{ $catWithVerb['title'] }}',
-                                @endforeach
-                    ]
-                }
+                        @foreach($totalEachVerbatim as $test)
+                            '{{number_format((float) $test->percent , 2, '.', '')}}',
+                        @endforeach
+                    ],
+                    grid: {
+                        display: false,
+                    },
+                    ticks: {
+                        font : {
+                            size: 12
+                        },
+                    }
+                },
+                // category labels
+                x3: {
+                    labels: [
+                        @foreach($categoryWithVerbatim as $catWithVerb)
+                            @foreach($catWithVerb['verbatim'] as $test)
+                            '{{ $catWithVerb['title'] }}', 
+                            @endforeach
+                        @endforeach
+                    ],
+                    grid: {
+                        // display: false
+                    },
+                    barPercentage: 5,
+                    categoryPercentage: 21
+                }, 
             },
             plugins : {
                 arbitaryLine: {
@@ -233,7 +293,8 @@
             },
         }
     }
-
+    
+    console.log(config.options.scales.x2.ticks)
     const myChart = new Chart(document.getElementById('myChart'), config);
 
     const chartContainerBody = document.querySelector('.chartContainerBody');
@@ -242,6 +303,10 @@
     //         const newWidth = '100vw' + ((totalLabels - 7) * 100)
     //         chartContainerBody.style.width = newWidth + 'vw'
     //     }
+
+        
+    const numXLabels = config.options.scales.x.labels.length;
+
     </script>
 
 

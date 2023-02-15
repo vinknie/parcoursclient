@@ -65,18 +65,18 @@ class DashboardController extends Controller
             ->groupBy('category.id_category')
             ->get();
 
-            foreach ($totalEachVerbatim as $verbatim) {
-                foreach ($totalEachCategory as $category) {
-                    if ($verbatim->id_category === $category->id_category) {
-                        if ($category->total > 0) {
-                            $percent = ($verbatim->total / $category->total) * 100;
-                        } else {
-                            $percent = 0;
-                        }
+        foreach ($totalEachVerbatim as $verbatim) {
+            foreach ($totalEachCategory as $category) {
+                if ($verbatim->id_category === $category->id_category) {
+                    if ($category->total > 0) {
+                        $percent = ($verbatim->total / $category->total) * 100;
+                    } else {
+                        $percent = 0;
                     }
                 }
-                $verbatim->percent = $percent;
             }
+            $verbatim->percent = $percent;
+        }
 
 
         return view('admin.dashboard', compact('getCategory', 'categoryWithVerbatim', 'totalEachVerbatim', 'totalEachCategory', 'percent'));
