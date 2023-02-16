@@ -219,12 +219,17 @@
         ]
     }
 
+
+    // dont delete (testing category displaying once)
+    // let test = "";
     // @foreach($categoryWithVerbatim as $catWithVerb)
-    //     @foreach($catWithVerb['verbatim'] as $length)
-    //         '{{ $catWithVerb['title'] }}',
+    //     @foreach($catWithVerb['verbatim'] as $verbatimCount)
+    //         test += "{{ $catWithVerb['title'] }}, "
     //     @endforeach
     // @endforeach
-   
+
+    // console.log(test)
+
     // config block
     const config = {
         type: 'bar',
@@ -284,10 +289,8 @@
                 x3: {
                     labels: [
                         @foreach($categoryWithVerbatim as $catWithVerb)
-
-                            @foreach($catWithVerb['verbatim'] as $test)
-                            "{{ $catWithVerb['title'] }}", 
-
+                            @foreach($catWithVerb['verbatim'] as $verbatimCount)
+                                "{{ $catWithVerb['title'] }} ",
                             @endforeach
                         @endforeach
                     ],
@@ -309,18 +312,9 @@
     const myChart = new Chart(document.getElementById('myChart'), config);
 
     const chartContainerBody = document.querySelector('.chartContainerBody');
-    // const totalLabels  = myChart.data.labels.length 
-    //     if(totalLabels > 7) {
-    //         const newWidth = '100vw' + ((totalLabels - 7) * 100)
-    //         chartContainerBody.style.width = newWidth + 'vw'
-    //     }
-
         
-    const numXLabels = config.options.scales.x.labels.length;
-
+    // const numXLabels = config.options.scales.x.labels.length;
     </script>
-
-
 </body>
 
 </html>
