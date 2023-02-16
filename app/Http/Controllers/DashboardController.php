@@ -78,7 +78,6 @@ class DashboardController extends Controller
             $verbatim->percent = $percent;
         }
 
-
         return view('admin.dashboard', compact('getCategory', 'categoryWithVerbatim', 'totalEachVerbatim', 'totalEachCategory', 'percent'));
     }
 
