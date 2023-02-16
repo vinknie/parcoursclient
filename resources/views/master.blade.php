@@ -10,7 +10,6 @@
             </a>
             <ul class="divide-y divide-solid divide-slate-600">
 
-
                 @if(Auth::user()->role == 'admin')
                 <li class="py-2">
                     <x-responsive-nav-link :href="route('admin.createUser')"
@@ -49,7 +48,8 @@
                 @endif
                 <ul class="collapse list-unstyled" id="pageSubmenu">
                     @foreach($getCategory as $category)
-                    <li class="py-2 px-2 text-white">
+                    <li class="py-2 px-2 text-white cursor-pointer hover:bg-sky-700">
+                        <a href="{{ route('admin.noteVerba',['id_category' => $category->id_category]) }}">{{
                             $category->title }}</a>
                     </li>
                     @endforeach
