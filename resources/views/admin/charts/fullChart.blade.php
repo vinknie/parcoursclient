@@ -247,14 +247,33 @@
                     min: -{{ $highestLowest->lowest + 2}},
                     ticks: {
                         beginAtZero: true,
-                        stepSize: 0.5
+                        stepSize: 0.5,
+                        display: false
                     },
                     stacked: true,
                     grid: {
-                        drawOnChartArea: false,
+                        // drawOnChartArea: false,
+                        drawBorder: false,
+                        color: function(context) {
+                            if (context.tick.value === 0) {
+                            return 'rgba(0,0,0,0.2)'; // Set color for grid line at zero value
+                            }
+                        },
+                        lineWidth: function(context) {
+                            if (context.tick.value === 0) {
+                            return 1; // Set line width for grid line at zero value
+                            } else {
+                            return 0; // Hide other grid lines
+                            }
+                        },
+                        zeroLineColor: 'black', // Set color for zero line
+                        zeroLineWidth: 1, // Set line width for zero line
                     },
-                    display: false 
+
+                    // display: false,
                 },
+
+                // top phrase labales
                 x: {
                     labels: [
                         @foreach($categoryWithVerbatim as $key => $catWithVerb)
@@ -295,16 +314,16 @@
                         @endforeach
                     ],
                     grid: {
-                        display: true,
+                        // display: false,
                     },
                 }, 
             },
-            plugins : {
-                arbitaryLine: {
-                    arbitaryLineColor : 'blue',
-                    xPosition: 2
-                }
-            },
+            // plugins : {
+            //     arbitaryLine: {
+            //         arbitaryLineColor : 'blue',
+            //         xPosition: 2
+            //     }
+            // },
         }
     }
     
