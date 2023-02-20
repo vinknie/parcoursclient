@@ -24,8 +24,7 @@
     {{-- Chart Js --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js"></script>
 
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"
         integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
@@ -65,7 +64,6 @@
             background: red !important;
         }
 
-        */
     </style>
 </head>
 
@@ -78,6 +76,7 @@
             <canvas id="myChart" class="m-2"></canvas>
         </div>
     </div>
+
 
     <script>
         // multiple labels Plugin
@@ -180,7 +179,7 @@
                         labels: [
                             @foreach($categoryWithVerbatim as $key => $catWithVerb)
                                 @foreach($catWithVerb['verbatim'] as $verbatim)
-                                    "{{ $verbatim }}",
+                                    "{!! $verbatim !!}",
                                 @endforeach
                             @endforeach
                             ],
@@ -194,25 +193,39 @@
 
                     // percentage labels
                     x2: {
-                        labels: [
-                            @foreach($totalEachVerbatim as $test)
-                                "{{number_format((float) $test->percent , 2, '.', '')}}",
-                            @endforeach
-                        ],
-                        grid: {
-                            display: false,
-                        },
-                        ticks: {
-                            font : {
-                                size: 12
-                            },
-                        }
+                    labels: [
+                        @foreach ($totalEachVerbatim as $test)
+                            "{!! number_format((float) $test->percent, 2, '.', '') !!} %",
+                        @endforeach
+                    ],
+                    grid: {
+                        display: false,
                     },
+                    ticks: {
+                        font: {
+                            size: 12,
+                            family: 'FontAwesome',
+                        },
+                        
+                        showLabelBackdrop: true,
+                        backdropPadding: 6,
+                        backdropColor: function(value) {
+                            var percent = parseFloat(value.tick.label);
+                            if (typeof percent === 'number' && !isNaN(percent)) {
+                                var alpha = percent / 100;
+                                return 'rgba(30, 144, 255, ' + alpha + ')';
+                            } else {
+                                return 'gray';
+                            }
+                        },
+                   
+                },
+            },
                     // category labels
                     x3: {
                         labels: [
                             @foreach($categoryWithVerbatim as $catWithVerb)
-                            "{{ $catWithVerb['title'] }} ",
+                            "{!! $catWithVerb['title'] !!} ",
                             @endforeach
                         ],
                         grid: {
@@ -240,6 +253,7 @@
         
         // const numXLabels = config.options.scales.x.labels.length;
     </script>
+
 </body>
 
 </html>

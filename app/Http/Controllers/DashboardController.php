@@ -78,6 +78,10 @@ class DashboardController extends Controller
             $verbatim->percent = $percent;
         }
 
+
+        if(!isset($percent)){
+            return view('admin.dashboard', compact('getCategory', 'categoryWithVerbatim', 'totalEachVerbatim', 'totalEachCategory'));
+        }
         return view('admin.dashboard', compact('getCategory', 'categoryWithVerbatim', 'totalEachVerbatim', 'totalEachCategory', 'percent'));
     }
 
@@ -162,7 +166,9 @@ class DashboardController extends Controller
             }
             $verbatim->percent = $percent;
         }
-
+        if(!isset($percent)){
+            return view('admin.charts.fullChart', compact('getCategory', 'categoryWithVerbatim', 'highestLowest', 'verbatimCountByCategory', 'totalEachVerbatim'));
+        }
         return view('admin.charts.fullChart', compact('getCategory', 'categoryWithVerbatim', 'highestLowest', 'verbatimCountByCategory', 'totalEachVerbatim', 'percent'));
     }
 }
