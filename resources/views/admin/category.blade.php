@@ -230,7 +230,7 @@
     @endforeach
 </div>
 @else
-<div class="container mx-auto px-6 py-12">
+<div class="container mx-auto px-6 py-12 mt-8">
     <div class="text-center">
         <h2 class="text-2xl font-medium mb-4">Gestion des étapes et des verbatims</h2>
     </div>

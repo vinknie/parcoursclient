@@ -3,5 +3,3 @@
 - localstorage => to make the submenu opened after click
 
 - seperate dashboard and nav
-
-- bug 1 : dashboardController (if verbatim in category is not noted, divide by zero error)
