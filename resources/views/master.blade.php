@@ -3,7 +3,7 @@
 
         {{-- sidebar --}}
         @if (!request()->is('chart/full'))
-        <nav class="w-none md:w-1/6 bg-gray-800 text-slate-50 p-5">
+        <nav class="w-none md:w-1/6 bg-gray-800 text-slate-50 p-5 mt-5">
 
             <a href="{{ route('profile.edit') }}" class="block h-36 w-36 rounded-full mx-auto my-12"
                 style="background: url({{ asset('images/admin.jpg') }}) left center / cover no-repeat">

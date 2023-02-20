@@ -2,7 +2,7 @@
 @section('content')
 
 
-<div class="">
+<div class="mt-9">
     <canvas id="myChart" class="w-full"></canvas>
 </div>
 
@@ -70,8 +70,6 @@
     });
 
 </script>
-
-
 
 <h1>Percentage</h1>
 
