@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Parcours Client') }}</title>
+    <title>Parcours Client</title>
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
 
@@ -64,6 +64,8 @@
         .tenzin {
             background: red !important;
         }
+
+        */
     </style>
 </head>
 
@@ -77,262 +79,166 @@
         </div>
     </div>
 
-
     <script>
         // multiple labels Plugin
-    let verbatimCountByCategory = {!! json_encode($verbatimCountByCategory) !!};
-    let categoryWithVerbatim = {!! json_encode($categoryWithVerbatim) !!}
-    // const subLabels = {
-    //     id: 'subLabels',
-    //     afterDatasetsDraw(chart, args, pluginOptions) {
-    //         const { ctx, chartArea: {left, right, top, bottom, width, height}} = chart;
+        let verbatimCountByCategory = {!! json_encode($verbatimCountByCategory) !!};
+        let categoryWithVerbatim    = {!! json_encode($categoryWithVerbatim) !!}
 
-    //         let xPosition = [];
-    //         verbatimCountByCategory.forEach((num) => {
-    //             xPosition.push( width / num['total_by_cat']);
-    //         })
-            
-    //         ctx.save();
-
-    //         // displaying category names (calling subLabelText())
-    //         for(const key in categoryWithVerbatim) {
-    //             subLabelText(categoryWithVerbatim[key]['title'], width / Object.keys(categoryWithVerbatim).length  * categoryWithVerbatim[key]['catPosition'][0])
-    //         }
-
-    //         function subLabelText(text, x) {
-    //             ctx.font = 'bolder 12px sans-serif';
-    //             ctx.textAlign = 'center';
-    //             ctx.fillStyle = 'rgba(102,102,102,1)';
-    //             // verbatimCountByCategory.forEach(num => {
-    //             //     ctx.fillText(text, x +  num['total_by_cat'], top + 10);
-    //             // })
-    //             ctx.fillText(text, x +  left, top + 10);
-    //         }
-    //         // end of displaying category names
-            
-    //         ctx.strokeStyle  = 'lightgray';
-    //         [left, right].forEach(x => {
-    //             ctx.beginPath();
-    //             ctx.moveTo(x, 100);
-    //             ctx.lineTo(x, top + 20);
-    //             ctx.stroke();
-    //         });
-            
-    //         // console.log(xPosition)
-    //         xPosition.forEach(x => {
-    //             console.log(x)
-    //             ctx.beginPath();
-    //             // verbatimCountByCategory.forEach(num => {
-
-    //             ctx.moveTo(x, top);
-    //             ctx.lineTo(x, top + 20);
-    //             ctx.stroke();
-    //         })
-    //         ctx.restore();
-    //     }
-    // }
-
-
-    // const percentageLabels = {
-    //     id: 'percentageLabels',
-    //     afterDatasetsDraw(chart, args, pluginOptions) {
-    //         const { ctx, chartArea: {left, right, top, bottom, width, height}} = chart;
-
-    //         let percentData = [
-    //             @foreach($totalEachVerbatim as $test)
-    //                 '{{number_format((float) $test->percent , 2, '.', '')}}',
-    //             @endforeach
-    //         ];
-
-    //         const xCenter = (left + right) / 2;
-    //         const yCenter = bottom + 20;
-
-    //         ctx.save();
-    //         ctx.textBaseline = 'middle';
-    //         ctx.textAlign = 'center';
-
-    //         // console.log(percentData.length)
-    //         for (let i = 0; i < percentData.length; i++) {
-    //             const x = xCenter + (i - percentData.length / 2 + 0.5) * 120;
-    //             const y = yCenter;
-
-    //             // Draw circle
-    //             ctx.beginPath();
-    //             ctx.arc(x, y, 15, 0, 2 * Math.PI);
-    //             ctx.fillStyle = 'blue';
-    //             ctx.fill();
-
-    //             // Draw text
-    //             ctx.fillStyle = 'white';
-    //             ctx.fillText(percentData[i], x, y);
-    //         }
-    //         ctx.restore();
-    //     }
-    // }
-
-    // data block
-    const data = {
-        // labels: [
-        //     @foreach($categoryWithVerbatim as $key => $catWithVerb)
-        //         @foreach($catWithVerb['verbatim'] as $verbatim)
-        //             '{{ $verbatim }}',
-        //         @endforeach
-        //     @endforeach
-        // ],
-        datasets: [
-            {
-                label: 'Positif',
-                backgroundColor: '#3c7cc4',
-                borderRadius: 30,
-                barThickness: 16,
-                stack: 'Stack 0',
-                data: [
-                    @foreach($categoryWithVerbatim as $key=> $catWithVerb)
-                        @foreach($catWithVerb['positif'] as $positif)
-                            {{ $positif.',' }}
-                        @endforeach
-                        @endforeach
-                ],
-                datalabels: {
-                anchor: 'end',
-                align: 'top'
-                }
-            },
-            {
-                label: 'Negatif',
-                backgroundColor: '#c4042c',
-                borderRadius: 30,
-                barThickness: 16,
-                stack: 'Stack 0',
-                data: [
-                    @foreach($categoryWithVerbatim as $key=> $catWithVerb)
-                        @foreach($catWithVerb['negatif'] as $negatif)
-                            {{ '-'.$negatif.',' }}
-                        @endforeach
-                    @endforeach
-                ],
-                datalabels: {
-                    anchor: 'start',
-                    align: 'bottom',
-                }
-            },
-        ]
-    }
-
-
-    // dont delete (testing category displaying once)
-    // let test = "";
-    // @foreach($categoryWithVerbatim as $catWithVerb)
-    //     @foreach($catWithVerb['verbatim'] as $verbatimCount)
-    //         test += "{{ $catWithVerb['title'] }}, "
-    //     @endforeach
-    // @endforeach
-
-    // console.log(test)
-
-    // config block
-    const config = {
-        type: 'bar',
-        data: data,
-        plugins: [ChartDataLabels],
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-             layout: {
-                padding: 50
-            },
-            scales: {
-                y: {
-                    max: {{ $highestLowest->highest + 4}},
-                    min: -{{ $highestLowest->lowest + 2}},
-                    ticks: {
-                        beginAtZero: true,
-                        stepSize: 0.5,
-                        display: false
-                    },
-                    stacked: true,
-                    grid: {
-                        // drawOnChartArea: false,
-                        drawBorder: false,
-                        color: function(context) {
-                            if (context.tick.value === 0) {
-                            return 'rgba(0,0,0,0.2)'; // Set color for grid line at zero value
-                            }
-                        },
-                        lineWidth: function(context) {
-                            if (context.tick.value === 0) {
-                            return 1; // Set line width for grid line at zero value
-                            } else {
-                            return 0; // Hide other grid lines
-                            }
-                        },
-                        zeroLineColor: 'black', // Set color for zero line
-                        zeroLineWidth: 1, // Set line width for zero line
-                    },
-
-                    // display: false,
-                },
-
-                // top phrase labales
-                x: {
-                    labels: [
-                        @foreach($categoryWithVerbatim as $key => $catWithVerb)
-                            @foreach($catWithVerb['verbatim'] as $verbatim)
-                                "{{ $verbatim }}",
+        // data block
+        const data = {
+            // labels: [
+            //     @foreach($categoryWithVerbatim as $key => $catWithVerb)
+            //         @foreach($catWithVerb['verbatim'] as $verbatim)
+            //             '{{ $verbatim }}',
+            //         @endforeach
+            //     @endforeach
+            // ],
+            datasets: [
+                {
+                    label: 'Positif',
+                    backgroundColor: '#3c7cc4',
+                    borderRadius: 30,
+                    barThickness: 16,
+                    stack: 'Stack 0',
+                    data: [
+                        @foreach($categoryWithVerbatim as $key=> $catWithVerb)
+                            @foreach($catWithVerb['positif'] as $positif)
+                                {{ $positif.',' }}
                             @endforeach
                         @endforeach
-                            ],
-                    position:'top',
-                    grid: {
-                        display:false,
-                    },
-                },
-
-                // percentage labels
-                x2: {
-                    labels: [
-                        @foreach($totalEachVerbatim as $test)
-                            "{{number_format((float) $test->percent , 2, '.', '')}}",
-                        @endforeach
                     ],
-                    grid: {
-                        display: false,
-                    },
-                    ticks: {
-                        font : {
-                            size: 12
-                        },
+                    datalabels: {
+                    anchor: 'end',
+                    align: 'top'
                     }
                 },
-                // category labels
-                x3: {
-                    labels: [
-                        @foreach($categoryWithVerbatim as $catWithVerb)
-                            @foreach($catWithVerb['verbatim'] as $verbatimCount)
-                                "{{ $catWithVerb['title'] }} ",
+                {
+                    label: 'Negatif',
+                    backgroundColor: '#c4042c',
+                    borderRadius: 30,
+                    barThickness: 16,
+                    stack: 'Stack 0',
+                    data: [
+                        @foreach($categoryWithVerbatim as $key=> $catWithVerb)
+                            @foreach($catWithVerb['negatif'] as $negatif)
+                                {{ '-'.$negatif.',' }}
                             @endforeach
                         @endforeach
                     ],
-                    grid: {
+                    datalabels: {
+                        anchor: 'start',
+                        align: 'bottom',
+                    }
+                },
+            ]
+        }
+
+        // config block
+        const config = {
+            type: 'bar',
+            data: data,
+            plugins: [ChartDataLabels],
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: 50
+                },
+                scales: {
+                    y: {
+                        max: {{ $highestLowest->highest + 4}},
+                        min: -{{ $highestLowest->lowest + 2}},
+                        ticks: {
+                            beginAtZero: true,
+                            stepSize: 0.5,
+                            display: false
+                        },
+                        stacked: true,
+                        grid: {
+                            // drawOnChartArea: false,
+                            drawBorder: false,
+                            color: function(context) {
+                                if (context.tick.value === 0) {
+                                return 'rgba(0,0,0,0.2)'; // Set color for grid line at zero value
+                                }
+                            },
+                            lineWidth: function(context) {
+                                if (context.tick.value === 0) {
+                                return 1; // Set line width for grid line at zero value
+                                } else {
+                                return 0; // Hide other grid lines
+                                }
+                            },
+                            zeroLineColor: 'black', // Set color for zero line
+                            zeroLineWidth: 1, // Set line width for zero line
+                        },
                         // display: false,
                     },
-                }, 
-            },
-            // plugins : {
-            //     arbitaryLine: {
-            //         arbitaryLineColor : 'blue',
-            //         xPosition: 2
-            //     }
-            // },
-        }
-    }
-    
-    console.log(config.options.scales.x2.ticks)
-    const myChart = new Chart(document.getElementById('myChart'), config);
 
-    const chartContainerBody = document.querySelector('.chartContainerBody');
+                    // top phrase labales
+                    x: {
+                        labels: [
+                            @foreach($categoryWithVerbatim as $key => $catWithVerb)
+                                @foreach($catWithVerb['verbatim'] as $verbatim)
+                                    "{{ $verbatim }}",
+                                @endforeach
+                            @endforeach
+                            ],
+                        position:'top',
+                        grid: {
+                            display:false,
+                        },
+                        ticks: {
+                        }
+                    },
+
+                    // percentage labels
+                    x2: {
+                        labels: [
+                            @foreach($totalEachVerbatim as $test)
+                                "{{number_format((float) $test->percent , 2, '.', '')}}",
+                            @endforeach
+                        ],
+                        grid: {
+                            display: false,
+                        },
+                        ticks: {
+                            font : {
+                                size: 12
+                            },
+                        }
+                    },
+                    // category labels
+                    x3: {
+                        labels: [
+                            @foreach($categoryWithVerbatim as $catWithVerb)
+                            "{{ $catWithVerb['title'] }} ",
+                            @endforeach
+                        ],
+                        grid: {
+                            // display: false,
+                        },
+                        border: {
+                            display: true,
+                            color: '#7dba80',
+                            width: 2
+                        },
+                        ticks: {
+                            showLabelBackdrop: true,
+                            backdropColor: ['#7dba80', '#c6cfc7'],
+                            backdropPadding: 9,
+                            color:['white', 'black'],
+                        },
+                    }, 
+                },
+            }
+        }
         
-    // const numXLabels = config.options.scales.x.labels.length;
+        const myChart = new Chart(document.getElementById('myChart'), config);
+        
+        const chartContainerBody = document.querySelector('.chartContainerBody');
+        
+        // const numXLabels = config.options.scales.x.labels.length;
     </script>
 </body>
 

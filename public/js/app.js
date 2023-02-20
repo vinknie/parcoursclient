@@ -16,4 +16,4 @@
 
 const submenuBtn  = document.querySelector("a.dropdown-toggle");
 const pageSubmenu = document.getElementById("pageSubmenu");
-if(submenuBtn) submenuBtn.addEventListener("click", () => pageSubmenu.classList.toggle('collapse'));
+if(submenuBtn) submenuBtn.addEventListener("click", () => pageSubmenu.classList.toggle('collapse'));  
