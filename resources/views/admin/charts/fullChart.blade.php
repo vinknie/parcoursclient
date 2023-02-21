@@ -24,8 +24,7 @@
     {{-- Chart Js --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js"></script>
 
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"
         integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
@@ -69,13 +68,33 @@
                 top: 90px;
             }
         }
+
+        .dialogue-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dialogue-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     </style>
 </head>
 
 <body class="relative">
 
-    {{-- @foreach($categoryWithVerbatim as $key => $catWithVerb)
-    @foreach($catWithVerb['verbatim'] as $key => $verbatim)
+    {{-- @foreach ($categoryWithVerbatim as $key => $catWithVerb)
+    @foreach ($catWithVerb['verbatim'] as $key => $verbatim)
     '{{ $key }}',
     @endforeach
     @endforeach --}}
@@ -87,43 +106,42 @@
     </a>
 
     {{-- chart js --}}
-    <div class="chartContainer border-4 relative">
+    <div class="chartContainer border-4 ">
         <div class="chartContainerBody">
             <canvas id="myChart" class="m-2"></canvas>
         </div>
-        <div class="flex flex-col justify-center absolute top-0 bottom-0 left-2">
+        {{-- <div class="flex flex-col justify-center absolute top-0 bottom-0 left-2">
             <img src="{{ asset('images/happy.png')}}" alt="happy emoji" class="w-7 absolute">
             <img src="{{ asset('images/neutral.png')}}" alt="neutral emoji" class="w-7 relative">
             <img src="{{ asset('images/sad.png')}}" alt="sad emoji" class="w-7 absolute">
-        </div>
+        </div> --}}
     </div>
 
 
     <script>
         // multiple labels Plugin
         let verbatimCountByCategory = {!! json_encode($verbatimCountByCategory) !!};
-        let categoryWithVerbatim    = {!! json_encode($categoryWithVerbatim) !!}
+        let categoryWithVerbatim = {!! json_encode($categoryWithVerbatim) !!}
 
         // data block
         const data = {
             labels: [
-                @foreach($categoryWithVerbatim as $key => $catWithVerb)
-                    @foreach($catWithVerb['verbatim'] as $key => $verbatim)
+                @foreach ($categoryWithVerbatim as $key => $catWithVerb)
+                    @foreach ($catWithVerb['verbatim'] as $key => $verbatim)
                         '{{ $key }}',
                     @endforeach
                 @endforeach
             ],
-            datasets: [
-                {
+            datasets: [{
                     label: 'Positif',
                     backgroundColor: '#3c7cc4',
                     borderRadius: 30,
                     barThickness: 16,
                     stack: 'Stack 0',
                     data: [
-                        @foreach($categoryWithVerbatim as $key=> $catWithVerb)
-                            @foreach($catWithVerb['positif'] as $positif)
-                                {{ $positif.',' }}
+                        @foreach ($categoryWithVerbatim as $key => $catWithVerb)
+                            @foreach ($catWithVerb['positif'] as $positif)
+                                {{ $positif . ',' }}
                             @endforeach
                         @endforeach
                     ],
@@ -139,9 +157,9 @@
                     barThickness: 16,
                     stack: 'Stack 0',
                     data: [
-                        @foreach($categoryWithVerbatim as $key=> $catWithVerb)
-                            @foreach($catWithVerb['negatif'] as $negatif)
-                                {{ '-'.$negatif.',' }}
+                        @foreach ($categoryWithVerbatim as $key => $catWithVerb)
+                            @foreach ($catWithVerb['negatif'] as $negatif)
+                                {{ '-' . $negatif . ',' }}
                             @endforeach
                         @endforeach
                     ],
@@ -166,8 +184,8 @@
                 },
                 scales: {
                     y: {
-                        max: {{ $highestLowest->highest + 4}},
-                        min: -{{ $highestLowest->lowest + 2}},
+                        max: {{ $highestLowest->highest + 4 }},
+                        min: -{{ $highestLowest->lowest + 2 }},
                         ticks: {
                             beginAtZero: true,
                             stepSize: 0.5,
@@ -179,14 +197,14 @@
                             drawBorder: false,
                             color: function(context) {
                                 if (context.tick.value === 0) {
-                                return 'rgba(0,0,0,0.2)'; // Set color for grid line at zero value
+                                    return 'rgba(0,0,0,0.2)'; // Set color for grid line at zero value
                                 }
                             },
                             lineWidth: function(context) {
                                 if (context.tick.value === 0) {
-                                return 1; // Set line width for grid line at zero value
+                                    return 1; // Set line width for grid line at zero value
                                 } else {
-                                return 0; // Hide other grid lines
+                                    return 0; // Hide other grid lines
                                 }
                             },
                             zeroLineColor: 'black', // Set color for zero line
@@ -198,18 +216,17 @@
                     // top phrase labales
                     x: {
                         labels: [
-                            @foreach($categoryWithVerbatim as $key => $catWithVerb)
-                                @foreach($catWithVerb['verbatim'] as $verbatim)
+                            @foreach ($categoryWithVerbatim as $key => $catWithVerb)
+                                @foreach ($catWithVerb['verbatim'] as $verbatim)
                                     "{!! $verbatim !!}",
                                 @endforeach
                             @endforeach
-                            ],
-                        position:'top',
+                        ],
+                        position: 'top',
                         grid: {
-                            display:false,
+                            display: false,
                         },
-                        ticks: {
-                        }
+                        ticks: {}
                     },
 
                     // percentage labels
@@ -243,12 +260,12 @@
                     // category labels
                     x3: {
                         labels: [
-                            @foreach($categoryWithVerbatim as $catWithVerb)
-                            "{!! $catWithVerb['title'] !!} ",
+                            @foreach ($categoryWithVerbatim as $catWithVerb)
+                                "{!! $catWithVerb['title'] !!} ",
                             @endforeach
                         ],
                         grid: {
-                            display: false,
+                            display: true,
                         },
                         border: {
                             display: true,
@@ -259,9 +276,9 @@
                             showLabelBackdrop: true,
                             backdropColor: ['#7dba80', '#c6cfc7'],
                             backdropPadding: 9,
-                            color:['white', 'black'],
+                            color: ['white', 'black'],
                         },
-                    }, 
+                    },
                 },
             }
         }
@@ -270,23 +287,79 @@
 
         const chartContainerBody = document.querySelector('.chartContainerBody');
 
-        
-        const clickableBar = (canvas, click) => {
-            const points = myChart.getElementsAtEventForMode(click, 'nearest', { intersect: true }, true);
-            if(points.length) {
-                const firstPoint = points[0];
 
+        const clickableBar = (canvas, click) => {
+            const points = myChart.getElementsAtEventForMode(click, 'nearest', {
+                intersect: true
+            }, true);
+            if (points.length) {
+                const firstPoint = points[0];
                 const id_verbatim = myChart.data.labels[firstPoint.index];
-                const url = "/fullchart/popup/" + id_verbatim ;
-                location.href = url
-                // console.log(url)
+                const url = "/fullchart/popup/" + id_verbatim;
+
+                const xhr = new XMLHttpRequest();
+                xhr.open("GET", url);
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        const data = xhr.responseText;
+                        const popup = document.createElement('div');
+                        popup.classList.add('dialogue-popup', 'flex', 'items-center', 'justify-center', 'fixed',
+                            'left-0', 'bottom-0', 'w-full', 'h-full', 'bg-gray-800', 'relative');
+
+                        const dialogueContent = document.createElement('div');
+                        dialogueContent.classList.add('dialogue-content', 'bg-white', 'w-2/3', 'lg:max-w-lg',
+                            'mx-auto', 'rounded', 'shadow-lg', 'z-50', 'overflow-y-auto', 'relative');
+                        
+                            const jsonData = JSON.parse(data);
+                            console.log(jsonData);
+// Parcourir les dialogues et construire le HTML pour chaque dialogue
+let dialogueHtml = '';
+ dialogueHtml += `<h1 class="text-xl font-bold text-gray-800 m-4 text-center">${jsonData[0] ? jsonData[0].verbatim : 'Pas de dialogue'}</h1>
+ `
+jsonData.forEach(dialogue => {
+    var sentimentIcon = '';
+    if (dialogue.positif > 0) {
+        sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-green-500 text-white flex-shrink-0 mr-2">+</span>';
+    } else if (dialogue.neutre > 0) {
+        sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500 text-white flex-shrink-0 mr-2">=</span>';
+    } else if (dialogue.negatif > 0) {
+        sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-red-500 text-white flex-shrink-0 mr-2">-</span>';
+    }
+    dialogueHtml += '<div class="bg-white shadow-md rounded px-8 py-6 m-4">';
+        dialogueHtml += '<div class="flex items-center mb-4">' + sentimentIcon + '<h2 class="text-lg font-medium text-gray-800">' + dialogue.dialogue + '</h2></div>';
+        dialogueHtml += '</div>';
+});
+dialogueHtml += '<button class="close-button absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800">&times;</button>';
+
+dialogueContent.innerHTML = dialogueHtml;
+
+                        popup.appendChild(dialogueContent);
+
+
+                        document.body.appendChild(popup);
+                        popup.style.display = "block";
+
+                        document.querySelector(".close-button").addEventListener("click", function(e) {
+                            document.querySelector(".dialogue-popup").remove();
+                        });
+
+                        popup.addEventListener("click", function(e) {
+                            if (e.target === popup) {
+                                popup.style.display = "none";
+                            }
+                        });
+
+
+                    }
+                };
+                xhr.send();
             }
         }
 
         ctx.addEventListener('click', e => clickableBar(ctx, e))
     </script>
 
-    <div id="pop_up" style="height: 250px; width: 500px; background: rgba(0,0,0,0.5)">dsf</div>
+    {{-- <div id="pop_up" style="height: 250px; width: 500px; background: rgba(0,0,0,0.5)">dsf</div> --}}
 </body>
 
 </html>
