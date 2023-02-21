@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Verbatim;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -173,8 +174,31 @@ class DashboardController extends Controller
         return view('admin.charts.fullChart', compact('getCategory', 'categoryWithVerbatim', 'highestLowest', 'verbatimCountByCategory', 'totalEachVerbatim', 'percent'));
     }
 
-    public function popup_chart($id_verbatim)
+
+
+    public function getDialogues(Request $request)
     {
-        echo $id_verbatim;
+        $id_verbatim = $request->id_verbatim;
+    
+        $dialogues = DB::table('dialogue')
+            ->join('verbatim', 'dialogue.id_verbatim', '=', 'verbatim.id_verbatim')
+            ->select('dialogue.*', 'verbatim.id_verbatim','verbatim.verbatim')
+            ->where('verbatim.id_verbatim', $id_verbatim)
+            ->orderByRaw('positif DESC, neutre DESC, negatif DESC')
+            ->get();
+        
+        return response()->json($dialogues);
     }
+
+  public function popup_chart($id_verbatim)
+{
+    $dialogues = $this->getDialogues(new Request(['id_verbatim' => $id_verbatim]));
+
+    // Ensuite, vous pouvez retourner la vue avec les dialogues en utilisant la méthode view() de Laravel
+    return $dialogues;
+}
+
+
+
+
 }
