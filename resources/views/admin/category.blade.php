@@ -72,7 +72,7 @@
 </style>
 @section('content')
 @if (request()->route('id_category'))
-<div class="text-left mb-6 ml-6 mt-6">
+<div class="text-left mb-6 ml-6 mt-24">
     <a href="{{ route('admin.category') }}"
         class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded"><i
             class="fa-solid fa-arrow-left-long"></i></a>
@@ -238,7 +238,7 @@
     @if (Auth::check() && Auth::user()->role === 'admin' ? true : false)
     <span class="text-sm text-gray-600 mb-6">* Déplacé les cartes pour modifier l'ordre des étapes qui
         apparaitront dans le graphique</span>
-    <div class="flex justify-between mb-6">
+    <div class="flex justify-between my-6">
         <button id="myBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
             <i class="fa-solid fa-plus"></i> Créer une étape
         </button>

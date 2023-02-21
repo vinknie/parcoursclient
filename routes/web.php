@@ -49,6 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/category/updateVerbatimWithoutCat', [CategoryController::class, 'updateVerbatimWithoutCat'])->name('admin.updateVerbatimWithoutCat');
 
     Route::post('/dashboard/createCategory/createDialogue', [CategoryController::class, 'createDialogue']);
+
     
     Route::get('dashboard/category/deletecategory/{id_category}',[CategoryController::class, 'deleteCat'])->name('admin.deleteCat');
     
@@ -71,8 +72,10 @@ Route::middleware('auth')->group(function () {
     
     Route::post('/dashboard/note/update-verbatim-positions', [NoteController::class, 'updatePositionVerba'])->name('admin.updatePositionVerba');
 
-    Route::post('/dashboard/note/get-dialogues',[NoteController::class, 'getDialogues']);
-    Route::patch('/dashboard/resetvalues/{id_verbatim}',[NoteController::class,'resetValues'])->name('admin.resetvalues');
+    Route::post('/dashboard/note/get-dialogues', [NoteController::class, 'getDialogues']);
+    Route::patch('/dashboard/resetvalues/{id_verbatim}', [NoteController::class, 'resetValues'])->name('admin.resetvalues');
+
+    Route::get('/fullchart/popup/{id_verbatim}', [DashboardController::class, 'popup_chart'])->name('fullchart.popup');
 });
 // test
 Route::get('/chart/full', [DashboardController::class, 'fullChart'])->name('fullChart');

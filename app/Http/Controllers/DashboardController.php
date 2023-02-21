@@ -79,7 +79,7 @@ class DashboardController extends Controller
         }
 
 
-        if(!isset($percent)){
+        if (!isset($percent)) {
             return view('admin.dashboard', compact('getCategory', 'categoryWithVerbatim', 'totalEachVerbatim', 'totalEachCategory'));
         }
         return view('admin.dashboard', compact('getCategory', 'categoryWithVerbatim', 'totalEachVerbatim', 'totalEachCategory', 'percent'));
@@ -95,6 +95,7 @@ class DashboardController extends Controller
                 'verbatim.positif',
                 'verbatim.negatif',
                 'verbatim.verbatim',
+                'verbatim.id_verbatim',
                 'category.title',
                 'category.id_category',
                 'category.position',
@@ -108,7 +109,7 @@ class DashboardController extends Controller
                     'title' => $item->first()->title,
                     'positif' => $item->pluck('positif')->toArray(),
                     'negatif' => $item->pluck('negatif')->toArray(),
-                    'verbatim' => $item->pluck('verbatim')->toArray(),
+                    'verbatim' => $item->pluck('verbatim', 'id_verbatim')->toArray(),
                     'catPosition' => $item->pluck('position')
                 ];
             });
@@ -166,9 +167,14 @@ class DashboardController extends Controller
             }
             $verbatim->percent = $percent;
         }
-        if(!isset($percent)){
+        if (!isset($percent)) {
             return view('admin.charts.fullChart', compact('getCategory', 'categoryWithVerbatim', 'highestLowest', 'verbatimCountByCategory', 'totalEachVerbatim'));
         }
         return view('admin.charts.fullChart', compact('getCategory', 'categoryWithVerbatim', 'highestLowest', 'verbatimCountByCategory', 'totalEachVerbatim', 'percent'));
+    }
+
+    public function popup_chart($id_verbatim)
+    {
+        echo $id_verbatim;
     }
 }
