@@ -24,7 +24,8 @@
     {{-- Chart Js --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"
         integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
@@ -42,17 +43,8 @@
             min-height: 100vh;
         }
 
-        .chartContainer {
-            /* background: rgb(189, 189, 189); */
-            /* width: 80%;
-            overflow-x: scroll;
-            height: 100vh; */
-            /* max-height: 1200px; */
-        }
-
         .chartContainerBody {
             width: 100vw;
-            /* max-height: 1200px; */
         }
 
         #myChart {
@@ -60,20 +52,49 @@
             width: 100vw !important;
         }
 
-        .tenzin {
-            background: red !important;
+        .chartContainer img:first-child {
+            top: 320px;
         }
 
+        .chartContainer img:nth-child(2) {
+            top: 50px;
+        }
+
+        .chartContainer img:last-of-type {
+            bottom: 230px
+        }
+
+        @media(min-height: 750px) {
+            .chartContainer img:nth-child(2) {
+                top: 90px;
+            }
+        }
     </style>
 </head>
 
 <body class="relative">
+
+    {{-- @foreach($categoryWithVerbatim as $key => $catWithVerb)
+    @foreach($catWithVerb['verbatim'] as $key => $verbatim)
+    '{{ $key }}',
+    @endforeach
+    @endforeach --}}
+
+
+
     <a href="{{ URL::previous() }}">
         <i class="fa-solid fa-xmark fixed z-10 top-0 right-0 text-4xl text-gray-500 cursor-pointer"></i>
     </a>
-    <div class="chartContainer border-4">
+
+    {{-- chart js --}}
+    <div class="chartContainer border-4 relative">
         <div class="chartContainerBody">
             <canvas id="myChart" class="m-2"></canvas>
+        </div>
+        <div class="flex flex-col justify-center absolute top-0 bottom-0 left-2">
+            <img src="{{ asset('images/happy.png')}}" alt="happy emoji" class="w-7 absolute">
+            <img src="{{ asset('images/neutral.png')}}" alt="neutral emoji" class="w-7 relative">
+            <img src="{{ asset('images/sad.png')}}" alt="sad emoji" class="w-7 absolute">
         </div>
     </div>
 
@@ -85,13 +106,13 @@
 
         // data block
         const data = {
-            // labels: [
-            //     @foreach($categoryWithVerbatim as $key => $catWithVerb)
-            //         @foreach($catWithVerb['verbatim'] as $verbatim)
-            //             '{{ $verbatim }}',
-            //         @endforeach
-            //     @endforeach
-            // ],
+            labels: [
+                @foreach($categoryWithVerbatim as $key => $catWithVerb)
+                    @foreach($catWithVerb['verbatim'] as $key => $verbatim)
+                        '{{ $key }}',
+                    @endforeach
+                @endforeach
+            ],
             datasets: [
                 {
                     label: 'Positif',
@@ -107,8 +128,8 @@
                         @endforeach
                     ],
                     datalabels: {
-                    anchor: 'end',
-                    align: 'top'
+                        anchor: 'end',
+                        align: 'top'
                     }
                 },
                 {
@@ -138,7 +159,7 @@
             data: data,
             plugins: [ChartDataLabels],
             options: {
-                responsive: true,
+                responsive: false,
                 maintainAspectRatio: false,
                 layout: {
                     padding: 50
@@ -193,34 +214,32 @@
 
                     // percentage labels
                     x2: {
-                    labels: [
-                        @foreach ($totalEachVerbatim as $test)
-                            "{!! number_format((float) $test->percent, 2, '.', '') !!} %",
-                        @endforeach
-                    ],
-                    grid: {
-                        display: false,
+                        labels: [
+                            @foreach ($totalEachVerbatim as $test)
+                                "{!! number_format((float) $test->percent, 2, '.', '') !!} %",
+                            @endforeach
+                        ],
+                        grid: {
+                            display: false,
+                        },
+                        ticks: {
+                            font: {
+                                size: 12,
+                                family: 'FontAwesome',
+                            },
+                            showLabelBackdrop: true,
+                            backdropPadding: 6,
+                            backdropColor: function(value) {
+                                var percent = parseFloat(value.tick.label);
+                                if (typeof percent === 'number' && !isNaN(percent)) {
+                                    var alpha = percent / 100;
+                                    return 'rgba(30, 144, 255, ' + alpha + ')';
+                                } else {
+                                    return 'gray';
+                                }
+                            },
+                        },
                     },
-                    ticks: {
-                        font: {
-                            size: 12,
-                            family: 'FontAwesome',
-                        },
-                        
-                        showLabelBackdrop: true,
-                        backdropPadding: 6,
-                        backdropColor: function(value) {
-                            var percent = parseFloat(value.tick.label);
-                            if (typeof percent === 'number' && !isNaN(percent)) {
-                                var alpha = percent / 100;
-                                return 'rgba(30, 144, 255, ' + alpha + ')';
-                            } else {
-                                return 'gray';
-                            }
-                        },
-                   
-                },
-            },
                     // category labels
                     x3: {
                         labels: [
@@ -229,7 +248,7 @@
                             @endforeach
                         ],
                         grid: {
-                            // display: false,
+                            display: false,
                         },
                         border: {
                             display: true,
@@ -246,14 +265,28 @@
                 },
             }
         }
-        
-        const myChart = new Chart(document.getElementById('myChart'), config);
-        
+        const ctx = document.getElementById('myChart');
+        const myChart = new Chart(ctx, config);
+
         const chartContainerBody = document.querySelector('.chartContainerBody');
+
         
-        // const numXLabels = config.options.scales.x.labels.length;
+        const clickableBar = (canvas, click) => {
+            const points = myChart.getElementsAtEventForMode(click, 'nearest', { intersect: true }, true);
+            if(points.length) {
+                const firstPoint = points[0];
+
+                const id_verbatim = myChart.data.labels[firstPoint.index];
+                const url = "/fullchart/popup/" + id_verbatim ;
+                location.href = url
+                // console.log(url)
+            }
+        }
+
+        ctx.addEventListener('click', e => clickableBar(ctx, e))
     </script>
 
+    <div id="pop_up" style="height: 250px; width: 500px; background: rgba(0,0,0,0.5)">dsf</div>
 </body>
 
 </html>
