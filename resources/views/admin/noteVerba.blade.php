@@ -250,6 +250,7 @@ $.each(data, function(index, dialogue) {
     } else if (dialogue.negatif > 0) {
         sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-red-500 text-white flex-shrink-0 mr-2">-</span>';
     }
+
     dialoguesHTML += '<div class="bg-white shadow-md rounded px-8 py-6 m-4">';
     dialoguesHTML += '<div class="flex items-center mb-4">' + sentimentIcon + '<h2 class="text-lg font-medium text-gray-800">' + dialogue.dialogue + '</h2></div>';
     dialoguesHTML += '</div>';

@@ -193,4 +193,24 @@ class CategoryController extends Controller
 
         return redirect()->back()->with('delete', 'Etapes supprimé , les verbatims de la catégory se trouve dans "sans étape"');
     }
+
+    public function deleteVerba($id_verbatim)
+    {
+        $delete = DB::table('verbatim')->where('id_verbatim', $id_verbatim)->delete();
+        if ($delete) {
+            return response()->json(['success' => 'Verbatim supprimé avec succès']);
+        } else {
+            dd('La suppression a échoué');
+            return response()->json(['error' => 'La suppression a échoué']);
+        }
+
+}
+
+    public function getVerbatim($id_category){
+        $getVerbatim = Verbatim::Where('id_category',$id_category)->pluck("verbatim",'id_verbatim');
+        return json_encode($getVerbatim);
+    }
+
+
+
 }
