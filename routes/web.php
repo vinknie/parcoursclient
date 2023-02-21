@@ -51,6 +51,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/createCategory/createDialogue', [CategoryController::class, 'createDialogue']);
     
     Route::get('dashboard/category/deletecategory/{id_category}',[CategoryController::class, 'deleteCat'])->name('admin.deleteCat');
+    
+    Route::delete('dashboard/category/deleteVerba/{id_verbatim}', [CategoryController::class,'deleteVerba'])->name('admin.deleteVerba');
+
+    Route::get('/dashboard/createCategory/createDialogue/getVerbatim/{id_category}',[CategoryController::class,'getVerbatim'])->name('getVerbatim');
 
     Route::get('/dashboard/note/{id_category}', [NoteController::class, 'show'])->name('admin.noteVerba');
 
@@ -63,6 +67,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/dashboard/category/update-category-positions', [CategoryController::class, 'updateCategoryPositions'])->name('admin.updateCategoryPositions');
 
+
+    
     Route::post('/dashboard/note/update-verbatim-positions', [NoteController::class, 'updatePositionVerba'])->name('admin.updatePositionVerba');
 
     Route::post('/dashboard/note/get-dialogues',[NoteController::class, 'getDialogues']);

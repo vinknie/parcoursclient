@@ -154,16 +154,17 @@
         <form action="{{ route('admin.updateVerba') }}" method="post" enctype="multipart/form-data">
             @csrf
             @foreach ($getverbatim as $verbatim)
-            <div class="mb-4">
-                <label class="block text-gray-700 font-medium mb-2" for="verbatim">Intitulé du
-                    verbatim</label>
-                <input type="hidden" name="id_verbatim[]" value="{{ $verbatim->id_verbatim }}">
-                <input class="bg-white border border-gray-400 rounded w-full py-2 px-4" type="text" name="verbatim[]"
-                    value="{{ $verbatim->verbatim }}" required>
-            </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium mb-2" for="verbatim">Intitulé du verbatim</label>
+                    <div class="flex items-center">
+                        <input type="hidden" name="id_verbatim[]" value="{{ $verbatim->id_verbatim }}" data-id="{{ $verbatim->id_verbatim }}">
+
+                        <input class="bg-white border border-gray-400 rounded w-full py-2 px-4" type="text" name="verbatim[]" value="{{ $verbatim->verbatim }}" required>
+                        <button type="button" class="ml-4 bg-red-500 text-white font-medium py-2 px-4 rounded-full hover:bg-red-600" onclick="deleteInput(this)"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
             @endforeach
-            <button
-                class="bg-indigo-500 text-white font-medium py-2 px-4 rounded-full hover:bg-indigo-600">Modifier</button>
+            <button class="bg-indigo-500 text-white font-medium py-2 px-4 rounded-full hover:bg-indigo-600">Modifier</button>
         </form>
         @else
         <p>Pas de verbatim dans cette catégorie</p>
@@ -362,7 +363,7 @@
                 @csrf
                 <div class="mb-4">
                     <label class="block text-gray-700 font-medium mb-2">Etape du dialogue</label>
-                    <select class="form-control" name="">
+                    <select class="form-control" name="id_category">
                         <option value="">--Selectionner l'étape--</option>
                         @foreach ($getCategory as $category)
                         <option value="{{ $category->id_category }}"> {{ $category->title }} </option>
@@ -373,9 +374,9 @@
                     <label class="block text-gray-700 font-medium mb-2">Verbatim du dialogue</label>
                     <select class="form-control" name="id_verbatim">
                         <option value="">--Selectionner le verbatim--</option>
-                        @foreach ($getVerbatim as $verbatim)
+                        {{-- @foreach ($getVerbatim as $verbatim)
                         <option value="{{ $verbatim->id_verbatim }}"> {{ $verbatim->verbatim }} </option>
-                        @endforeach
+                        @endforeach --}}
                     </select>
                 </div>
                 <div class="mb-4">
@@ -570,5 +571,57 @@
 
         // Set up the third popup
         setUpPopup(btn3, popup3, span3);
+
+
+        function deleteInput(btn) {
+    let id_verbatim = btn.parentNode.querySelector('input[type="hidden"]').getAttribute('data-id');
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')) {
+        fetch('/dashboard/category/deleteVerba/' + id_verbatim, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({id_verbatim: id_verbatim})
+        }).then(response => {
+            if (response.ok) {
+                btn.parentNode.remove();
+            } else {
+                alert('Une erreur s\'est produite lors de la suppression de l\'élément.');
+            }
+        }).catch(error => {
+            alert('Une erreur s\'est produite lors de la suppression de l\'élément : ' + error.message);
+        });
+    }
+}
+
+jQuery(document).ready(function()
+    {
+        jQuery('select[name="id_category"]').on('change',function(){
+            var CategoryID = jQuery(this).val();
+            console.log(CategoryID);
+            if(CategoryID)
+            {
+                jQuery.ajax({
+                    url : '/dashboard/createCategory/createDialogue/getVerbatim/' +CategoryID,
+                    type : "GET",
+                    dataType : "json",
+                    success:function(data)
+                    {
+                        jQuery('select[name="id_verbatim"]').empty();
+                        jQuery.each(data, function(key,value){
+                            
+                            $('select[name="id_verbatim"]').append('<option value="'+ key +'">'+ value +'</option>');
+                        });
+                    }
+                });
+            }
+            else{
+                jQuery('select[name="id_verbatim"]').empty();
+                $('select[name="id_verbatim"]').append('<option value="">--Selectionner le verbatim--</option>');
+            }
+        });
+    })
+
     </script>
     @endsection
