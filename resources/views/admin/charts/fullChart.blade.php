@@ -24,7 +24,8 @@
     {{-- Chart Js --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"
         integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
@@ -48,7 +49,7 @@
 
         #myChart {
             height: 95vh !important;
-            width: 100vw !important;
+            width: 100% !important;
         }
 
         .chartContainer img:first-child {
@@ -92,31 +93,16 @@
 </head>
 
 <body class="relative">
-
-    {{-- @foreach ($categoryWithVerbatim as $key => $catWithVerb)
-    @foreach ($catWithVerb['verbatim'] as $key => $verbatim)
-    '{{ $key }}',
-    @endforeach
-    @endforeach --}}
-
-
-
     <a href="{{ URL::previous() }}">
         <i class="fa-solid fa-xmark fixed z-10 top-0 right-0 text-4xl text-gray-500 cursor-pointer"></i>
     </a>
 
     {{-- chart js --}}
-    <div class="chartContainer border-4 ">
+    <div class="chartContainer">
         <div class="chartContainerBody">
             <canvas id="myChart" class="m-2"></canvas>
         </div>
-        {{-- <div class="flex flex-col justify-center absolute top-0 bottom-0 left-2">
-            <img src="{{ asset('images/happy.png')}}" alt="happy emoji" class="w-7 absolute">
-            <img src="{{ asset('images/neutral.png')}}" alt="neutral emoji" class="w-7 relative">
-            <img src="{{ asset('images/sad.png')}}" alt="sad emoji" class="w-7 absolute">
-        </div> --}}
     </div>
-
 
     <script>
         // multiple labels Plugin
@@ -177,6 +163,7 @@
             data: data,
             plugins: [ChartDataLabels],
             options: {
+                // indexAxis: 'y',
                 responsive: false,
                 maintainAspectRatio: false,
                 layout: {
@@ -287,11 +274,12 @@
 
         const chartContainerBody = document.querySelector('.chartContainerBody');
 
-
+        // click bar handler
         const clickableBar = (canvas, click) => {
             const points = myChart.getElementsAtEventForMode(click, 'nearest', {
                 intersect: true
             }, true);
+            
             if (points.length) {
                 const firstPoint = points[0];
                 const id_verbatim = myChart.data.labels[firstPoint.index];
@@ -303,35 +291,32 @@
                     if (xhr.status === 200) {
                         const data = xhr.responseText;
                         const popup = document.createElement('div');
-                        popup.classList.add('dialogue-popup', 'flex', 'items-center', 'justify-center', 'fixed',
-                            'left-0', 'bottom-0', 'w-full', 'h-full', 'bg-gray-800', 'relative');
+                        popup.classList.add('dialogue-popup', 'flex', 'items-center', 'justify-center', 'fixed', 'left-0', 'bottom-0', 'w-full', 'h-full', 'bg-gray-800', 'relative');
 
                         const dialogueContent = document.createElement('div');
-                        dialogueContent.classList.add('dialogue-content', 'bg-white', 'w-2/3', 'lg:max-w-lg',
-                            'mx-auto', 'rounded', 'shadow-lg', 'z-50', 'overflow-y-auto', 'relative');
+                        dialogueContent.classList.add('dialogue-content', 'bg-white', 'w-2/3', 'lg:max-w-lg', 'mx-auto', 'rounded', 'shadow-lg', 'z-50', 'overflow-y-auto', 'relative');
                         
-                            const jsonData = JSON.parse(data);
-                            console.log(jsonData);
-// Parcourir les dialogues et construire le HTML pour chaque dialogue
-let dialogueHtml = '';
- dialogueHtml += `<h1 class="text-xl font-bold text-gray-800 m-4 text-center">${jsonData[0] ? jsonData[0].verbatim : 'Pas de dialogue'}</h1>
- `
-jsonData.forEach(dialogue => {
-    var sentimentIcon = '';
-    if (dialogue.positif > 0) {
-        sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-green-500 text-white flex-shrink-0 mr-2">+</span>';
-    } else if (dialogue.neutre > 0) {
-        sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500 text-white flex-shrink-0 mr-2">=</span>';
-    } else if (dialogue.negatif > 0) {
-        sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-red-500 text-white flex-shrink-0 mr-2">-</span>';
-    }
-    dialogueHtml += '<div class="bg-white shadow-md rounded px-8 py-6 m-4">';
-        dialogueHtml += '<div class="flex items-center mb-4">' + sentimentIcon + '<h2 class="text-lg font-medium text-gray-800">' + dialogue.dialogue + '</h2></div>';
-        dialogueHtml += '</div>';
-});
-dialogueHtml += '<button class="close-button absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800">&times;</button>';
+                        const jsonData = JSON.parse(data);
+                        // Parcourir les dialogues et construire le HTML pour chaque dialogue
+                        let dialogueHtml = '';
+                        dialogueHtml += `<h1 class="text-xl font-bold text-gray-800 m-4 text-center">${jsonData[0] ? jsonData[0].verbatim : 'Pas de dialogue'}</h1>`;
+                        jsonData.forEach(dialogue => {
+                            var sentimentIcon = '';
+                            if (dialogue.positif > 0) {
+                                sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-green-500 text-white flex-shrink-0 mr-2">+</span>';
+                            } else if (dialogue.neutre > 0) {
+                                sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500 text-white flex-shrink-0 mr-2">=</span>';
+                            } else if (dialogue.negatif > 0) {
+                                sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-red-500 text-white flex-shrink-0 mr-2">-</span>';
+                            }
+                            dialogueHtml += '<div class="bg-white shadow-md rounded px-8 py-6 m-4">';
+                            dialogueHtml += '<div class="flex items-center mb-4">' + sentimentIcon + '<h2 class="text-lg font-medium text-gray-800">' + dialogue.dialogue + '</h2></div>';
+                            dialogueHtml += '</div>';
+                        });
 
-dialogueContent.innerHTML = dialogueHtml;
+                        dialogueHtml += '<button class="close-button absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800">&times;</button>';
+
+                        dialogueContent.innerHTML = dialogueHtml;
 
                         popup.appendChild(dialogueContent);
 
@@ -348,18 +333,13 @@ dialogueContent.innerHTML = dialogueHtml;
                                 popup.style.display = "none";
                             }
                         });
-
-
                     }
                 };
                 xhr.send();
             }
         }
-
         ctx.addEventListener('click', e => clickableBar(ctx, e))
     </script>
-
-    {{-- <div id="pop_up" style="height: 250px; width: 500px; background: rgba(0,0,0,0.5)">dsf</div> --}}
 </body>
 
 </html>
