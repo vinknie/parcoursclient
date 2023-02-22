@@ -81,6 +81,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow-y: scroll;
+            
         }
 
         .dialogue-content {
@@ -88,7 +90,11 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            max-height: 70%;
+         
         }
+        
+  
     </style>
 </head>
 
@@ -169,10 +175,11 @@
                 layout: {
                     padding: 50
                 },
+                
                 scales: {
                     y: {
                         max: {{ $highestLowest->highest + 4 }},
-                        min: -{{ $highestLowest->lowest + 2 }},
+                        min: -{{ $highestLowest->lowest + 4 }},
                         ticks: {
                             beginAtZero: true,
                             stepSize: 0.5,
@@ -291,7 +298,10 @@
                     if (xhr.status === 200) {
                         const data = xhr.responseText;
                         const popup = document.createElement('div');
-                        popup.classList.add('dialogue-popup', 'flex', 'items-center', 'justify-center', 'fixed', 'left-0', 'bottom-0', 'w-full', 'h-full', 'bg-gray-800', 'relative');
+
+
+                        popup.classList.add('dialogue-popup', 'flex', 'items-center', 'justify-center', 'fixed',
+                            'left-0', 'bottom-0', 'w-full', 'h-full', 'bg-gray-800', 'relative');
 
                         const dialogueContent = document.createElement('div');
                         dialogueContent.classList.add('dialogue-content', 'bg-white', 'w-2/3', 'lg:max-w-lg', 'mx-auto', 'rounded', 'shadow-lg', 'z-50', 'overflow-y-auto', 'relative');
@@ -329,9 +339,8 @@
                         });
 
                         popup.addEventListener("click", function(e) {
-                            if (e.target === popup) {
-                                popup.style.display = "none";
-                            }
+                            document.querySelector(".dialogue-popup").remove();
+                            
                         });
                     }
                 };
