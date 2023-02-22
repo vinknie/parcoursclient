@@ -15,77 +15,6 @@ class DashboardController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    //  dashboard
-    public function index()
-    {
-        $getCategory            = Category::all();
-        $categoryWithVerbatim   = DB::table('verbatim')
-            ->join('category', 'verbatim.id_category', '=', 'category.id_category')
-            ->select('verbatim.positif', 'verbatim.negatif', 'verbatim.verbatim', 'category.title', 'category.id_category')
-            ->orderBy('category.position', 'asc')
-            ->orderBy('verbatim.position', 'asc')
-            ->get()
-            ->groupBy('id_category')
-            ->map(function ($item) {
-                return [
-                    'title' => $item->first()->title,
-                    'positif' => $item->pluck('positif')->toArray(),
-                    'negatif' => $item->pluck('negatif')->toArray(),
-                    'verbatim' => $item->pluck('verbatim')->toArray(),
-                ];
-            });
-
-        $totalEachVerbatim      = DB::table('verbatim')
-            ->join('category', 'verbatim.id_category', '=', 'category.id_category')
-            ->select(
-                'verbatim.positif',
-                'verbatim.negatif',
-                'verbatim.neutre',
-                'verbatim.verbatim',
-                'verbatim.position',
-                'category.title',
-                'category.id_category',
-                'category.position',
-                DB::raw('sum(verbatim.positif + verbatim.negatif + verbatim.neutre) as total')
-            )
-            ->orderBy('category.position', 'asc')
-            ->orderBy('verbatim.position', 'asc')
-            ->groupBy('verbatim.id_verbatim')
-            ->get();
-
-        $totalEachCategory   = DB::table('verbatim')
-            ->join('category', 'verbatim.id_category', '=', 'category.id_category')
-            ->select(
-                'category.title',
-                'category.id_category',
-                'category.position',
-                DB::raw('sum(verbatim.positif + verbatim.negatif + verbatim.neutre) as total')
-            )
-            ->orderBy('category.position', 'asc')
-            ->orderBy('verbatim.position', 'asc')
-            ->groupBy('category.id_category')
-            ->get();
-
-        foreach ($totalEachVerbatim as $verbatim) {
-            foreach ($totalEachCategory as $category) {
-                if ($verbatim->id_category === $category->id_category) {
-                    if ($category->total > 0) {
-                        $percent = ($verbatim->total / $category->total) * 100;
-                    } else {
-                        $percent = 0;
-                    }
-                }
-            }
-            $verbatim->percent = $percent;
-        }
-
-
-        if (!isset($percent)) {
-            return view('admin.dashboard', compact('getCategory', 'categoryWithVerbatim', 'totalEachVerbatim', 'totalEachCategory'));
-        }
-        return view('admin.dashboard', compact('getCategory', 'categoryWithVerbatim', 'totalEachVerbatim', 'totalEachCategory', 'percent'));
-    }
-
     // fullchart page
     public function fullChart()
     {
@@ -174,31 +103,25 @@ class DashboardController extends Controller
         return view('admin.charts.fullChart', compact('getCategory', 'categoryWithVerbatim', 'highestLowest', 'verbatimCountByCategory', 'totalEachVerbatim', 'percent'));
     }
 
-
-
     public function getDialogues(Request $request)
     {
         $id_verbatim = $request->id_verbatim;
-    
+
         $dialogues = DB::table('dialogue')
             ->join('verbatim', 'dialogue.id_verbatim', '=', 'verbatim.id_verbatim')
-            ->select('dialogue.*', 'verbatim.id_verbatim','verbatim.verbatim')
+            ->select('dialogue.*', 'verbatim.id_verbatim', 'verbatim.verbatim')
             ->where('verbatim.id_verbatim', $id_verbatim)
             ->orderByRaw('positif DESC, neutre DESC, negatif DESC')
             ->get();
-        
+
         return response()->json($dialogues);
     }
 
-  public function popup_chart($id_verbatim)
-{
-    $dialogues = $this->getDialogues(new Request(['id_verbatim' => $id_verbatim]));
+    public function popup_chart($id_verbatim)
+    {
+        $dialogues = $this->getDialogues(new Request(['id_verbatim' => $id_verbatim]));
 
-    // Ensuite, vous pouvez retourner la vue avec les dialogues en utilisant la méthode view() de Laravel
-    return $dialogues;
-}
-
-
-
-
+        // Ensuite, vous pouvez retourner la vue avec les dialogues en utilisant la méthode view() de Laravel
+        return $dialogues;
+    }
 }

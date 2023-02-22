@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [CategoryController::class, 'category'])->middleware(['auth', 'verified'])->name('admin.category');
 
 
 
