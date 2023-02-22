@@ -169,13 +169,13 @@ class CategoryController extends Controller
         $dial->dialogue = $request->dialogue;
         if ($request->input('sentiment') === 'positif') {
             $dial->positif = 1;
-            Verbatim::where('id_verbatim', $request->id_verbatim)->increment('positif');
+            // Verbatim::where('id_verbatim', $request->id_verbatim)->increment('positif');
         } elseif ($request->input('sentiment') === 'neutre') {
             $dial->neutre = 1;
-            Verbatim::where('id_verbatim', $request->id_verbatim)->increment('neutre');
+            // Verbatim::where('id_verbatim', $request->id_verbatim)->increment('neutre');
         } elseif ($request->input('sentiment') === 'negatif') {
             $dial->negatif = 1;
-            Verbatim::where('id_verbatim', $request->id_verbatim)->increment('negatif');
+            // Verbatim::where('id_verbatim', $request->id_verbatim)->increment('negatif');
         }
 
         $dial->save();
