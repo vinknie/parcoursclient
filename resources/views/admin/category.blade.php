@@ -154,17 +154,22 @@
         <form action="{{ route('admin.updateVerba') }}" method="post" enctype="multipart/form-data">
             @csrf
             @foreach ($getverbatim as $verbatim)
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-medium mb-2" for="verbatim">Intitulé du verbatim</label>
-                    <div class="flex items-center">
-                        <input type="hidden" name="id_verbatim[]" value="{{ $verbatim->id_verbatim }}" data-id="{{ $verbatim->id_verbatim }}">
+            <div class="mb-4">
+                <label class="block text-gray-700 font-medium mb-2" for="verbatim">Intitulé du verbatim</label>
+                <div class="flex items-center">
+                    <input type="hidden" name="id_verbatim[]" value="{{ $verbatim->id_verbatim }}"
+                        data-id="{{ $verbatim->id_verbatim }}">
 
-                        <input class="bg-white border border-gray-400 rounded w-full py-2 px-4" type="text" name="verbatim[]" value="{{ $verbatim->verbatim }}" required>
-                        <button type="button" class="ml-4 bg-red-500 text-white font-medium py-2 px-4 rounded-full hover:bg-red-600" onclick="deleteInput(this)"><i class="fa-solid fa-trash"></i></button>
-                    </div>
+                    <input class="bg-white border border-gray-400 rounded w-full py-2 px-4" type="text"
+                        name="verbatim[]" value="{{ $verbatim->verbatim }}" required>
+                    <button type="button"
+                        class="ml-4 bg-red-500 text-white font-medium py-2 px-4 rounded-full hover:bg-red-600"
+                        onclick="deleteInput(this)"><i class="fa-solid fa-trash"></i></button>
                 </div>
+            </div>
             @endforeach
-            <button class="bg-indigo-500 text-white font-medium py-2 px-4 rounded-full hover:bg-indigo-600">Modifier</button>
+            <button
+                class="bg-indigo-500 text-white font-medium py-2 px-4 rounded-full hover:bg-indigo-600">Modifier</button>
         </form>
         @else
         <p>Pas de verbatim dans cette catégorie</p>
@@ -172,7 +177,7 @@
     </div>
 </div>
 @elseif (Route::currentRouteName() == 'admin.verbatimsWithoutCategory')
-<div class="text-left mb-6 ml-6 mt-6">
+<div class="text-left mb-6 ml-6 mt-28">
     <a href="{{ route('admin.category') }}"
         class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded"><i
             class="fa-solid fa-arrow-left-long"></i></a>
@@ -235,7 +240,7 @@
     <div class="text-center">
         <h2 class="text-2xl font-medium mb-4">Gestion des étapes et des verbatims</h2>
     </div>
-    @if (Auth::check() && Auth::user()->role === 'admin' ? true : false)
+    {{-- @if (Auth::check() && Auth::user()->role === 'admin' ? true : false) --}}
     <span class="text-sm text-gray-600 mb-6">* Déplacé les cartes pour modifier l'ordre des étapes qui
         apparaitront dans le graphique</span>
     <div class="flex justify-between my-6">
@@ -445,7 +450,7 @@
         </span>
     </div>
     @endif
-    @endif
+    {{-- @endif --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 category-list">
         @foreach ($categories as $category)
 
@@ -491,10 +496,10 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
-        var isAdmin = {{ Auth::check() && Auth::user()->role === 'admin' ? true : false }};
+        // const isAdmin = {{ Auth::check() && Auth::user()->role === 'admin' ? 'true' : 'false' }};
 
         $(function() {
-            if (isAdmin) {
+            // if (isAdmin) {
                 $(".category-list").sortable({
                     update: function(event, ui) {
                         var positions = [];
@@ -523,7 +528,7 @@
                     }
                 });
                 $(".category-list").disableSelection();
-            }
+            // }
         });
 
         // Get the <span> element that closes the popup
@@ -574,26 +579,26 @@
 
 
         function deleteInput(btn) {
-    let id_verbatim = btn.parentNode.querySelector('input[type="hidden"]').getAttribute('data-id');
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')) {
-        fetch('/dashboard/category/deleteVerba/' + id_verbatim, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({id_verbatim: id_verbatim})
-        }).then(response => {
-            if (response.ok) {
-                btn.parentNode.remove();
-            } else {
-                alert('Une erreur s\'est produite lors de la suppression de l\'élément.');
+            let id_verbatim = btn.parentNode.querySelector('input[type="hidden"]').getAttribute('data-id');
+            if (confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')) {
+                fetch('/dashboard/category/deleteVerba/' + id_verbatim, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({id_verbatim: id_verbatim})
+                }).then(response => {
+                    if (response.ok) {
+                        btn.parentNode.remove();
+                    } else {
+                        alert('Une erreur s\'est produite lors de la suppression de l\'élément.');
+                    }
+                }).catch(error => {
+                    alert('Une erreur s\'est produite lors de la suppression de l\'élément : ' + error.message);
+                });
             }
-        }).catch(error => {
-            alert('Une erreur s\'est produite lors de la suppression de l\'élément : ' + error.message);
-        });
-    }
-}
+        }
 
 jQuery(document).ready(function()
     {

@@ -169,23 +169,22 @@
             </select>
         </div>
         <label class="labels block text-gray-700 font-medium mb-2">Intitulé du dialogue</label>
-        <input class="bg-white border border-gray-400 rounded w-full py-2 px-4" type="text" name="dialogue"
-            required="">
-            <div class="form-group">
-                <label for="sentiment">Sentiment:</label>
-                <div>
-                    <input type="radio" id="positif" name="positif" value="positif">
-                    <label for="positif">Positif</label>
-                </div>
-                <div>
-                    <input type="radio" id="neutre" name="neutre" value="neutre">
-                    <label for="neutre">Neutre</label>
-                </div>
-                <div>
-                    <input type="radio" id="négatif" name="negatif" value="négatif">
-                    <label for="négatif">Négatif</label>
-                </div>
+        <input class="bg-white border border-gray-400 rounded w-full py-2 px-4" type="text" name="dialogue" required="">
+        <div class="form-group">
+            <label for="sentiment">Sentiment:</label>
+            <div>
+                <input type="radio" id="positif" name="positif" value="positif">
+                <label for="positif">Positif</label>
             </div>
+            <div>
+                <input type="radio" id="neutre" name="neutre" value="neutre">
+                <label for="neutre">Neutre</label>
+            </div>
+            <div>
+                <input type="radio" id="négatif" name="negatif" value="négatif">
+                <label for="négatif">Négatif</label>
+            </div>
+        </div>
 
         <button id="btncreate" type="submit"
             class="btn btn-success bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-600">Créer</button>
