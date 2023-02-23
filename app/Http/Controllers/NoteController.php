@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Verbatim;
+use App\Models\Dialogue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -142,6 +143,14 @@ public function resetValues($id_verbatim)
     ]);
 
     return redirect()->back();
+}
+
+public function deleteDialogue($id_dialogue){
+    $dialogue = Dialogue::findOrFail($id_dialogue);
+
+    $dialogue->delete();
+
+    return response()->json(['message' => 'Dialogue Supprimé avec succès']);
 }
 
 }
