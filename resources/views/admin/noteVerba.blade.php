@@ -252,8 +252,10 @@ $.each(data, function(index, dialogue) {
     }
 
     dialoguesHTML += '<div class="bg-white shadow-md rounded px-8 py-6 m-4">';
-    dialoguesHTML += '<div class="flex items-center mb-4">' + sentimentIcon + '<h2 class="text-lg font-medium text-gray-800">' + dialogue.dialogue + '</h2></div>';
-    dialoguesHTML += '</div>';
+dialoguesHTML += '<div class="flex items-center mb-4">' + sentimentIcon + '<h2 class="text-lg font-medium text-gray-800">' + dialogue.dialogue + '</h2>';
+dialoguesHTML += '<button class="delete-button ml-auto text-gray-600 hover:text-gray-800" data-dialogue-id="' + dialogue.id_dialogue + '">&times;</button></div>';
+dialoguesHTML += '<input type="hidden" name="dialogue_id" value="' + dialogue.id_dialogue + '">';
+dialoguesHTML += '</div>';
 });
 
 var popupHTML = '<div class="dialogue-popup flex items-center justify-center fixed left-0 bottom-0 w-full h-full bg-gray-800 bg-opacity-75">';
@@ -278,7 +280,33 @@ $('.close-button').on('click', function() {
         }
     });
 });
-        
+
+$(document).on('click', '.delete-button', function() {
+    var dialogueId = $(this).data('dialogue-id');
+    if (confirm("Êtes-vous sûr de vouloir supprimer ce dialogue ?")) {
+        deleteDialogue(dialogueId);
+        $(this).closest('.bg-white').remove();
+    }
+});
+function deleteDialogue(dialogueId) {
+    console.log(dialogueId)
+    $.ajax({
+        url: '/dashboard/note/deleteDialogue/' + dialogueId,
+        type: 'DELETE',
+        data: {
+        '_token': '{{ csrf_token() }}'
+    },
+        success: function(response) {
+            console.log('Dialogue supprimé avec succès');
+        },
+        error: function(error) {
+            console.error('Erreur lors de la suppression du dialogue', error);
+        }
+    });
+}
+
+
+
 </script>
 
 @endsection
