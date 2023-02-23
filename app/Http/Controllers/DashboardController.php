@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Verbatim;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -30,6 +31,7 @@ class DashboardController extends Controller
                 'category.id_category',
                 'category.position',
             )
+            ->where('category.id_user', '=', Auth::user()->id)
             ->orderBy('verbatim.position', 'asc')
             ->orderBy('category.position', 'asc')
             ->get()

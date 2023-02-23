@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Verbatim;
 use App\Models\Dialogue;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 
@@ -29,8 +30,10 @@ class CategoryController extends Controller
     {
         $categories = DB::table('category')
             ->leftJoin('verbatim', 'category.id_category', '=', 'verbatim.id_category')
+            ->leftJoin('users', 'category.id_user', '=', 'users.id')
             ->select('category.*', DB::raw('count(verbatim.id_verbatim) as verbatim_count'))
             ->groupBy('category.position')
+            ->where('id', '=', Auth::user()->id)
             ->get();
 
         $noCategoryCount = Verbatim::whereNull('id_category')->count();
@@ -55,6 +58,7 @@ class CategoryController extends Controller
 
         $category = new Category();
         $category->title = $request->title;
+        $category->id_user = Auth::user()->id;
 
         $lastCategory = Category::orderBy('position', 'desc')->first();
         $category->position = $lastCategory ? $lastCategory->position + 1 : 1;
@@ -203,14 +207,11 @@ class CategoryController extends Controller
             dd('La suppression a échoué');
             return response()->json(['error' => 'La suppression a échoué']);
         }
-
-}
-
-    public function getVerbatim($id_category){
-        $getVerbatim = Verbatim::Where('id_category',$id_category)->pluck("verbatim",'id_verbatim');
-        return json_encode($getVerbatim);
     }
 
-
-
+    public function getVerbatim($id_category)
+    {
+        $getVerbatim = Verbatim::Where('id_category', $id_category)->pluck("verbatim", 'id_verbatim');
+        return json_encode($getVerbatim);
+    }
 }
