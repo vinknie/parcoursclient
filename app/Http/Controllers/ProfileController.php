@@ -21,7 +21,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        $getCategory = Category::all();
+        $getCategory = Category::where('id_user', Auth::user()->id)->get();
 
         return view('profile.edit', [
             'user' => $request->user(), 'getCategory' => $getCategory
@@ -70,7 +70,7 @@ class ProfileController extends Controller
     // create user
     public function createUser()
     {
-        $getCategory = Category::all();
+        $getCategory = Category::where('id_user', Auth::user()->id)->get();
         return view('admin.createUser', compact('getCategory'));
     }
 

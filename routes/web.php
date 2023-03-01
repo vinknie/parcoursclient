@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HistoriqueController;
 use App\Http\Controllers\NoteController;
 use Illuminate\Support\Facades\Route;
 
@@ -76,9 +77,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/dashboard/resetvalues/{id_verbatim}', [NoteController::class, 'resetValues'])->name('admin.resetvalues');
 
 
-    Route::delete('/dashboard/note/deleteDialogue/{id_dialogue}',[NoteController::class,'deleteDialogue']);
+    Route::delete('/dashboard/note/deleteDialogue/{id_dialogue}', [NoteController::class, 'deleteDialogue']);
 
     Route::get('/fullchart/popup/{id_verbatim}', [DashboardController::class, 'popup_chart'])->name('fullchart.popup');
+    Route::get('/dashboard/historique', [HistoriqueController::class, 'getHistorique'])->name('admin.historique');
 });
 // test
 Route::get('/chart/full', [DashboardController::class, 'fullChart'])->name('fullChart');

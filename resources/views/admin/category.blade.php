@@ -600,33 +600,32 @@
             }
         }
 
-jQuery(document).ready(function()
-    {
-        jQuery('select[name="id_category"]').on('change',function(){
-            var CategoryID = jQuery(this).val();
-            console.log(CategoryID);
-            if(CategoryID)
-            {
-                jQuery.ajax({
-                    url : '/dashboard/createCategory/createDialogue/getVerbatim/' +CategoryID,
-                    type : "GET",
-                    dataType : "json",
-                    success:function(data)
-                    {
-                        jQuery('select[name="id_verbatim"]').empty();
-                        jQuery.each(data, function(key,value){
-                            
-                            $('select[name="id_verbatim"]').append('<option value="'+ key +'">'+ value +'</option>');
-                        });
-                    }
-                });
-            }
-            else{
-                jQuery('select[name="id_verbatim"]').empty();
-                $('select[name="id_verbatim"]').append('<option value="">--Selectionner le verbatim--</option>');
-            }
-        });
-    })
-
+        jQuery(document).ready(function() {
+            jQuery('select[name="id_category"]').on('change',function(){
+                // const currentUserId = {{Auth::user()->id}};
+                const CategoryID = jQuery(this).val();
+                console.log(CategoryID);
+                if(CategoryID)
+                {
+                    jQuery.ajax({
+                        url : '/dashboard/createCategory/createDialogue/getVerbatim/' +CategoryID,
+                        type : "GET",
+                        dataType : "json",
+                        success:function(data)
+                        {
+                            jQuery('select[name="id_verbatim"]').empty();
+                            jQuery.each(data, function(key,value){
+                                
+                                $('select[name="id_verbatim"]').append('<option value="'+ key +'">'+ value +'</option>');
+                            });
+                        }
+                    });
+                }
+                else{
+                    jQuery('select[name="id_verbatim"]').empty();
+                    $('select[name="id_verbatim"]').append('<option value="">--Selectionner le verbatim--</option>');
+                }
+            });
+        })
     </script>
     @endsection
