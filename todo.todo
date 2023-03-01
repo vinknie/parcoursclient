@@ -3,3 +3,11 @@
 - localstorage => to make the submenu opened after click
 
 - seperate dashboard and nav
+- 
+- 
+- 
+- 
+- admin creates other users @done
+- when someone creates a category, his id is saved in the column id_user in category table @done
+- 
+- only the category and its datas that are linked to him are displayed @done

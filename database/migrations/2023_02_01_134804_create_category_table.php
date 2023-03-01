@@ -16,7 +16,9 @@ return new class extends Migration
         Schema::create('category', function (Blueprint $table) {
             $table->BigIncrements('id_category');
             $table->string('title');
+            $table->bigInteger('id_user')->unsigned()->nullable();
             $table->bigInteger('position');
+            $table->foreign('id_user')->references('id')->on('users');
             $table->timestamps();
         });
     }

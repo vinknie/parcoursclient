@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HistoriqueController;
 use App\Http\Controllers\NoteController;
 use Illuminate\Support\Facades\Route;
 
@@ -50,12 +51,12 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/dashboard/createCategory/createDialogue', [CategoryController::class, 'createDialogue']);
 
-    
-    Route::get('dashboard/category/deletecategory/{id_category}',[CategoryController::class, 'deleteCat'])->name('admin.deleteCat');
-    
-    Route::delete('dashboard/category/deleteVerba/{id_verbatim}', [CategoryController::class,'deleteVerba'])->name('admin.deleteVerba');
 
-    Route::get('/dashboard/createCategory/createDialogue/getVerbatim/{id_category}',[CategoryController::class,'getVerbatim'])->name('getVerbatim');
+    Route::get('dashboard/category/deletecategory/{id_category}', [CategoryController::class, 'deleteCat'])->name('admin.deleteCat');
+
+    Route::delete('dashboard/category/deleteVerba/{id_verbatim}', [CategoryController::class, 'deleteVerba'])->name('admin.deleteVerba');
+
+    Route::get('/dashboard/createCategory/createDialogue/getVerbatim/{id_category}', [CategoryController::class, 'getVerbatim'])->name('getVerbatim');
 
     Route::get('/dashboard/note/{id_category}', [NoteController::class, 'show'])->name('admin.noteVerba');
 
@@ -69,16 +70,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/category/update-category-positions', [CategoryController::class, 'updateCategoryPositions'])->name('admin.updateCategoryPositions');
 
 
-    
+
     Route::post('/dashboard/note/update-verbatim-positions', [NoteController::class, 'updatePositionVerba'])->name('admin.updatePositionVerba');
 
     Route::post('/dashboard/note/get-dialogues', [NoteController::class, 'getDialogues']);
     Route::patch('/dashboard/resetvalues/{id_verbatim}', [NoteController::class, 'resetValues'])->name('admin.resetvalues');
 
 
-    Route::delete('/dashboard/note/deleteDialogue/{id_dialogue}',[NoteController::class,'deleteDialogue']);
+    Route::delete('/dashboard/note/deleteDialogue/{id_dialogue}', [NoteController::class, 'deleteDialogue']);
 
     Route::get('/fullchart/popup/{id_verbatim}', [DashboardController::class, 'popup_chart'])->name('fullchart.popup');
+    Route::get('/dashboard/historique', [HistoriqueController::class, 'getHistorique'])->name('admin.historique');
 });
 // test
 Route::get('/chart/full', [DashboardController::class, 'fullChart'])->name('fullChart');

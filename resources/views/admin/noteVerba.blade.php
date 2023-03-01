@@ -53,7 +53,6 @@
                 </button>
             </div>
 
-
             <div class="flex items-center">
                 <div>
                     <form action="{{ route('admin.updatepositif', $verbatim->id_verbatim) }}" method="POST">
@@ -112,7 +111,7 @@
                 @method('PATCH')
                 <input type="hidden" name="positif" value="positif">
                 <input type="hidden" name="value" value="{{ $verbatim->positif - 1 }}">
-                <button class="bg-red-500 hover:bg-red-400 text-white font-bold py-1 px-2 rounded">
+                <button class="bg-red-500 hover:bg-red-400 text-white font-bold py-1 px-2 rounded-sm">
                     <i class="fas fa-minus"></i>
                 </button>
             </form>
@@ -125,7 +124,7 @@
                 <input type="hidden" name="neutre" value="neutre">
                 <input type="hidden" name="value" value="{{ $verbatim->neutre - 1 }}">
 
-                <button class="bg-red-500 hover:bg-red-400 text-white font-bold py-1 px-2 rounded">
+                <button class="bg-red-500 hover:bg-red-400 text-white font-bold py-1 px-2 rounded-sm">
                     <i class="fa-solid fa-minus"></i>
                 </button>
             </form>
@@ -138,7 +137,8 @@
                 <input type="hidden" name="negatif" value="negatif">
                 <input type="hidden" name="value" value="{{ $verbatim->negatif - 1 }}">
 
-                <button class="bg-red-500 hover:bg-red-400 text-white font-bold py-1 px-2 rounded" id="decrease-button">
+                <button class="bg-red-500 hover:bg-red-400 text-white font-bold py-1 px-2 rounded-sm"
+                    id="decrease-button">
                     <i class="fa-solid fa-minus"></i>
                 </button>
             </form>
@@ -177,38 +177,33 @@
     var isAdmin = {{ Auth::check() && Auth::user()->role === 'admin' ? true : false }};
         $(function() {
             if (isAdmin) {
-            $( ".category-list" ).sortable({
-                update: function(event, ui) {
-                    var positions = [];
-                    $('.category-card').each(function(i) {
-                        positions[i] = $(this).data('id');
-                    });
-                    $.ajax({
-                        type: 'POST',
-                        url: '/dashboard/note/update-verbatim-positions',
-                        data: {
-                            positions: positions,
-                            _token: "{{ csrf_token() }}"
-                        },
-                        success: function(data) {
-                            console.log("AJAX call success");
-                            $('.category-card').each(function(i) {
-                                $(this).find('.text-lg.font-medium').text((i + 1) + '. ' + $(this).find('.text-lg.font-medium').text().split('.')[1]);
-                                return true;
-                                console.log(data);
-                                
-                            });
-                        }
-                    });
-                }
-            });
-            $( ".category-list" ).disableSelection();
-        }
-
-
+                $( ".category-list" ).sortable({
+                    update: function(event, ui) {
+                        var positions = [];
+                        $('.category-card').each(function(i) {
+                            positions[i] = $(this).data('id');
+                        });
+                        $.ajax({
+                            type: 'POST',
+                            url: '/dashboard/note/update-verbatim-positions',
+                            data: {
+                                positions: positions,
+                                _token: "{{ csrf_token() }}"
+                            },
+                            success: function(data) {
+                                console.log("AJAX call success");
+                                $('.category-card').each(function(i) {
+                                    $(this).find('.text-lg.font-medium').text((i + 1) + '. ' + $(this).find('.text-lg.font-medium').text().split('.')[1]);
+                                    return true;
+                                    console.log(data);
+                                });
+                            }
+                        });
+                    }
+                });
+                $( ".category-list" ).disableSelection();
+            }
         });
-
-
        
         document.addEventListener("DOMContentLoaded", function(event) { 
             var scrollpos = localStorage.getItem('scrollpos');
@@ -219,91 +214,88 @@
             localStorage.setItem('scrollpos', window.scrollY);
         };
 
-
-        
-
         $('.popup-trigger').click(function() {
             var id_verbatim = $(this).data('id-verbatim');
     
-    $.ajax({
-        url: '/dashboard/note/get-dialogues',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            id_verbatim: id_verbatim,
-            _token: '{{ csrf_token() }}'
-        },
-        success: function(data) {
-    console.log('Données renvoyées :', data);
+            $.ajax({
+                url: '/dashboard/note/get-dialogues',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    id_verbatim: id_verbatim,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    console.log('Données renvoyées :', data);
 
-    // Vérifier si les données sont correctement formatées
-    if (typeof data === 'object' && data !== null) {
-  // Générer le contenu HTML des cartes de dialogue
-  var dialoguesHTML = '';
-  var verbatim = data[0].verbatim;
-$.each(data, function(index, dialogue) {
-    var sentimentIcon = '';
-    if (dialogue.positif > 0) {
-        sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-green-500 text-white flex-shrink-0 mr-2">+</span>';
-    } else if (dialogue.neutre > 0) {
-        sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500 text-white flex-shrink-0 mr-2">=</span>';
-    } else if (dialogue.negatif > 0) {
-        sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-red-500 text-white flex-shrink-0 mr-2">-</span>';
-    }
+                    // Vérifier si les données sont correctement formatées
+                    if (typeof data === 'object' && data !== null) {
+                        // Générer le contenu HTML des cartes de dialogue
+                        var dialoguesHTML = '';
+                        var verbatim = data[0].verbatim;
+                        $.each(data, function(index, dialogue) {
+                            var sentimentIcon = '';
+                            if (dialogue.positif > 0) {
+                                sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-green-500 text-white flex-shrink-0 mr-2">+</span>';
+                            } else if (dialogue.neutre > 0) {
+                                sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500 text-white flex-shrink-0 mr-2">=</span>';
+                            } else if (dialogue.negatif > 0) {
+                                sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-red-500 text-white flex-shrink-0 mr-2">-</span>';
+                            }
 
-    dialoguesHTML += '<div class="bg-white shadow-md rounded px-8 py-6 m-4">';
-dialoguesHTML += '<div class="flex items-center mb-4">' + sentimentIcon + '<h2 class="text-lg font-medium text-gray-800">' + dialogue.dialogue + '</h2>';
-dialoguesHTML += '<button class="delete-button ml-auto text-gray-600 hover:text-gray-800" data-dialogue-id="' + dialogue.id_dialogue + '">&times;</button></div>';
-dialoguesHTML += '<input type="hidden" name="dialogue_id" value="' + dialogue.id_dialogue + '">';
-dialoguesHTML += '</div>';
-});
+                            dialoguesHTML += '<div class="bg-white shadow-md rounded px-8 py-6 m-4">';
+                        dialoguesHTML += '<div class="flex items-center mb-4">' + sentimentIcon + '<h2 class="text-lg font-medium text-gray-800">' + dialogue.dialogue + '</h2>';
+                        dialoguesHTML += '<button class="delete-button ml-auto text-gray-600 hover:text-gray-800" data-dialogue-id="' + dialogue.id_dialogue + '">&times;</button></div>';
+                        dialoguesHTML += '<input type="hidden" name="dialogue_id" value="' + dialogue.id_dialogue + '">';
+                        dialoguesHTML += '</div>';
+                        });
 
-var popupHTML = '<div class="dialogue-popup flex items-center justify-center fixed left-0 bottom-0 w-full h-full bg-gray-800 bg-opacity-75">';
-popupHTML += '<div class="dialogue-container bg-white w-2/3 lg:max-w-lg mx-auto rounded shadow-lg z-50 overflow-y-auto relative">';
-popupHTML += '<h1 class="text-xl font-bold text-gray-800 m-4 text-center">'+verbatim+'</h1>';
-popupHTML += dialoguesHTML;
-popupHTML += '<button class="close-button absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800">&times;</button>';
-popupHTML += '</div>';
-popupHTML += '</div>';
+                        var popupHTML = '<div class="dialogue-popup flex items-center justify-center fixed left-0 bottom-0 w-full h-full bg-gray-800 bg-opacity-75">';
+                        popupHTML += '<div class="dialogue-container bg-white w-2/3 lg:max-w-lg mx-auto rounded shadow-lg z-50 overflow-y-auto relative">';
+                        popupHTML += '<h1 class="text-xl font-bold text-gray-800 m-4 text-center">'+verbatim+'</h1>';
+                        popupHTML += dialoguesHTML;
+                        popupHTML += '<button class="close-button absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800">&times;</button>';
+                        popupHTML += '</div>';
+                        popupHTML += '</div>';
 
-$('body').append(popupHTML);
+                        $('body').append(popupHTML);
 
-$('.close-button').on('click', function() {
-    $('.dialogue-popup').remove();
-});
-} else {
-  console.log('Erreur : données incorrectes');
-}
-},
-        error: function() {
-            alert('Une erreur s\'est produite.');
+                        $('.close-button').on('click', function() {
+                            $('.dialogue-popup').remove();
+                        });
+                    } else {
+                    console.log('Erreur : données incorrectes');
+                    }
+                },
+                error: function() {
+                    alert('Une erreur s\'est produite.');
+                }
+            });
+        });
+
+        $(document).on('click', '.delete-button', function() {
+            var dialogueId = $(this).data('dialogue-id');
+            if (confirm("Êtes-vous sûr de vouloir supprimer ce dialogue ?")) {
+                deleteDialogue(dialogueId);
+                $(this).closest('.bg-white').remove();
+            }
+        });
+        function deleteDialogue(dialogueId) {
+            console.log(dialogueId)
+            $.ajax({
+                url: '/dashboard/note/deleteDialogue/' + dialogueId,
+                type: 'DELETE',
+                data: {
+                '_token': '{{ csrf_token() }}'
+            },
+                success: function(response) {
+                    console.log('Dialogue supprimé avec succès');
+                },
+                error: function(error) {
+                    console.error('Erreur lors de la suppression du dialogue', error);
+                }
+            });
         }
-    });
-});
-
-$(document).on('click', '.delete-button', function() {
-    var dialogueId = $(this).data('dialogue-id');
-    if (confirm("Êtes-vous sûr de vouloir supprimer ce dialogue ?")) {
-        deleteDialogue(dialogueId);
-        $(this).closest('.bg-white').remove();
-    }
-});
-function deleteDialogue(dialogueId) {
-    console.log(dialogueId)
-    $.ajax({
-        url: '/dashboard/note/deleteDialogue/' + dialogueId,
-        type: 'DELETE',
-        data: {
-        '_token': '{{ csrf_token() }}'
-    },
-        success: function(response) {
-            console.log('Dialogue supprimé avec succès');
-        },
-        error: function(error) {
-            console.error('Erreur lors de la suppression du dialogue', error);
-        }
-    });
-}
 
 
 
