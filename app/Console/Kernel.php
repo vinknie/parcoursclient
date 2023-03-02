@@ -13,9 +13,16 @@ class Kernel extends ConsoleKernel
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
+
+
+    //  UPDATING THE TABLE HISTORIQUES AUTOMATICALLY
+    protected $commands = [
+        Commands\InsertMonthlyTotalCommand::class,
+    ];
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->command('insert:monthly-total')->monthly();
     }
 
     /**
@@ -25,7 +32,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
