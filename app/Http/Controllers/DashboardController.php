@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Verbatim;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +20,7 @@ class DashboardController extends Controller
     // fullchart page
     public function fullChart()
     {
+
         $getCategory                = Category::all();
         $categoryWithVerbatim       = DB::table('verbatim')
             ->join('category', 'verbatim.id_category', '=', 'category.id_category')

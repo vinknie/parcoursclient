@@ -82,7 +82,7 @@
             justify-content: center;
             align-items: center;
             overflow-y: scroll;
-            
+
         }
 
         .dialogue-content {
@@ -91,10 +91,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             max-height: 70%;
-         
         }
-        
-  
     </style>
 </head>
 
