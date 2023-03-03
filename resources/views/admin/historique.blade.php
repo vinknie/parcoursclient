@@ -1,6 +1,7 @@
 @extends('master')
 @section('content')
 
+@dd($historique_by_month)
 <div class="mt-28">
     <div class="flex justify-around">
         <div class="">

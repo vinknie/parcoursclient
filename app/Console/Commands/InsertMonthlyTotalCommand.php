@@ -29,14 +29,17 @@ class InsertMonthlyTotalCommand extends Command
      */
     public function handle()
     {
+        // fetching data from verbatim table
         $monthlyTotals = DB::table('verbatim')
-            ->select(DB::raw('SUM(positif) as total_positif, 
+            ->select(
+                DB::raw('SUM(positif) as total_positif, 
                     SUM(negatif) as total_negatif, 
-                    id_verbatim'))
+                    id_verbatim')
+            )
             ->groupBy('id_verbatim')
             ->get();
 
-        // 
+        // inserting into historiques table
         foreach ($monthlyTotals as $total) {
             DB::table('historiques')->insert([
                 'id_verbatim' => $total->id_verbatim,
@@ -45,12 +48,5 @@ class InsertMonthlyTotalCommand extends Command
                 'negatif' => $total->total_negatif,
             ]);
         }
-
-        // DB::table('historiques')->insert([
-        //     'id_verbatim' => 12,
-        //     'month_year' => 'null',
-        //     'positif' => 12,
-        //     'negatif' => 12,
-        // ]);
     }
 }

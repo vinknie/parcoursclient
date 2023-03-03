@@ -17,6 +17,8 @@
 - php artisan serve
 - npm run dev
 - 
-- php artisan schedule:work (run schedule timer)
-- php artisan schedule:list (see scheduled functions)
-- php artisan insert:monthly-total (manual update)
+- 
+- FOR HISTORIQUE TABLE ->
+    - php artisan schedule:work (run schedule timer)
+    - php artisan schedule:list (see scheduled functions)
+    - php artisan insert:monthly-total (manual update)
