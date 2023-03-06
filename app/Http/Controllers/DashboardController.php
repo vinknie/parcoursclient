@@ -20,7 +20,6 @@ class DashboardController extends Controller
     // fullchart page
     public function fullChart()
     {
-
         $getCategory                = Category::all();
         $categoryWithVerbatim       = DB::table('verbatim')
             ->join('category', 'verbatim.id_category', '=', 'category.id_category')
@@ -101,6 +100,7 @@ class DashboardController extends Controller
             }
             $verbatim->percent = $percent;
         }
+
         if (!isset($percent)) {
             return view('admin.charts.fullChart', compact('getCategory', 'categoryWithVerbatim', 'highestLowest', 'verbatimCountByCategory', 'totalEachVerbatim'));
         }
