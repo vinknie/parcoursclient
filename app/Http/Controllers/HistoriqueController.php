@@ -33,31 +33,19 @@ class HistoriqueController extends Controller
         $getVerbatim = $this->commonDatas()->getVerbatim;
         $historique_monthYear = $this->commonDatas()->historique_monthYear;
 
-
-        // get historqiue data divided by month
-
-
         return view('admin.historique', compact('getCategory', 'getVerbatim', 'historique_monthYear'));
     }
 
     // getting Historiquey By Month
-    public function getHistoriqueyByMonth(Request $request)
+    public function getHistoriqueyByMonth($month_year)
     {
-        $getCategory = $this->commonDatas()->getCategory;
-        $getVerbatim = $this->commonDatas()->getVerbatim;
-        $historique_monthYear = $this->commonDatas()->historique_monthYear;
-
-        $highestLowest = Verbatim::select(DB::raw('MAX(positif) as highest, MAX(negatif) as lowest'))->first();
-
-
-        $month_year = $request->chart_month1;
+        // $highestLowest = Verbatim::select(DB::raw('MAX(positif) as highest, MAX(negatif) as lowest'))->first();
 
         $historique_by_month = Category::join('verbatim', 'verbatim.id_category', '=', 'category.id_category')
             ->join('historiques', 'historiques.id_verbatim', '=', 'verbatim.id_verbatim')
             ->where('historiques.month_year', '=', $month_year)
             ->get();
 
-
-        return view('admin.historique', compact('getCategory', 'getVerbatim', 'historique_monthYear', 'highestLowest', 'historique_by_month'));
+        return json_encode($historique_by_month);
     }
 }

@@ -15,6 +15,10 @@
         integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+
+    {{-- JQuery --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <!-- JqueryUI -->
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
 
