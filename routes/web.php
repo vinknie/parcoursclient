@@ -83,7 +83,7 @@ Route::middleware('auth')->group(function () {
 
     // historique routes
     Route::get('/dashboard/historique', [HistoriqueController::class, 'getHistorique'])->name('admin.historique');
-    Route::post('/dashboard/historique/fetchChart', [HistoriqueController::class, 'getHistoriqueyByMonth'])->name('admin.historiqueByMonth');
+    Route::get('/dashboard/historique/fetchChart/{month_year}', [HistoriqueController::class, 'getHistoriqueyByMonth'])->name('admin.historiqueByMonth');
 });
 // test
 Route::get('/chart/full', [DashboardController::class, 'fullChart'])->name('fullChart');
