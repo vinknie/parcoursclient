@@ -14,7 +14,7 @@
                 </select>
             </div>
             <div class="">
-                <div class="">
+                <div id="chart-container1">
                     <canvas id="myChart1" class="m-2 w-full hidden"></canvas>
                 </div>
             </div>
@@ -42,17 +42,21 @@
 </div>
 
 <script>
-    function destroy() {
-        return [];
-    }
+    const chartContainer1 = document.querySelector('#chart-container1');
     function loadChart(selectId, chartId) {
         let myChart;
+        let ctx;
         
         jQuery(selectId).on('change',function(){
             if(myChart) {
-            myChart.destroy();
-        }
-            // const currentUserId = {{Auth::user()->id}};
+            // myChart.destroy();
+            // const newCanvas = document.createElement('canvas');
+            // newCanvas.id = 'myChart1';
+
+            // chartContainer1.replaceChild(newCanvas, chartContainer1.childNodes[1]);
+            // console.log(ctx)
+            alert('Please reload page')
+            }
             const month_year = jQuery(this).val();
             if(month_year) {
                 jQuery.ajax({
@@ -61,7 +65,6 @@
                     dataType : "json",
                     success:function(chartData)
                     {
-                        console.log(chartData)
                         // ===============C H A R T   J S================
                         const data = {
                             labels: chartData.map(d => d.verbatim),
@@ -131,7 +134,7 @@
                                     },
                                     // top phrase labales
                                     x: {
-                                        labels: chartData.map(hbm => hbm.verbatim),
+                                        labels: chartData.map(d => d.verbatim),
                                         position: 'top',
                                         grid: {
                                             display: false,
@@ -140,7 +143,7 @@
                                     },
                                     // category labels
                                     x3: {
-                                        labels: chartData.map(hbm => hbm.title),
+                                        labels: chartData.map(d => d.title),
                                         grid: {
                                             display: true,
                                         },
@@ -160,11 +163,9 @@
                             }
                         }
 
-                        
-                        const ctx = document.getElementById(chartId);
-                        myChart = new Chart(ctx, config);
-                       
                         // =======================================================
+                        ctx = document.getElementById(chartId);
+                        myChart = new Chart(ctx, config);
                     }
                 });
             } else {
@@ -176,6 +177,7 @@
         loadChart('#choose_month1', 'myChart1');
         loadChart('#choose_month2', 'myChart2');
     })
+
 </script>
 
 @endsection
