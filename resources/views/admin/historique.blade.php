@@ -5,7 +5,7 @@
     <div class="">
         {{-- left chart --}}
         <div class="w-full">
-            <div class="w-1/2 flex items-center justify-between pb-2 px-5">
+            <div class="w-1/2 flex items-center justify-between pb-2 px-5" id="select1-container">
                 <select name="chart_month1" id="choose_month1" class="rounded w-60 py-1 px-3 border-0 shadow">
                     <option value="">Choisissez un mois</option>
                     @foreach ($historique_monthYear as $month)
@@ -13,17 +13,15 @@
                     @endforeach
                 </select>
             </div>
-            <div class="">
-                <div id="chart-container1">
-                    <canvas id="myChart1" class="m-2 w-full hidden"></canvas>
-                </div>
+            <div id="chart-container1">
+                <canvas id="myChart1" class="m-2 w-full hidden"></canvas>
             </div>
         </div>
 
 
         {{-- right chart --}}
         <div class="w-full">
-            <div class="w-1/2 flex items-center justify-between pb-2 px-5 ">
+            <div class="w-1/2 flex items-center justify-between pb-2 px-5" id="select2-container">
                 <select name="chart_month2" id="choose_month2" class="rounded w-60 py-1 px-3 border-0 shadow">
                     <option value="">Choisissez un mois</option>
                     @foreach ($historique_monthYear as $month)
@@ -32,9 +30,7 @@
                 </select>
             </div>
             <div class="">
-                <div class="">
-                    <canvas id="myChart2" class="m-2 w-full hidden"></canvas>
-                </div>
+                <canvas id="myChart2" class="m-2 w-full hidden"></canvas>
             </div>
         </div>
 
@@ -43,22 +39,39 @@
 
 <script>
     const chartContainer1 = document.querySelector('#chart-container1');
-    function loadChart(selectId, chartId) {
+    function loadChart(selectId, chartId, selectContainer) {
         let myChart;
         let ctx;
         
-        jQuery(selectId).on('change',function(){
+        jQuery('#'+selectId).on('change',function(){
             if(myChart) {
             // myChart.destroy();
+            // document.getElementById(chartId).remove(); // this is my <canvas> element
+            // $('#chart-container1').append('<canvas id=' + chartId + ' class="test"><canvas>');
             // const newCanvas = document.createElement('canvas');
             // newCanvas.id = 'myChart1';
 
             // chartContainer1.replaceChild(newCanvas, chartContainer1.childNodes[1]);
             // console.log(ctx)
-            alert('Please reload page')
-            }
-            const month_year = jQuery(this).val();
-            if(month_year) {
+            // alert('Please reload page')
+
+        }
+
+        const month_year = jQuery(this).val();
+        document.getElementById(selectId).remove();
+
+        const h2 = document.createElement('h2');
+        h2.style.marginLeft = '55px';
+        h2.style.fontSize = '1.5rem';
+        h2.style.fontWeight = 'bold';
+        h2.style.color = '#333';
+        h2.textContent = "Pour le mois de "+ month_year
+
+        const selectOptionContainer = document.getElementById(selectContainer)
+        selectOptionContainer.append(h2)
+        
+
+        if(month_year) {
                 jQuery.ajax({
                     url : '/dashboard/historique/fetchChart/' +month_year,
                     type : "GET",
@@ -174,10 +187,9 @@
         });
     }
     jQuery(document).ready(function() {
-        loadChart('#choose_month1', 'myChart1');
-        loadChart('#choose_month2', 'myChart2');
+        loadChart('choose_month1', 'myChart1', 'select1-container');
+        loadChart('choose_month2', 'myChart2', 'select2-container');
     })
 
 </script>
-
 @endsection
