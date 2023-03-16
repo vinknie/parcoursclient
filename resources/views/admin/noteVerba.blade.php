@@ -24,24 +24,6 @@
     .close-button {
         font-size: 1.5rem;
     }
-
-    #note-verba__pagetitle:before {
-        content: "";
-        height: 2px;
-        width: 100px;
-        margin: 0 20px 8px 0;
-        background: #999;
-        display: inline-block;
-    }
-
-    #note-verba__pagetitle:after {
-        content: "";
-        height: 2px;
-        width: 100px;
-        margin: 0 0 8px 20px;
-        background: #999;
-        display: inline-block;
-    }
 </style>
 
 @section('content')
@@ -53,7 +35,7 @@
 @endif
 
 <div class="text-center mt-20">
-    <h1 class="text-2xl font-semibold" id="note-verba__pagetitle">{{ $category->title }}</h1>
+    <h1 class="text-2xl font-semibold page-titles">{{ $category->title }}</h1>
 </div>
 
 <div class="category-list">

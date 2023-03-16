@@ -239,7 +239,7 @@
 @else
 <div class="container mx-auto px-6 py-12 mt-8">
     <div class="text-center">
-        <h2 class="text-2xl font-medium mb-4">Gestion des étapes et des verbatims</h2>
+        <h2 class="text-2xl font-medium mb-4 page-titles">Gestion des étapes et des verbatims</h2>
     </div>
     @if (Auth::check() && Auth::user()->role === 'admin' ? true : false)
     <span class="text-sm text-green-600 mb-6">* Déplacé les cartes pour modifier l'ordre des étapes qui
