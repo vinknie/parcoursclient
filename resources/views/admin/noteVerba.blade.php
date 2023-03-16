@@ -24,49 +24,69 @@
     .close-button {
         font-size: 1.5rem;
     }
+
+    #note-verba__pagetitle:before {
+        content: "";
+        height: 2px;
+        width: 100px;
+        margin: 0 20px 8px 0;
+        background: #999;
+        display: inline-block;
+    }
+
+    #note-verba__pagetitle:after {
+        content: "";
+        height: 2px;
+        width: 100px;
+        margin: 0 0 8px 20px;
+        background: #999;
+        display: inline-block;
+    }
 </style>
 
 @section('content')
 
 @if(Auth::check() && Auth::user()->role === 'admin')
-<span class="text-sm font-medium text-gray-500 mt-16"> * Déplacé les cartes pour modifier l'ordre des étapes qui
-    apparaitront
-    dans le graphique</span>
+<p class="text-sm font-medium text-green-600 mt-16">
+    * Déplacé les cartes pour modifier l'ordre des étapes qui apparaitront dans le graphique
+</p>
 @endif
 
-<div class="text-center mt-16">
-    <h1 class="text-2xl font-medium">{{ $category->title }}</h1>
+<div class="text-center mt-20">
+    <h1 class="text-2xl font-semibold" id="note-verba__pagetitle">{{ $category->title }}</h1>
 </div>
 
 <div class="category-list">
     @foreach ($getverbatim as $verbatim)
     {{-- @dd($getverbatim) --}}
-    <div class=" rounded-lg overflow-hidden shadow-lg m-4 category-card" data-id="{{ $verbatim->id_verbatim }}">
-        <div class="px-6 py-4 flex justify-between">
-            <div class="m-4">
-                <h3 class="text-lg font-medium">{{ $verbatim->position }}. {{ $verbatim->verbatim }}</h3>
+    <div class="rounded-lg overflow-hidden shadow-lg m-4 px-4 py-4 category-card"
+        data-id="{{ $verbatim->id_verbatim }}">
+        <div class="flex justify-between">
+            <div>
+                <h3 class="text-lg font-medium tracking-wider font-semibold">{{ $verbatim->position }}. {{
+                    $verbatim->verbatim }}</h3>
 
                 {{-- button popup dialogue --}}
-                <button class="popup-trigger" data-id-verbatim="{{ $verbatim->id_verbatim }}"
-                    @if($verbatim->dialogue_count == 0) disabled @endif>{{ $verbatim->dialogue_count }}
+                <button class="popup-trigger mt-4" data-id-verbatim="{{ $verbatim->id_verbatim }}"
+                    @if($verbatim->dialogue_count == 0) disabled @endif> <span
+                        class="bg-gray-800 px-2 text-slate-100 rounded">{{
+                        $verbatim->dialogue_count }}</span>
                     Dialogue(s)
                 </button>
             </div>
 
             <div class="flex items-center">
-                <div>
-                    <form action="{{ route('admin.updatepositif', $verbatim->id_verbatim) }}" method="POST">
-                        @csrf
-                        @method('PATCH')
-                        <input type="hidden" name="positif" value="positif">
-                        <input type="hidden" name="value" value="{{ $verbatim->positif + 1 }}">
-                        <button
-                            class="bg-green-500 hover:bg-green-400 text-white font-bold py-3 px-5 m-1 rounded-lg shadow-lg">
-                            <i class="fas fa-thumbs-up"></i>
-                        </button>
-                    </form>
+                <form action="{{ route('admin.updatepositif', $verbatim->id_verbatim) }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" name="positif" value="positif">
+                    <input type="hidden" name="value" value="{{ $verbatim->positif + 1 }}">
+                    <button
+                        class="bg-green-500 hover:bg-white text-white hover:text-green-500 hover:drop-shadow-md font-bold py-2 px-2 m-1 rounded-full shadow-lg">
+                        <i class="fa-regular fa-thumbs-up"></i>
+                    </button>
+                </form>
 
-                </div>
                 <div>
                     <form action="{{ route('admin.updateneutre', $verbatim->id_verbatim) }}" method="POST">
                         @csrf
@@ -74,7 +94,7 @@
                         <input type="hidden" name="neutre" value="neutre">
                         <input type="hidden" name="value" value="{{ $verbatim->neutre + 1 }}">
                         <button
-                            class="bg-gray-500 hover:bg-gray-400 text-white font-bold py-3 px-5 m-1 rounded-lg shadow-lg">
+                            class="bg-gray-500 hover:bg-white text-white hover:text-gray-500 hover:drop-shadow-md font-bold py-2 px-2 m-1 rounded-full shadow-lg">
                             <i class="fas fa-equals"></i>
                         </button>
                     </form>
@@ -89,8 +109,8 @@
                         <input type="hidden" name="value" value="{{ $verbatim->negatif + 1 }}">
 
                         <button
-                            class="bg-red-500 hover:bg-red-400 text-white font-bold py-3 px-5 m-1 rounded-lg shadow-lg">
-                            <i class="fas fa-thumbs-down"></i>
+                            class="bg-red-500 hover:bg-white text-white hover:text-red-500 hover:drop-shadow-md font-bold py-2 px-2 m-1 rounded-full shadow-lg">
+                            <i class="fa-regular fa-thumbs-down"></i>
                         </button>
                     </form>
 
@@ -103,45 +123,60 @@
         </div>
 
 
-        <div class="flex justify-between w-1/3">
+        <div class="flex justify-between w-1/3 mt-4">
 
-            <p class="text-gray-700 mb-4">Positif: {{ $verbatim->positif ? $verbatim->positif : 0 }}</p>
-            <form action="{{ route('admin.decreasepositif', $verbatim->id_verbatim) }}" method="POST">
-                @csrf
-                @method('PATCH')
-                <input type="hidden" name="positif" value="positif">
-                <input type="hidden" name="value" value="{{ $verbatim->positif - 1 }}">
-                <button class="bg-red-500 hover:bg-red-400 text-white font-bold py-1 px-2 rounded-sm">
-                    <i class="fas fa-minus"></i>
-                </button>
-            </form>
+            <div class="flex border-2 border-green-300 px-2 rounded-full items-center">
+                <p class="text-gray-700">
+                    Positif: <span class="font-bold">{{ $verbatim->positif ? $verbatim->positif : 0 }}</span>
+                </p>
+                <form class="mb-0 ml-4" action="{{ route('admin.decreasepositif', $verbatim->id_verbatim) }}"
+                    method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" name="positif" value="positif">
+                    <input type="hidden" name="value" value="{{ $verbatim->positif - 1 }}">
+                    <button class="bg-red-400 hover:bg-red-600 text-white font-bold px-2 rounded-full cursor-pointer">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </form>
+            </div>
 
-            <p class="text-gray-700 mb-4">neutre: {{ $verbatim->neutre ? $verbatim->neutre : 0 }}</p>
-            <form action="{{ route('admin.decreaseneutre', $verbatim->id_verbatim) }}" method="POST">
-                @csrf
-                @method('PATCH')
+            <div class="flex border-2 border-gray-300 px-2 rounded-full items-center">
+                <p class="text-gray-700">
+                    Neutre: <span class="font-bold">{{ $verbatim->neutre ?$verbatim->neutre: 0}}</span>
+                </p>
+                <form class="mb-0 ml-4" action="{{ route('admin.decreaseneutre', $verbatim->id_verbatim) }}"
+                    method="POST">
+                    @csrf
+                    @method('PATCH')
 
-                <input type="hidden" name="neutre" value="neutre">
-                <input type="hidden" name="value" value="{{ $verbatim->neutre - 1 }}">
+                    <input type="hidden" name="neutre" value="neutre">
+                    <input type="hidden" name="value" value="{{ $verbatim->neutre - 1 }}">
 
-                <button class="bg-red-500 hover:bg-red-400 text-white font-bold py-1 px-2 rounded-sm">
-                    <i class="fa-solid fa-minus"></i>
-                </button>
-            </form>
+                    <button class="bg-red-400 hover:bg-red-600 text-white font-bold px-2 rounded-full cursor-pointer">
+                        <i class="fa-solid fa-minus"></i>
+                    </button>
+                </form>
+            </div>
 
-            <p class="text-gray-700 mb-4">Negatif: {{ $verbatim->negatif ? $verbatim->negatif : 0 }}</p>
-            <form action="{{ route('admin.decreasenegatif', $verbatim->id_verbatim) }}" method="POST">
-                @csrf
-                @method('PATCH')
+            <div class="flex border-2 border-red-300 px-2 rounded-full items-center">
+                <p class="text-gray-700">
+                    Negatif: <span class="font-bold">{{ $verbatim->negatif ? $verbatim->negatif: 0}}</span>
+                </p>
+                <form class="mb-0 ml-4" action="{{ route('admin.decreasenegatif', $verbatim->id_verbatim) }}"
+                    method="POST">
+                    @csrf
+                    @method('PATCH')
 
-                <input type="hidden" name="negatif" value="negatif">
-                <input type="hidden" name="value" value="{{ $verbatim->negatif - 1 }}">
+                    <input type="hidden" name="negatif" value="negatif">
+                    <input type="hidden" name="value" value="{{ $verbatim->negatif - 1 }}">
 
-                <button class="bg-red-500 hover:bg-red-400 text-white font-bold py-1 px-2 rounded-sm"
-                    id="decrease-button">
-                    <i class="fa-solid fa-minus"></i>
-                </button>
-            </form>
+                    <button class="bg-red-400 hover:bg-red-600 text-white font-bold px-2 rounded-full cursor-pointer"
+                        id="decrease-button">
+                        <i class="fa-solid fa-minus"></i>
+                    </button>
+                </form>
+            </div>
 
         </div>
         @if(Auth::check() && Auth::user()->role === 'admin')
