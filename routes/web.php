@@ -85,5 +85,6 @@ Route::middleware('auth')->group(function () {
 });
 // test
 Route::get('/chart/full', [DashboardController::class, 'fullChart'])->name('fullChart');
+Route::get('/chart/fulltest', [DashboardController::class, 'test'])->name('fullcharttest');
 
 require __DIR__ . '/auth.php';
