@@ -47,6 +47,8 @@ class DashboardController extends Controller
                 ];
             });
 
+            
+
         $verbatimCountByCategory    = Verbatim::selectRaw('count(*) as total_by_cat')
             ->join('category', 'verbatim.id_category', '=', 'category.id_category')
             ->orderBy('category.position', 'asc')
@@ -127,5 +129,58 @@ class DashboardController extends Controller
 
         // Ensuite, vous pouvez retourner la vue avec les dialogues en utilisant la méthode view() de Laravel
         return $dialogues;
+    }
+
+
+    public function test(){
+        $getCategory= Category::all();
+        $totalEachVerbatim   = DB::table('verbatim')
+            ->join('category', 'verbatim.id_category', '=', 'category.id_category')
+            ->select(
+                'verbatim.positif',
+                'verbatim.negatif',
+                'verbatim.neutre',
+                'verbatim.verbatim',
+                'verbatim.position',
+                'category.title',
+                'category.id_category',
+                'category.position',
+                DB::raw('sum(verbatim.positif + verbatim.negatif + verbatim.neutre) as total'),
+            )
+            ->orderBy('category.position', 'asc')
+            ->orderBy('verbatim.position', 'asc')
+            ->groupBy('verbatim.id_verbatim')
+            ->get();
+
+            $totalEachCategory   = DB::table('verbatim')
+            ->join('category', 'verbatim.id_category', '=', 'category.id_category')
+            ->select(
+                'category.title',
+                'category.id_category',
+                'category.position',
+                DB::raw('sum(verbatim.positif + verbatim.negatif + verbatim.neutre) as total')
+            )
+            ->orderBy('category.position', 'asc')
+            ->orderBy('verbatim.position', 'asc')
+            ->groupBy('category.id_category')
+            ->get();
+
+            foreach ($totalEachVerbatim as $verbatim) {
+                foreach ($totalEachCategory as $category) {
+                    if ($verbatim->id_category === $category->id_category) {
+                        if ($category->total > 0) {
+                            $percent = ($verbatim->total / $category->total) * 100;
+                        } else {
+                            $percent = 0;
+                        }
+                    }
+                }
+                $verbatim->percent = $percent;
+            }
+            if (!isset($percent)) {
+                return view('admin.charts.fullcharttest', compact('getCategory','totalEachCategory','totalEachVerbatim'));
+            }
+            return view('admin.charts.fullcharttest', compact('getCategory','totalEachCategory','totalEachVerbatim','percent'));    
+
     }
 }

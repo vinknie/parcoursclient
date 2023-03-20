@@ -49,3 +49,4 @@ class HistoriqueController extends Controller
         return json_encode($historique_by_month);
     }
 }
+

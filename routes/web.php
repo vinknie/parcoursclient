@@ -84,8 +84,10 @@ Route::middleware('auth')->group(function () {
     // historique routes
     Route::get('/dashboard/historique', [HistoriqueController::class, 'getHistorique'])->name('admin.historique');
     Route::get('/dashboard/historique/fetchChart/{month_year}', [HistoriqueController::class, 'getHistoriqueyByMonth'])->name('admin.historiqueByMonth');
+
 });
 // test
 Route::get('/chart/full', [DashboardController::class, 'fullChart'])->name('fullChart');
+Route::get('/chart/fulltest', [DashboardController::class, 'test'])->name('fullcharttest');
 
 require __DIR__ . '/auth.php';
