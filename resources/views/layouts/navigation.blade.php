@@ -7,7 +7,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('admin.category') }}">
-                        <img src="{{ asset('images/prij.png') }}" alt="" class="block h-9 w-auto fill-current">
+                        <img src="{{ asset('images/logo.png') }}" alt="" class="block h-9 w-auto fill-current">
                         {{--
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                         --}}

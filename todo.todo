@@ -11,3 +11,25 @@
 - when someone creates a category, his id is saved in the column id_user in category table @done
 - 
 - only the category and its datas that are linked to him are displayed @done
+- 
+- 
+- < -------------- STARTING PROJECT ------------- >
+- php artisan serve
+- npm run dev
+- 
+- 
+- FOR HISTORIQUE TABLE ->
+    - php artisan schedule:work (run schedule timer)
+    - php artisan schedule:list (see scheduled functions)
+    - php artisan insert:monthly-total (manual update)
+
+
+FOR CHARTS
+- (historiques) select historique row with the month_year
+- (verbatim) get all verbatim with id_verbatim in historique
+- (category) get category linked with id_category in verbatim table
+- 
+- 
+- 
+- 
+CREATE A CLASS FOR THE COMMON DATAS 

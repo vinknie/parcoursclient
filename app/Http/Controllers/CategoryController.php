@@ -18,13 +18,13 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function createCategory()
-    {
-        $getCategory = Category::all();
-        $getVerbatim = Verbatim::all();
+    // public function createCategory()
+    // {
+    //     $getCategory = Category::all();
+    //     $getVerbatim = Verbatim::all();
 
-        return view('admin.createCategory', compact('getCategory', 'getVerbatim'));
-    }
+    //     return view('admin.createCategory', compact('getCategory', 'getVerbatim'));
+    // }
 
     public function category()
     {
@@ -37,7 +37,7 @@ class CategoryController extends Controller
             ->get();
 
         $noCategoryCount = Verbatim::whereNull('id_category')->count();
-        $getCategory = Category::orderBy('position')->get();
+        $getCategory = Category::where('id_user', Auth::user()->id)->orderBy('position')->get();
         $getVerbatim = Verbatim::all();
 
         return view('admin.category', compact('categories', 'noCategoryCount', 'getCategory', 'getVerbatim'));

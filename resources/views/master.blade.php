@@ -29,7 +29,7 @@
                 <li class="py-2">
                     <x-responsive-nav-link :href="route('admin.category')"
                         :active="request()->routeIs('admin.category')">
-                        {{ __('Liste des catégories et des verbatims') }}
+                        {{ __('Catégories - Verbatims') }}
                     </x-responsive-nav-link>
                 </li>
 

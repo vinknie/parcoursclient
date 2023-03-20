@@ -1,13 +1,14 @@
 @extends('master')
 <style>
     .category-card {
+        cursor: pointer;
         transition: transform 0.2s ease-out;
         transform: scale(1);
     }
 
     .category-card:hover {
-        background-color: rgba(0, 0, 0, 0.1);
-        transform: scale(1.05);
+        /* background-color: rgba(0, 0, 0, 0.1); */
+        transform: scale(1.02);
         z-index: 10;
     }
 
@@ -74,12 +75,12 @@
 @if (request()->route('id_category'))
 <div class="text-left mb-6 ml-6 mt-24">
     <a href="{{ route('admin.category') }}"
-        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded"><i
+        class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded"><i
             class="fa-solid fa-arrow-left-long"></i></a>
 </div>
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
     <div class="bg-white rounded-lg shadow-lg p-6">
-        <h3 class="text-xl font-medium mb-6">Modifier l'étape</h3>
+        <h3 class="text-xl font-medium mb-6 tracking-wide">Modifier l'étape</h3>
         @if (\Session::has('success'))
         <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
             class="bg-teal-100 border border-teal-400 text-green-700 px-4 py-3 rounded relative" role="alert">
@@ -116,12 +117,11 @@
                 <input class="bg-white border border-gray-400 rounded w-full py-2 px-4" type="text" id="title"
                     name="title" value="{{ $getcategory->title }}" required>
             </div>
-            <button
-                class="bg-indigo-500 text-white font-medium py-2 px-4 rounded-full hover:bg-indigo-600">Modifier</button>
+            <button class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded">Modifier</button>
         </form>
     </div>
     <div class="bg-white rounded-lg shadow-lg p-6">
-        <h3 class="text-xl font-medium mb-6">Modifier les verbatims</h3>
+        <h3 class="text-xl font-medium mb-6 tracking-wide">Modifier les verbatims</h3>
         @if (\Session::has('success1'))
         <div x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
             class="bg-teal-100 border border-teal-400 text-green-700 px-4 py-3 rounded relative" role="alert">
@@ -154,7 +154,7 @@
         <form action="{{ route('admin.updateVerba') }}" method="post" enctype="multipart/form-data">
             @csrf
             @foreach ($getverbatim as $verbatim)
-            <div class="mb-4">
+            <div class="mb-4 relative">
                 <label class="block text-gray-700 font-medium mb-2" for="verbatim">Intitulé du verbatim</label>
                 <div class="flex items-center">
                     <input type="hidden" name="id_verbatim[]" value="{{ $verbatim->id_verbatim }}"
@@ -163,13 +163,14 @@
                     <input class="bg-white border border-gray-400 rounded w-full py-2 px-4" type="text"
                         name="verbatim[]" value="{{ $verbatim->verbatim }}" required>
                     <button type="button"
-                        class="ml-4 bg-red-500 text-white font-medium py-2 px-4 rounded-full hover:bg-red-600"
-                        onclick="deleteInput(this)"><i class="fa-solid fa-trash"></i></button>
+                        class="bg-red-400 hover:bg-red-600 text-slate-50 m-1 rounded absolute right-0 px-2"
+                        onclick="deleteInput(this)">
+                        Supprimer
+                    </button>
                 </div>
             </div>
             @endforeach
-            <button
-                class="bg-indigo-500 text-white font-medium py-2 px-4 rounded-full hover:bg-indigo-600">Modifier</button>
+            <button class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded">Modifier</button>
         </form>
         @else
         <p>Pas de verbatim dans cette catégorie</p>
@@ -179,7 +180,7 @@
 @elseif (Route::currentRouteName() == 'admin.verbatimsWithoutCategory')
 <div class="text-left mb-6 ml-6 mt-28">
     <a href="{{ route('admin.category') }}"
-        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded"><i
+        class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded"><i
             class="fa-solid fa-arrow-left-long"></i></a>
 </div>
 @if (\Session::has('success1'))
@@ -238,19 +239,20 @@
 @else
 <div class="container mx-auto px-6 py-12 mt-8">
     <div class="text-center">
-        <h2 class="text-2xl font-medium mb-4">Gestion des étapes et des verbatims</h2>
+        <h2 class="text-2xl font-medium mb-4 page-titles">Gestion des étapes et des verbatims</h2>
     </div>
-    {{-- @if (Auth::check() && Auth::user()->role === 'admin' ? true : false) --}}
-    <span class="text-sm text-gray-600 mb-6">* Déplacé les cartes pour modifier l'ordre des étapes qui
+    @if (Auth::check() && Auth::user()->role === 'admin' ? true : false)
+    <span class="text-sm text-green-600 mb-6">* Déplacé les cartes pour modifier l'ordre des étapes qui
         apparaitront dans le graphique</span>
+    @endif
     <div class="flex justify-between my-6">
-        <button id="myBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+        <button id="myBtn" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded">
             <i class="fa-solid fa-plus"></i> Créer une étape
         </button>
-        <button id="myBtn1" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+        <button id="myBtn1" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded">
             <i class="fa-solid fa-plus"></i> Créer une verbatim
         </button>
-        <button id="myBtn3" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+        <button id="myBtn3" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded">
             <i class="fa-solid fa-plus"></i> Créer un dialogue
         </button>
     </div>
@@ -450,44 +452,49 @@
         </span>
     </div>
     @endif
-    {{-- @endif --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 category-list">
         @foreach ($categories as $category)
 
         <div class="bg-white rounded-lg shadow-lg category-card z-0" data-id="{{ $category->id_category }}">
             <div class="p-6 flex justify-between">
-                <h3 class="text-lg font-medium truncate-text">{{ $category->position }}.
-                    {{ $category->title }}</h3>
-                <div class="">
+                <h3 class="text-lg font-medium truncate-text tracking-wider">
+                    <a href="{{ route('admin.editCategory', ['id_category' => $category->id_category]) }}"> {{
+                        $category->position }}. {{ $category->title }}
+                    </a>
+                </h3>
+                <div>
                     <a href="{{ route('admin.editCategory', ['id_category' => $category->id_category]) }}"
-                        class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 m-1 rounded">
-                        <i class="fa-solid fa-pen-to-square "></i>
+                        class="text-gray-400 hover:text-gray-600 m-1 rounded">
+                        <i class="fa-regular fa-pen-to-square "></i>
                     </a>
                     <a href="{{ route('admin.deleteCat', ['id_category' => $category->id_category]) }}"
-                        class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4  m-1 rounded"
+                        class="text-red-300 hover:text-red-600 m-1 rounded"
                         onclick="return confirm('etes vous sur de vouloir supprimé? ')">
-                        <i class="fa-solid fa-trash"></i>
+                        <i class="fa-regular fa-trash-can"></i>
                     </a>
                 </div>
-
-
-
             </div>
+
             <div class="p-6">
-                <p class="text-gray-600">{{ $category->verbatim_count }} verbatims</p>
+                <p>
+                    <span class="bg-gray-800 text-gray-100 px-2 rounded">{{ $category->verbatim_count }}</span>
+                    verbatims
+                </p>
             </div>
         </div>
         @endforeach
-        <div class="bg-white rounded-lg shadow-lg ">
+        <div class="bg-white rounded-lg shadow-lg category-card">
             <div class="p-6 flex justify-between">
-                <h3 class="text-lg font-medium">Verbatims sans étape</h3>
+                <h3 class="text-lg font-medium tracking-wider">
+                    <a href="{{ route('admin.verbatimsWithoutCategory') }}">Verbatims sans étape</a>
+                </h3>
                 <a href="{{ route('admin.verbatimsWithoutCategory') }}"
-                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    class="text-gray-400 hover:text-gray-600 rounded">
                     <i class="fa-regular fa-pen-to-square"></i>
                 </a>
             </div>
             <div class="p-6">
-                <p class="text-gray-600">{{ $noCategoryCount }} verbatims</p>
+                <p><span class="bg-gray-800 text-gray-100 px-2 rounded">{{ $noCategoryCount }}</span> verbatims</p>
             </div>
         </div>
     </div>
@@ -496,10 +503,10 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
-        // const isAdmin = {{ Auth::check() && Auth::user()->role === 'admin' ? 'true' : 'false' }};
+        const isAdmin = {{ Auth::check() && Auth::user()->role === 'admin' ? 'true' : 'false' }};
 
         $(function() {
-            // if (isAdmin) {
+            if (isAdmin) {
                 $(".category-list").sortable({
                     update: function(event, ui) {
                         var positions = [];
@@ -528,7 +535,7 @@
                     }
                 });
                 $(".category-list").disableSelection();
-            // }
+            }
         });
 
         // Get the <span> element that closes the popup
@@ -600,33 +607,32 @@
             }
         }
 
-jQuery(document).ready(function()
-    {
-        jQuery('select[name="id_category"]').on('change',function(){
-            var CategoryID = jQuery(this).val();
-            console.log(CategoryID);
-            if(CategoryID)
-            {
-                jQuery.ajax({
-                    url : '/dashboard/createCategory/createDialogue/getVerbatim/' +CategoryID,
-                    type : "GET",
-                    dataType : "json",
-                    success:function(data)
-                    {
-                        jQuery('select[name="id_verbatim"]').empty();
-                        jQuery.each(data, function(key,value){
-                            
-                            $('select[name="id_verbatim"]').append('<option value="'+ key +'">'+ value +'</option>');
-                        });
-                    }
-                });
-            }
-            else{
-                jQuery('select[name="id_verbatim"]').empty();
-                $('select[name="id_verbatim"]').append('<option value="">--Selectionner le verbatim--</option>');
-            }
-        });
-    })
-
+        jQuery(document).ready(function() {
+            jQuery('select[name="id_category"]').on('change',function(){
+                // const currentUserId = {{Auth::user()->id}};
+                const CategoryID = jQuery(this).val();
+                console.log(CategoryID);
+                if(CategoryID)
+                {
+                    jQuery.ajax({
+                        url : '/dashboard/createCategory/createDialogue/getVerbatim/' +CategoryID,
+                        type : "GET",
+                        dataType : "json",
+                        success:function(data)
+                        {
+                            jQuery('select[name="id_verbatim"]').empty();
+                            jQuery.each(data, function(key,value){
+                                
+                                $('select[name="id_verbatim"]').append('<option value="'+ key +'">'+ value +'</option>');
+                            });
+                        }
+                    });
+                }
+                else{
+                    jQuery('select[name="id_verbatim"]').empty();
+                    $('select[name="id_verbatim"]').append('<option value="">--Selectionner le verbatim--</option>');
+                }
+            });
+        })
     </script>
     @endsection
