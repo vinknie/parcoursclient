@@ -55,16 +55,14 @@
         }
     }
 
-    console.log(final);
-  
     var option = {
         grid: {
-        top: '10%',
-        left: '3%',
-        right: '3%',
-        bottom: '5%', // Augmenter l'espace en dessous de la charte
-        containLabel: true
-    },
+            top: '10%',
+            left: '3%',
+            right: '3%',
+            bottom: '5%', // Augmenter l'espace en dessous de la charte
+            containLabel: true
+        },
         "xAxis": [{
                 "type": "category",
                 data: verbatim,
@@ -77,82 +75,87 @@
                 }
             },
             {
-    type: 'category',
-    position: 'bottom',
-    data: percent,
-    offset: 10,
-    axisLabel: {
-        formatter: function(value, index) {
-            return '{a|' + value + '}\n{b| }';
-        },
-        rich: {
-            a: {
-                backgroundColor: '#3498db',
-                color: '#fff',
-                borderRadius: 50,
-                width: 55,
-                height: 55,
-                textAlign: 'center',
-                lineHeight: 30,
-                fontSize: 12,
-                fontWeight: 'bold'
+                type: 'category',
+                position: 'bottom',
+                data: percent,
+                offset: 10,
+                axisLabel: {
+                    formatter: function(value, index) {
+                        return '{a|' + value + '}\n{b| }';
+                    },
+                    rich: {
+                        a: {
+                            backgroundColor: '#3498db',
+                            color: '#fff',
+                            borderRadius: 50,
+                            width: 55,
+                            height: 55,
+                            textAlign: 'center',
+                            lineHeight: 30,
+                            fontSize: 12,
+                            fontWeight: 'bold'
+                        },
+                        b: {
+                            height: 10
+                        }
+                    }
+                },
             },
-            b: {
-                height: 10
-            }
-        }
-    },
-    axisLine: {
-        show: false
-    }
-},
-           {
-    type: 'category',
-    position: 'bottom',
-    data: final,
-    offset: 65,
-    axisLabel: {
-    show: true,
-    interval: 0,
-    formatter: function(value, index) {
-        if (index % 2 == 0) {
-            return '{a|' + value + '}';
-        } else {
-            return '{b|' + value + '}';
-        }
-    },
-    rich: {
-        a: {
-            backgroundColor: '#2ecc71',
-            color: '#fff',
-            borderRadius: 50,
-            width: 120,
-            height: 30,
-            textAlign: 'center',
-            lineHeight: 30,
-            fontSize: 12,
-            fontWeight: 'bold'
-        },
-        b: {
-            backgroundColor: '#e74c3c',
-            color: '#fff',
-            borderRadius: 50,
-            width: 120,
-            height: 30,
-            textAlign: 'center',
-            lineHeight: 30,
-            fontSize: 12,
-            fontWeight: 'bold'
-        },
-    }
-},
-}
+            {
+                type: 'category',
+                position: 'bottom',
+                data: final,
+                offset: 65,
+                axisLabel: {
+                    show: true,
+                    interval: 0,
+                    formatter: function(value, index) {
+                        if (index % 2 == 0) {
+                            return '{a|' + value + '}';
+                        } else {
+                            return '{b|' + value + '}';
+                        }
+                    },
+                    rich: {
+                        a: {
+                            backgroundColor: '#2ecc71',
+                            color: '#fff',
+                            borderRadius: 50,
+                            width: 120,
+                            height: 30,
+                            textAlign: 'center',
+                            lineHeight: 30,
+                            fontSize: 12,
+                            fontWeight: 'bold'
+                        },
+                        b: {
+                            backgroundColor: '#e74c3c',
+                            color: '#fff',
+                            borderRadius: 50,
+                            width: 120,
+                            height: 30,
+                            textAlign: 'center',
+                            lineHeight: 30,
+                            fontSize: 12,
+                            fontWeight: 'bold'
+                        },
+                    }
+            //         textStyle: {
+            //     backgroundColor: 'red',
+            //     borderRadius: 2
+            // }
+                },
+                splitLine: {
+                    show: true
+                },
+            }],
 
-
-        ],
-        "yAxis": {
+        "yAxis": [{
             type: 'value',
-        },
+            splitLine: {
+                show: false
+            }
+        }],
         "series": [{
                 "type": "bar",
                 "name": "Positif",

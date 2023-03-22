@@ -16,8 +16,15 @@
                         :active="request()->routeIs('admin.createUser')">
                         {{ __('Créer un utilisateur') }}
                     </x-responsive-nav-link>
-                    @endif
                 </li>
+
+                <li class="py-2">
+                    <x-responsive-nav-link :href="route('admin.getUsers')"
+                        :active="request()->routeIs('admin.getUsers')">
+                        {{ __('Liste d\'utilisateur') }}
+                    </x-responsive-nav-link>
+                </li>
+                @endif
 
                 <li class="py-2">
                     <x-responsive-nav-link :href="route('admin.historique')"
