@@ -32,6 +32,9 @@
         integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    {{-- custom css --}}
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+
     @vite('resources/css/app.css')
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])

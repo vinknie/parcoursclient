@@ -70,6 +70,10 @@ class CategoryController extends Controller
 
     public function CreateVerba(Request $request)
     {
+        // get count of verbatims in other categories
+        // $countVerba = Verbatim::groupBy('id_category')->select('verbatim', DB::raw('count(*) as totalCount'))->get();
+        // echo ($countVerba[0]->totalCount);
+        // exit;
         $existingVerba = Verbatim::where('verbatim', $request->verbatim)->where('id_category', $request->id_category)->first();
         if ($existingVerba) {
             return redirect()->back()->with('error1', 'Un verbatim avec cette intitulé existe déjà dans cette étape');

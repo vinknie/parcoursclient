@@ -1,7 +1,9 @@
 @extends('master')
 @section('content')
 
-<div class="mt-28">
+<div class="mt-20">
+    <h1 class="text-2xl text-center font-semibold page-titles">Compare the datas</h1>
+
     <div class="">
         {{-- left chart --}}
         <div class="w-full">

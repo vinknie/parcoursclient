@@ -112,6 +112,7 @@
         let verbatimCountByCategory = {!! json_encode($verbatimCountByCategory) !!};
         let categoryWithVerbatim = {!! json_encode($categoryWithVerbatim) !!}
 
+
         // data block
         const data = {
             labels: [
@@ -271,8 +272,9 @@
                         },
                     },
                 },
-            }
+            },
         }
+
         const ctx = document.getElementById('myChart');
         const myChart = new Chart(ctx, config);
 

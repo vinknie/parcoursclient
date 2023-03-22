@@ -35,6 +35,11 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['auth', 'CheckRole'])->group(function () {
         Route::get('/dashboard/createUser', [ProfileController::class, 'createUser'])->name('admin.createUser');
         Route::post('/dashboard/storeUser', [ProfileController::class, 'storeUser'])->name('admin.storeUser');
+        // admin user list / edit page route
+        Route::get('/dashboard/user-list', [ProfileController::class, 'getUsers'])->name('admin.getUsers');
+        Route::get('/dashboard/user-list/edit/{id_user}', [ProfileController::class, 'editUser'])->name('admin.editUser');
+        Route::post('/dashboard/user-list/update/{id_user}', [ProfileController::class, 'updateUser'])->name('admin.updateUser');
+        Route::get('/dashboard/user-list/delete/{id_user}', [ProfileController::class, 'deleteUser'])->name('admin.deleteUser');
     });
 
     // Category routes
@@ -87,5 +92,6 @@ Route::middleware('auth')->group(function () {
 });
 // test
 Route::get('/chart/full', [DashboardController::class, 'fullChart'])->name('fullChart');
+Route::get('/chart/fulltest', [DashboardController::class, 'test'])->name('fullcharttest');
 
 require __DIR__ . '/auth.php';

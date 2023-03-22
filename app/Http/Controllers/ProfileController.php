@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Category;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -79,7 +80,7 @@ class ProfileController extends Controller
     {
         $validation = $request->validate([
             'name'      => 'required|max:255',
-            'email'     => 'required|max:255|unique:users'
+            'email'     => 'required|max:255|unique:users|email'
         ]);
 
         $password = Str::random(8);
@@ -97,5 +98,48 @@ class ProfileController extends Controller
         $user->save();
 
         return redirect()->back()->with('success', 'User created successfully.');
+    }
+
+    // get all users (admin)
+    public function getUsers()
+    {
+        $getCategory = Category::where('id_user', Auth::user()->id)->get();
+        $users = User::paginate(10);
+        return view('admin.users.all-users', compact('getCategory', 'users'));
+    }
+
+    // edit user (admin)
+    public function editUser($id)
+    {
+        $getCategory = Category::where('id_user', Auth::user()->id)->get();
+        $user = User::find($id);
+        return view('admin.users.edit-user', compact('getCategory', 'user'));
+    }
+
+    // update user (admin)
+    public function updateUser(Request $request, $id)
+    {
+        $validation = $request->validate([
+            'name'      => 'required|max:255',
+            'email'     => 'required|max:255|email'
+        ]);
+
+        $user = User::find($id);
+        if (!$user) {
+            return redirect()->back()->with('no-user', 'No user found');
+        }
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->updated_at = Carbon::now();
+        $user->save();
+
+        return redirect()->back()->with('success', 'User updated');
+    }
+
+    // delete user(admin)
+    public function deleteUser($id)
+    {
+        echo 'delete user with id : ' . $id;
     }
 }

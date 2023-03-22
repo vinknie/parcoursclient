@@ -19,6 +19,8 @@ class HistoriqueController extends Controller
         $getVerbatim = Verbatim::all();
         $historique_monthYear = Historique::groupBy('month_year')->get('month_year');
 
+        // $historique_monthYear = Historique::join('verbatim', 'verbatim.id_category', '=', '')
+
         $datas = new stdClass();
         $datas->getCategory =  $getCategory;
         $datas->getVerbatim =  $getVerbatim;
@@ -44,6 +46,7 @@ class HistoriqueController extends Controller
         $historique_by_month = Category::join('verbatim', 'verbatim.id_category', '=', 'category.id_category')
             ->join('historiques', 'historiques.id_verbatim', '=', 'verbatim.id_verbatim')
             ->where('historiques.month_year', '=', $month_year)
+            ->where('id_user', Auth::user()->id)
             ->get();
 
         return json_encode($historique_by_month);
