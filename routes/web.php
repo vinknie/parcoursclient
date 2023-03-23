@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard/user-list/edit/{id_user}', [ProfileController::class, 'editUser'])->name('admin.editUser');
         Route::post('/dashboard/user-list/update/{id_user}', [ProfileController::class, 'updateUser'])->name('admin.updateUser');
         Route::get('/dashboard/user-list/delete/{id_user}', [ProfileController::class, 'deleteUser'])->name('admin.deleteUser');
+        Route::get('/dashboard/user-list/restore/{id_user}', [ProfileController::class, 'restoreUser'])->name('admin.restoreUser');
     });
 
     // Category routes

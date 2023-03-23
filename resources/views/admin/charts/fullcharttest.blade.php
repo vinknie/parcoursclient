@@ -54,25 +54,20 @@
             }
         }
     }
-
+    console.log(final);
     var option = {
         grid: {
             top: '10%',
             left: '3%',
             right: '3%',
-            bottom: '5%', // Augmenter l'espace en dessous de la charte
+            bottom: '10%', // Augmenter l'espace en dessous de la charte
             containLabel: true
         },
         "xAxis": [{
                 "type": "category",
                 data: verbatim,
                 position: 'top',
-                axisTick: {
-                    show: false
-                },
-                "axisTick": {
-                    show: false
-                }
+                
             },
             {
                 type: 'category',
@@ -99,7 +94,7 @@
                             height: 10
                         }
                     }
-                },
+                }
             },
             {
                 type: 'category',
@@ -140,13 +135,9 @@
                             fontWeight: 'bold'
                         },
                     }
-            //         textStyle: {
-            //     backgroundColor: 'red',
-            //     borderRadius: 2
-            // }
                 },
                 splitLine: {
-                    show: true
+                    show: false
                 },
             }],
 

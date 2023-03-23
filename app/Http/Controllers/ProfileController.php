@@ -104,8 +104,10 @@ class ProfileController extends Controller
     public function getUsers()
     {
         $getCategory = Category::where('id_user', Auth::user()->id)->get();
-        $users = User::paginate(10);
-        return view('admin.users.all-users', compact('getCategory', 'users'));
+        $users = User::where('role', '!=', 'admin')->paginate(10);
+
+        $trashedUsers = User::onlyTrashed()->latest()->paginate(5);
+        return view('admin.users.all-users', compact('getCategory', 'users', 'trashedUsers'));
     }
 
     // edit user (admin)
@@ -140,6 +142,14 @@ class ProfileController extends Controller
     // delete user(admin)
     public function deleteUser($id)
     {
-        echo 'delete user with id : ' . $id;
+        $user = User::find($id)->delete();
+        return redirect()->back()->with('success', 'User moved to trash');
+    }
+
+    // restore user(admin)
+    public function restoreUser($id)
+    {
+        $restoreUser = User::withTrashed()->find($id)->restore();
+        return redirect()->back()->with('success', 'User restored');
     }
 }

@@ -16,3 +16,33 @@
     background: #999;
     display: inline-block;
 }
+
+
+
+/* liste d'utilisateur */
+.user-table {
+    width: 90%;
+    margin: auto;
+ }
+
+ .trash-user-container h2 {
+    width: fit-content;
+    border: 2px solid gray;
+    padding: 4px 10px;
+    border-radius: 6px;
+ }
+
+.success-msg {
+    background-color: #bdf9bd;
+    color: green;
+    min-width: 250px;
+    padding: 4px 20px;
+    font-size: larger;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 7px;
+}
+
+.success__cross-btn {
+    cursor: pointer;
+}
