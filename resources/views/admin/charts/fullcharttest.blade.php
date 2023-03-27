@@ -27,7 +27,7 @@
     var myChart = echarts.init(document.getElementById('main'));
 
     let getAll = {!! json_encode($totalEachVerbatim) !!};
-    console.log(getAll)
+    // console.log(getAll)
 
     const verbatim = getAll.map(el => el.verbatim);
     const positif = getAll.map(el => el.positif);
@@ -37,12 +37,12 @@
     // console.log(uniqueCat)
     const uniqueCat = [...new Set(category)];
     const result = [];
-
+    
     uniqueCat.forEach(value => {
         const duplicates = category.filter(item => item === value);
         result.push(duplicates);
     });
-
+    
     const final = [];
     for (let i = 0; i < result.length; i++) {
         let position = Math.floor(result[i].length / 2);
@@ -54,7 +54,9 @@
             }
         }
     }
-    console.log(final);
+    // tenzin testing for vertical line
+    const flatResult = result.flat();
+
     var option = {
         grid: {
             top: '10%',
@@ -63,12 +65,15 @@
             bottom: '10%', // Augmenter l'espace en dessous de la charte
             containLabel: true
         },
-        "xAxis": [{
+        "xAxis": [
+            // first xAxis, verbatim on top
+            {
                 "type": "category",
                 data: verbatim,
                 position: 'top',
                 
             },
+            // second xAxis, percentages
             {
                 type: 'category',
                 position: 'bottom',
@@ -94,21 +99,35 @@
                             height: 10
                         }
                     }
+                },
+                splitLine: {
+                    show: false,
                 }
             },
+            // third xAxis, parent categories
             {
                 type: 'category',
                 position: 'bottom',
                 data: final,
                 offset: 65,
                 axisLabel: {
-                    show: true,
+                    // show: true,
                     interval: 0,
+                    // rotate: 45,
+                    // align: 'left',
                     formatter: function(value, index) {
                         if (index % 2 == 0) {
-                            return '{a|' + value + '}';
+                            if (value !== '') {
+                                return '{a|' + value + '}';
+                            } else {
+                                return '{b|' + value + '}';
+                            }
                         } else {
-                            return '{b|' + value + '}';
+                            if (value !== '') {
+                                return '{c|' + value + '}';
+                            } else {
+                                return '{b|' + value + '}';
+                            }
                         }
                     },
                     rich: {
@@ -124,7 +143,15 @@
                             fontWeight: 'bold'
                         },
                         b: {
-                            backgroundColor: '#e74c3c',
+                            width: 120,
+                            height: 30,
+                            textAlign: 'center',
+                            lineHeight: 30,
+                            fontSize: 12,
+                            fontWeight: 'bold'
+                        },
+                        c: {
+                            backgroundColor: '#FF875B',
                             color: '#fff',
                             borderRadius: 50,
                             width: 120,
@@ -133,13 +160,41 @@
                             lineHeight: 30,
                             fontSize: 12,
                             fontWeight: 'bold'
-                        },
+                        }
                     }
                 },
                 splitLine: {
-                    show: false
-                },
-            }],
+                    show: true,
+                    lineStyle: {
+                        type: 'dashed',
+                        width: 1.5
+                    },
+                    interval: function(index, value) {
+                        if(!this._executed) {
+                            const counts = {};
+                            for (let i = 0; i < flatResult.length; i++) {
+                                const element = flatResult[i];
+                                counts[element] = counts[element] ? counts[element] + 1 : 1;
+                            }
+                            const intervals = Object.values(counts)
+                            // const uniqueValues = [...new Set(flatResult)];
+                            console.log(intervals)
+                            let count = 0;
+                            for (let i = 0; i < intervals.length; i++) {
+                                count += intervals[i];
+                                if (count <= index) {
+                                    continue;
+                                }
+                                this._executed = true;
+                                return true;
+                            }
+                            return false;
+                        }
+                        _executed = false
+                    }
+                }
+            }
+        ],
 
         "yAxis": [{
             type: 'value',
@@ -147,18 +202,18 @@
                 show: false
             }
         }],
-        "series": [{
+        "series": [
+            {
                 "type": "bar",
                 "name": "Positif",
                 "data": positif,
                 "stack": "stack1",
-                "barCategoryGap": "40%",
-                "barWidth": "30%",
+                "barCategoryGap": 40,
+                "barWidth": 20,
                 "barMaxWidth": 50,
-
                 "itemStyle": {
                     "color": "#3498db",
-
+                    "barBorderRadius": 50,
                 }
             },
             {
@@ -170,16 +225,14 @@
                 "barWidth": "30%",
                 "barMaxWidth": 50,
                 "itemStyle": {
-                    "color": "#e74c3c"
+                    "color": "#e74c3c",
+                    "barBorderRadius": 50,
                 }
             }
-
         ]
     };
 
-   
     myChart.setOption(option);
-
 </script>
 
 </html>
