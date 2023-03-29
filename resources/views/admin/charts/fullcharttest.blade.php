@@ -9,11 +9,11 @@
 </head>
 <style>
     #main {
-        height: 85vh !important;
-        width: 100% !important;
+        min-height: 95vh !important;
+        /* width: 100% !important; */
         /* padding: 50px; */
         /* margin-bottom: 70px; */
-        overflow: auto;
+        /* overflow: auto; */
     }
 </style>
 
@@ -27,7 +27,7 @@
     var myChart = echarts.init(document.getElementById('main'));
 
     let getAll = {!! json_encode($totalEachVerbatim) !!};
-    console.log(getAll)
+    // console.log(getAll)
 
     const verbatim = getAll.map(el => el.verbatim);
     const positif = getAll.map(el => el.positif);
@@ -37,12 +37,12 @@
     // console.log(uniqueCat)
     const uniqueCat = [...new Set(category)];
     const result = [];
-
+    
     uniqueCat.forEach(value => {
         const duplicates = category.filter(item => item === value);
         result.push(duplicates);
     });
-
+    
     const final = [];
     for (let i = 0; i < result.length; i++) {
         let position = Math.floor(result[i].length / 2);
@@ -54,7 +54,10 @@
             }
         }
     }
-    console.log(final);
+    // tenzin testing for vertical line
+    // console.log(result)
+    // for(let i =0; i <)
+
     var option = {
         grid: {
             top: '10%',
@@ -63,12 +66,22 @@
             bottom: '10%', // Augmenter l'espace en dessous de la charte
             containLabel: true
         },
-        "xAxis": [{
+        "xAxis": [
+            // first xAxis, verbatim on top
+            {
                 "type": "category",
                 data: verbatim,
                 position: 'top',
+                axisLabel: {
+                    rotate: 35,
+                    fontSize: 18,
+                    backgroundColor: '#F5F7FA',
+                    padding: [3,4,5,6],
+                    borderRadius: 5,
+                }
                 
             },
+            // second xAxis, percentages
             {
                 type: 'category',
                 position: 'bottom',
@@ -91,32 +104,46 @@
                             fontWeight: 'bold'
                         },
                         b: {
-                            height: 10
+                            // height: 10
                         }
                     }
+                },
+                splitLine: {
+                    show: false,
                 }
             },
+            // third xAxis, parent categories
             {
                 type: 'category',
                 position: 'bottom',
                 data: final,
                 offset: 65,
                 axisLabel: {
-                    show: true,
+                    // show: true,
                     interval: 0,
+                    // rotate: 45,
+                    // align: 'left',
                     formatter: function(value, index) {
                         if (index % 2 == 0) {
-                            return '{a|' + value + '}';
+                            if (value !== '') {
+                                return '{a|' + value + '}';
+                            } else {
+                                return '{b|' + value + '}';
+                            }
                         } else {
-                            return '{b|' + value + '}';
+                            if (value !== '') {
+                                return '{c|' + value + '}';
+                            } else {
+                                return '{b|' + value + '}';
+                            }
                         }
                     },
                     rich: {
                         a: {
                             backgroundColor: '#2ecc71',
                             color: '#fff',
-                            borderRadius: 50,
-                            width: 120,
+                            // borderRadius: 50,
+                            width: 150,
                             height: 30,
                             textAlign: 'center',
                             lineHeight: 30,
@@ -124,9 +151,6 @@
                             fontWeight: 'bold'
                         },
                         b: {
-                            backgroundColor: '#e74c3c',
-                            color: '#fff',
-                            borderRadius: 50,
                             width: 120,
                             height: 30,
                             textAlign: 'center',
@@ -134,12 +158,34 @@
                             fontSize: 12,
                             fontWeight: 'bold'
                         },
+                        c: {
+                            backgroundColor: '#2ecc71',
+                            color: '#fff',
+                            // borderRadius: 50,
+                            width: 150,
+                            height: 30,
+                            textAlign: 'center',
+                            lineHeight: 30,
+                            fontSize: 12,
+                            fontWeight: 'bold'
+                        }
                     }
                 },
                 splitLine: {
-                    show: false
-                },
-            }],
+                    show: true,
+                    lineStyle: {
+                        type: 'dashed',
+                        width: 1.5
+                    },
+                    interval: function(index, value) {
+                        // if(index === 3) {
+                        //     return true;
+                        // } 
+                        return true
+                    },
+                }
+            }
+        ],
 
         "yAxis": [{
             type: 'value',
@@ -147,18 +193,18 @@
                 show: false
             }
         }],
-        "series": [{
+        "series": [
+            {
                 "type": "bar",
                 "name": "Positif",
                 "data": positif,
                 "stack": "stack1",
-                "barCategoryGap": "40%",
-                "barWidth": "30%",
+                "barCategoryGap": 40,
+                "barWidth": 20,
                 "barMaxWidth": 50,
-
                 "itemStyle": {
                     "color": "#3498db",
-
+                    "barBorderRadius": 50,
                 }
             },
             {
@@ -170,15 +216,27 @@
                 "barWidth": "30%",
                 "barMaxWidth": 50,
                 "itemStyle": {
-                    "color": "#e74c3c"
+                    "color": "#e74c3c",
+                    "barBorderRadius": 50,
+                    "formatter": function(params) {
+                        return '-99';
+                    }
                 }
             }
-
         ]
     };
 
-   
     myChart.setOption(option);
+
+    myChart.on('click', async (e) => {
+        const verbaName = e.name;
+
+        const url = "/fullchart/popup/" + verbaName;
+        
+        const res = await fetch(url);
+        const data = await res;
+        console.log(data);
+    })
 
 </script>
 

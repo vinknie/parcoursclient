@@ -86,13 +86,19 @@ Route::middleware('auth')->group(function () {
     Route::delete('/dashboard/note/deleteDialogue/{id_dialogue}', [NoteController::class, 'deleteDialogue']);
 
     Route::get('/fullchart/popup/{id_verbatim}', [DashboardController::class, 'popup_chart'])->name('fullchart.popup');
+    // tenzin test
+    Route::get('/fullchart/popup/{verbaName}', [DashboardController::class, 'popup_chart_verbaName']);
+
 
     // historique routes
     Route::get('/dashboard/historique', [HistoriqueController::class, 'getHistorique'])->name('admin.historique');
     Route::get('/dashboard/historique/fetchChart/{month_year}', [HistoriqueController::class, 'getHistoriqueyByMonth'])->name('admin.historiqueByMonth');
+
+    // chart
+    Route::get('/chart/full', [DashboardController::class, 'fullChart'])->name('fullChart');
+    // test chart
+    Route::get('/chart/fulltest', [DashboardController::class, 'test'])->name('fullcharttest');
 });
-// test
-Route::get('/chart/full', [DashboardController::class, 'fullChart'])->name('fullChart');
-Route::get('/chart/fulltest', [DashboardController::class, 'test'])->name('fullcharttest');
+
 
 require __DIR__ . '/auth.php';
