@@ -9,11 +9,11 @@
 </head>
 <style>
     #main {
-        height: 85vh !important;
-        width: 100% !important;
+        min-height: 95vh !important;
+        /* width: 100% !important; */
         /* padding: 50px; */
         /* margin-bottom: 70px; */
-        overflow: auto;
+        /* overflow: auto; */
     }
 </style>
 
@@ -55,7 +55,8 @@
         }
     }
     // tenzin testing for vertical line
-    const flatResult = result.flat();
+    // console.log(result)
+    // for(let i =0; i <)
 
     var option = {
         grid: {
@@ -71,6 +72,13 @@
                 "type": "category",
                 data: verbatim,
                 position: 'top',
+                axisLabel: {
+                    rotate: 35,
+                    fontSize: 18,
+                    backgroundColor: '#F5F7FA',
+                    padding: [3,4,5,6],
+                    borderRadius: 5,
+                }
                 
             },
             // second xAxis, percentages
@@ -96,7 +104,7 @@
                             fontWeight: 'bold'
                         },
                         b: {
-                            height: 10
+                            // height: 10
                         }
                     }
                 },
@@ -134,8 +142,8 @@
                         a: {
                             backgroundColor: '#2ecc71',
                             color: '#fff',
-                            borderRadius: 50,
-                            width: 120,
+                            // borderRadius: 50,
+                            width: 150,
                             height: 30,
                             textAlign: 'center',
                             lineHeight: 30,
@@ -151,10 +159,10 @@
                             fontWeight: 'bold'
                         },
                         c: {
-                            backgroundColor: '#FF875B',
+                            backgroundColor: '#2ecc71',
                             color: '#fff',
-                            borderRadius: 50,
-                            width: 120,
+                            // borderRadius: 50,
+                            width: 150,
                             height: 30,
                             textAlign: 'center',
                             lineHeight: 30,
@@ -170,28 +178,11 @@
                         width: 1.5
                     },
                     interval: function(index, value) {
-                        if(!this._executed) {
-                            const counts = {};
-                            for (let i = 0; i < flatResult.length; i++) {
-                                const element = flatResult[i];
-                                counts[element] = counts[element] ? counts[element] + 1 : 1;
-                            }
-                            const intervals = Object.values(counts)
-                            // const uniqueValues = [...new Set(flatResult)];
-                            console.log(intervals)
-                            let count = 0;
-                            for (let i = 0; i < intervals.length; i++) {
-                                count += intervals[i];
-                                if (count <= index) {
-                                    continue;
-                                }
-                                this._executed = true;
-                                return true;
-                            }
-                            return false;
-                        }
-                        _executed = false
-                    }
+                        // if(index === 3) {
+                        //     return true;
+                        // } 
+                        return true
+                    },
                 }
             }
         ],
@@ -227,12 +218,26 @@
                 "itemStyle": {
                     "color": "#e74c3c",
                     "barBorderRadius": 50,
+                    "formatter": function(params) {
+                        return '-99';
+                    }
                 }
             }
         ]
     };
 
     myChart.setOption(option);
+
+    myChart.on('click', async (e) => {
+        const verbaName = e.name;
+
+        const url = "/fullchart/popup/" + verbaName;
+        
+        const res = await fetch(url);
+        const data = await res;
+        console.log(data);
+    })
+
 </script>
 
 </html>
