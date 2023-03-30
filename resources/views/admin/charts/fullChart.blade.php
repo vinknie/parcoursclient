@@ -1,353 +1,303 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html>
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>ECharts</title>
+    <!-- including ECharts file -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@4.9.0/dist/echarts.min.js"></script>
 
-    <title>Parcours Client</title>
-    <!-- Fonts -->
-    <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
-        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <!-- JqueryUI -->
-    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
-
-    {{-- manual javascript --}}
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
-    {{-- Chart Js --}}
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js"></script>
-
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"
-        integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     @vite('resources/css/app.css')
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style>
-        * {
-            box-sizing: border-box;
-        }
 
-        body {
-            display: grid;
-            place-items: center;
-            min-height: 100vh;
-        }
-
-        .chartContainerBody {
-            width: 100vw;
-        }
-
-        #myChart {
-            height: 95vh !important;
-            width: 100% !important;
-        }
-
-        .chartContainer img:first-child {
-            top: 320px;
-        }
-
-        .chartContainer img:nth-child(2) {
-            top: 50px;
-        }
-
-        .chartContainer img:last-of-type {
-            bottom: 230px
-        }
-
-        @media(min-height: 750px) {
-            .chartContainer img:nth-child(2) {
-                top: 90px;
-            }
-        }
-
-        .dialogue-popup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow-y: scroll;
-
-        }
-
-        .dialogue-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-height: 70%;
-        }
-    </style>
+    {{-- custom css --}}
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 </head>
 
 <body class="relative">
-    <a href="{{ URL::previous() }}">
-        <i class="fa-solid fa-xmark fixed z-10 top-0 right-0 text-4xl text-gray-500 cursor-pointer"></i>
-    </a>
+    <a href="{{ URL::previous() }}"
+        style="position: absolute; top: 0; right: 10px; font-size: 38px; z-index: 100">&times;</a>
+    <!-- prepare a DOM container with width and height -->
+    <div id="main" style="box-shadow: 10px 5px 5px rgb(141, 141, 141);"></div>
+</body>
 
-    {{-- chart js --}}
-    <div class="chartContainer">
-        <div class="chartContainerBody">
-            <canvas id="myChart" class="m-2"></canvas>
-        </div>
-    </div>
+<script>
+    // based on prepared DOM, initialize echarts instance
+    var myChart = echarts.init(document.getElementById('main'));
 
-    <script>
-        // multiple labels Plugin
-        let verbatimCountByCategory = {!! json_encode($verbatimCountByCategory) !!};
-        let categoryWithVerbatim = {!! json_encode($categoryWithVerbatim) !!}
+    let getAll = {!! json_encode($totalEachVerbatim) !!};
 
-
-        // data block
-        const data = {
-            labels: [
-                @foreach ($categoryWithVerbatim as $key => $catWithVerb)
-                    @foreach ($catWithVerb['verbatim'] as $key => $verbatim)
-                        '{{ $key }}',
-                    @endforeach
-                @endforeach
-            ],
-            datasets: [{
-                    label: 'Positif',
-                    backgroundColor: '#3c7cc4',
-                    borderRadius: 30,
-                    barThickness: 16,
-                    stack: 'Stack 0',
-                    data: [
-                        @foreach ($categoryWithVerbatim as $key => $catWithVerb)
-                            @foreach ($catWithVerb['positif'] as $positif)
-                                {{ $positif . ',' }}
-                            @endforeach
-                        @endforeach
-                    ],
-                    datalabels: {
-                        anchor: 'end',
-                        align: 'top'
-                    }
-                },
-                {
-                    label: 'Negatif',
-                    backgroundColor: '#c4042c',
-                    borderRadius: 30,
-                    barThickness: 16,
-                    stack: 'Stack 0',
-                    data: [
-                        @foreach ($categoryWithVerbatim as $key => $catWithVerb)
-                            @foreach ($catWithVerb['negatif'] as $negatif)
-                                {{ '-' . $negatif . ',' }}
-                            @endforeach
-                        @endforeach
-                    ],
-                    datalabels: {
-                        anchor: 'start',
-                        align: 'bottom',
-                    }
-                },
-            ]
-        }
-
-        // config block
-        const config = {
-            type: 'bar',
-            data: data,
-            plugins: [ChartDataLabels],
-            options: {
-                // indexAxis: 'y',
-                responsive: false,
-                maintainAspectRatio: false,
-                layout: {
-                    padding: 50
-                },
-                
-                scales: {
-                    y: {
-                        max: {{ $highestLowest->highest + 4 }},
-                        min: -{{ $highestLowest->lowest + 4 }},
-                        ticks: {
-                            beginAtZero: true,
-                            stepSize: 0.5,
-                            display: false
-                        },
-                        stacked: true,
-                        grid: {
-                            // drawOnChartArea: false,
-                            drawBorder: false,
-                            color: function(context) {
-                                if (context.tick.value === 0) {
-                                    return 'rgba(0,0,0,0.2)'; // Set color for grid line at zero value
-                                }
-                            },
-                            lineWidth: function(context) {
-                                if (context.tick.value === 0) {
-                                    return 1; // Set line width for grid line at zero value
-                                } else {
-                                    return 0; // Hide other grid lines
-                                }
-                            },
-                            zeroLineColor: 'black', // Set color for zero line
-                            zeroLineWidth: 1, // Set line width for zero line
-                        },
-                        // display: false,
-                    },
-
-                    // top phrase labales
-                    x: {
-                        labels: [
-                            @foreach ($categoryWithVerbatim as $key => $catWithVerb)
-                                @foreach ($catWithVerb['verbatim'] as $verbatim)
-                                    "{!! $verbatim !!}",
-                                @endforeach
-                            @endforeach
-                        ],
-                        position: 'top',
-                        grid: {
-                            display: false,
-                        },
-                        ticks: {}
-                    },
-
-                    // percentage labels
-                    x2: {
-                        labels: [
-                            @foreach ($totalEachVerbatim as $test)
-                                "{!! number_format((float) $test->percent, 2, '.', '') !!} %",
-                            @endforeach
-                        ],
-                        grid: {
-                            display: false,
-                        },
-                        ticks: {
-                            font: {
-                                size: 12,
-                                family: 'FontAwesome',
-                            },
-                            showLabelBackdrop: true,
-                            backdropPadding: 6,
-                            backdropColor: function(value) {
-                                var percent = parseFloat(value.tick.label);
-                                if (typeof percent === 'number' && !isNaN(percent)) {
-                                    var alpha = percent / 100;
-                                    return 'rgba(30, 144, 255, ' + alpha + ')';
-                                } else {
-                                    return 'gray';
-                                }
-                            },
-                        },
-                    },
-                    // category labels
-                    x3: {
-                        labels: [
-                            @foreach ($categoryWithVerbatim as $catWithVerb)
-                                "{!! $catWithVerb['title'] !!} ",
-                            @endforeach
-                        ],
-                        grid: {
-                            display: true,
-                        },
-                        border: {
-                            display: true,
-                            color: '#7dba80',
-                            width: 2
-                        },
-                        ticks: {
-                            showLabelBackdrop: true,
-                            backdropColor: ['#7dba80', '#c6cfc7'],
-                            backdropPadding: 9,
-                            color: ['white', 'black'],
-                        },
-                    },
-                },
-            },
-        }
-
-        const ctx = document.getElementById('myChart');
-        const myChart = new Chart(ctx, config);
-
-        const chartContainerBody = document.querySelector('.chartContainerBody');
-
-        // click bar handler
-        const clickableBar = (canvas, click) => {
-            const points = myChart.getElementsAtEventForMode(click, 'nearest', {
-                intersect: true
-            }, true);
-            
-            if (points.length) {
-                const firstPoint = points[0];
-                const id_verbatim = myChart.data.labels[firstPoint.index];
-                const url = "/fullchart/popup/" + id_verbatim;
-
-                const xhr = new XMLHttpRequest();
-                xhr.open("GET", url);
-                xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        const data = xhr.responseText;
-                        const popup = document.createElement('div');
-
-
-                        popup.classList.add('dialogue-popup', 'flex', 'items-center', 'justify-center', 'fixed',
-                            'left-0', 'bottom-0', 'w-full', 'h-full', 'bg-gray-800', 'relative');
-
-                        const dialogueContent = document.createElement('div');
-                        dialogueContent.classList.add('dialogue-content', 'bg-white', 'w-2/3', 'lg:max-w-lg', 'mx-auto', 'rounded', 'shadow-lg', 'z-50', 'overflow-y-auto', 'relative');
-                        
-                        const jsonData = JSON.parse(data);
-                        // Parcourir les dialogues et construire le HTML pour chaque dialogue
-                        let dialogueHtml = '';
-                        dialogueHtml += `<h1 class="text-xl font-bold text-gray-800 m-4 text-center">${jsonData[0] ? jsonData[0].verbatim : 'Pas de dialogue'}</h1>`;
-                        jsonData.forEach(dialogue => {
-                            var sentimentIcon = '';
-                            if (dialogue.positif > 0) {
-                                sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-green-500 text-white flex-shrink-0 mr-2">+</span>';
-                            } else if (dialogue.neutre > 0) {
-                                sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500 text-white flex-shrink-0 mr-2">=</span>';
-                            } else if (dialogue.negatif > 0) {
-                                sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-red-500 text-white flex-shrink-0 mr-2">-</span>';
-                            }
-                            dialogueHtml += '<div class="bg-white shadow-md rounded px-8 py-6 m-4">';
-                            dialogueHtml += '<div class="flex items-center mb-4">' + sentimentIcon + '<h2 class="text-lg font-medium text-gray-800">' + dialogue.dialogue + '</h2></div>';
-                            dialogueHtml += '</div>';
-                        });
-
-                        dialogueHtml += '<button class="close-button absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800">&times;</button>';
-
-                        dialogueContent.innerHTML = dialogueHtml;
-
-                        popup.appendChild(dialogueContent);
-
-
-                        document.body.appendChild(popup);
-                        popup.style.display = "block";
-
-                        document.querySelector(".close-button").addEventListener("click", function(e) {
-                            document.querySelector(".dialogue-popup").remove();
-                        });
-
-                        popup.addEventListener("click", function(e) {
-                            document.querySelector(".dialogue-popup").remove();
-                            
-                        });
-                    }
-                };
-                xhr.send();
+    const verbatim = getAll.map(el => el.verbatim);
+    const positif = getAll.map(el => el.positif);
+    const negatif = getAll.map(el => '-' + el.negatif);
+    const percent = getAll.map(el => el.percent.toFixed(2) + '%')
+    const category = getAll.map(el => el.title);
+    const uniqueCat = [...new Set(category)];
+    const result = [];
+    
+    uniqueCat.forEach(value => {
+        const duplicates = category.filter(item => item === value);
+        result.push(duplicates);
+    });
+    
+    const final = [];
+    for (let i = 0; i < result.length; i++) {
+        let position = Math.floor(result[i].length / 2);
+        for (let j = 0; j < result[i].length; j++) {
+            if (j === position) {
+                final.push(result[i][j]);
+            } else {
+                final.push("");
             }
         }
-        ctx.addEventListener('click', e => clickableBar(ctx, e))
-    </script>
-</body>
+    }
+    
+    const test = result.map(item => item.length * 200).reverse();
+    // console.log(test);
+
+    const rich = {
+        a: {
+            backgroundColor: '#2ecc71',
+            color: '#fff',
+            // borderRadius: 50,
+            width: 0,
+            height: 30,
+            // textAlign: 'center',
+            lineHeight: 30,
+            fontSize: 12,
+            fontWeight: 'bold'
+        },
+        b: {
+            width: 0,
+            height: 30,
+            // textAlign: 'center',
+            lineHeight: 30,
+            fontSize: 12,
+            fontWeight: 'bold'
+        },
+        c: {
+            backgroundColor: '#2ecc71',
+            color: '#fff',
+            // borderRadius: 50,
+            width: 0,
+            height: 30,
+            // textAlign: '',
+            lineHeight: 30,
+            fontSize: 12,
+            fontWeight: 'bold'
+        }
+    };
+
+    const richWithWidth = Object.entries(rich).map(([key, value], index) => {
+        return {
+            [key]: {
+            ...value,
+            width: test[index] // use dynamic width from array
+            }
+        };
+    });
+
+    // merge updated widths back into rich object
+    const updatedRich = Object.assign({}, ...richWithWidth);
+
+    console.log(updatedRich); 
+
+    var option = {
+        grid: {
+            top: '10%',
+            left: '3%',
+            right: '3%',
+            bottom: '10%', // Augmenter l'espace en dessous de la charte
+            containLabel: true
+        },
+        "xAxis": [
+            // first xAxis, verbatim on top
+            {
+                "type": "category",
+                data: verbatim,
+                position: 'top',
+                axisLabel: {
+                    rotate: 35,
+                    fontSize: 18,
+                    backgroundColor: '#F5F7FA',
+                    padding: [3,4,5,6],
+                    borderRadius: 5,
+                }
+                
+            },
+            // second xAxis, percentages
+            {
+                type: 'category',
+                position: 'bottom',
+                data: percent,
+                offset: 10,
+                axisLabel: {
+                    formatter: function(value, index) {
+                        return '{a|' + value + '}\n{b| }';
+                    },
+                    rich: {
+                        a: {
+                            backgroundColor: '#3498db',
+                            color: '#fff',
+                            borderRadius: 50,
+                            width: 55,
+                            height: 55,
+                            textAlign: 'center',
+                            lineHeight: 30,
+                            fontSize: 12,
+                            fontWeight: 'bold'
+                        },
+                        b: {
+                            // height: 10
+                        }
+                    }
+                },
+                splitLine: {
+                    show: false,
+                }
+            },
+            // third xAxis, parent categories
+            {
+                type: 'category',
+                position: 'bottom',
+                data: final,
+                offset: 65,
+                axisLabel: {
+                    // show: true,
+                    interval: 0,
+                    // rotate: 45,
+                    // align: 'left',
+                    formatter: function(value, index) {
+                        if (index % 2 == 0) {
+                            if (value !== '') {
+                                return '{a|' + value + '}';
+                            } else {
+                                return '{b|' + value + '}';
+                            }
+                        } else {
+                            if (value !== '') {
+                                return '{c|' + value + '}';
+                            } else {
+                                return '{b|' + value + '}';
+                            }
+                        }
+                    },
+                    rich: updatedRich,
+
+                },
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        type: 'dashed',
+                        width: 1.5
+                    },
+                    interval: function(index, value) {
+                        if(index == 3) {
+                            console.log(index);
+                            return true;
+                        }
+                        // return true
+                    },
+                }
+            }
+        ],
+
+        "yAxis": [{
+            type: 'value',
+            splitLine: {
+                show: false
+            }
+        }],
+        "series": [
+            {
+                "type": "bar",
+                "name": "Positif",
+                "data": positif,
+                "stack": "stack1",
+                "barCategoryGap": 40,
+                "barWidth": 20,
+                "barMaxWidth": 50,
+                "itemStyle": {
+                    "color": "#3498db",
+                    "barBorderRadius": 50,
+                }
+            },
+            {
+                "type": "bar",
+                "name": "Negatif",
+                "data": negatif,
+                "stack": "stack1",
+                "barCategoryGap": "40%",
+                "barWidth": "30%",
+                "barMaxWidth": 50,
+                "itemStyle": {
+                    "color": "#e74c3c",
+                    "barBorderRadius": 50,
+                    "formatter": function(params) {
+                        return '-99';
+                    }
+                }
+            }
+        ]
+    };
+
+    myChart.setOption(option);
+
+    myChart.on('click', async (e) => {
+        const verbaName = e.name;
+        const verbaId = getAll.find(item => item.verbatim === verbaName)?.id_verbatim ?? null;
+
+        const url = "/fullchart/popup/" + verbaId;
+
+        const response = await fetch(url);
+        const data = await response.text();
+        const popup = document.createElement('div');
+
+
+        popup.classList.add('dialogue-popup', 'flex', 'items-center', 'justify-center', 'fixed',
+            'left-0', 'bottom-0', 'w-full', 'h-full', 'bg-gray-800', 'relative');
+
+        const dialogueContent = document.createElement('div');
+        dialogueContent.classList.add('dialogue-content', 'bg-white', 'w-2/3', 'lg:max-w-lg', 'mx-auto', 'rounded', 'shadow-lg', 'z-50', 'overflow-y-auto', 'relative');
+        
+        const jsonData = JSON.parse(data);
+        // Parcourir les dialogues et construire le HTML pour chaque dialogue
+        let dialogueHtml = '';
+        dialogueHtml += `<h1 class="text-xl font-bold text-gray-800 m-4 text-center">${jsonData[0] ? jsonData[0].verbatim : 'Pas de dialogue'}</h1>`;
+        jsonData.forEach(dialogue => {
+            var sentimentIcon = '';
+            if (dialogue.positif > 0) {
+                sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-green-500 text-white flex-shrink-0 mr-2">+</span>';
+            } else if (dialogue.neutre > 0) {
+                sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500 text-white flex-shrink-0 mr-2">=</span>';
+            } else if (dialogue.negatif > 0) {
+                sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-red-500 text-white flex-shrink-0 mr-2">-</span>';
+            }
+            dialogueHtml += '<div class="bg-white shadow-md rounded px-8 py-6 m-4">';
+            dialogueHtml += '<div class="flex items-center mb-4">' + sentimentIcon + '<h2 class="text-lg font-medium text-gray-800">' + dialogue.dialogue + '</h2></div>';
+            dialogueHtml += '</div>';
+        });
+
+        dialogueHtml += '<button class="close-button absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800">&times;</button>';
+
+        dialogueContent.innerHTML = dialogueHtml;
+
+        popup.appendChild(dialogueContent);
+
+        document.body.appendChild(popup);
+        popup.style.display = "block";
+
+        document.querySelector(".close-button").addEventListener("click", function(e) {
+            document.querySelector(".dialogue-popup").remove();
+        });
+
+        popup.addEventListener("click", function(e) {
+            document.querySelector(".dialogue-popup").remove();
+            
+        });
+    })
+</script>
 
 </html>
