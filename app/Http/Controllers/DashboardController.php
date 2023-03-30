@@ -132,19 +132,13 @@ class DashboardController extends Controller
         return $dialogues;
     }
 
-    // echarts popup function
-    public function popup_chart_verbaName($verbaName)
-    {
-        return json_encode('tenzin' + $verbaName);
-    }
-
-
     public function test()
     {
         $getCategory = Category::all();
         $totalEachVerbatim   = DB::table('verbatim')
             ->join('category', 'verbatim.id_category', '=', 'category.id_category')
             ->select(
+                'verbatim.id_verbatim',
                 'verbatim.positif',
                 'verbatim.negatif',
                 'verbatim.neutre',

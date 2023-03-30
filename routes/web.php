@@ -85,9 +85,6 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/dashboard/note/deleteDialogue/{id_dialogue}', [NoteController::class, 'deleteDialogue']);
 
-    Route::get('/fullchart/popup/{id_verbatim}', [DashboardController::class, 'popup_chart'])->name('fullchart.popup');
-    // tenzin test
-    Route::get('/fullchart/popup/{verbaName}', [DashboardController::class, 'popup_chart_verbaName']);
 
 
     // historique routes
@@ -96,6 +93,8 @@ Route::middleware('auth')->group(function () {
 
     // chart
     Route::get('/chart/full', [DashboardController::class, 'fullChart'])->name('fullChart');
+    // chart modal popup route
+    Route::get('/fullchart/popup/{id_verbatim}', [DashboardController::class, 'popup_chart'])->name('fullchart.popup');
     // test chart
     Route::get('/chart/fulltest', [DashboardController::class, 'test'])->name('fullcharttest');
 });
