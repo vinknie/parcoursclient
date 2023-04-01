@@ -99,5 +99,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/chart/fulltest', [DashboardController::class, 'test'])->name('fullcharttest');
 });
 
+Route::fallback(function () {
+    return view('admin.page-not-found');
+});
 
 require __DIR__ . '/auth.php';
