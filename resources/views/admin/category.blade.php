@@ -163,8 +163,7 @@
                     <input class="bg-white border border-gray-400 rounded w-full py-2 px-4" type="text"
                         name="verbatim[]" value="{{ $verbatim->verbatim }}" required>
                     <button type="button"
-                        class="bg-red-400 hover:bg-red-600 text-slate-50 m-1 rounded absolute right-0 px-2"
-                        onclick="deleteInput(this)">
+                        class="bg-red-400 hover:bg-red-600 text-slate-50 m-1 rounded absolute right-0 px-2 verbatim_delete_btns">
                         Supprimer
                     </button>
                 </div>
@@ -468,8 +467,7 @@
                         <i class="fa-regular fa-pen-to-square "></i>
                     </a>
                     <a href="{{ route('admin.deleteCat', ['id_category' => $category->id_category]) }}"
-                        class="text-red-300 hover:text-red-600 m-1 rounded"
-                        onclick="return swalConfirm('etes vous sur de vouloir supprimé?')">
+                        class="text-red-300 hover:text-red-600 m-1 rounded cat_delete_btns">
                         <i class="fa-regular fa-trash-can"></i>
                     </a>
                 </div>
@@ -585,27 +583,6 @@
         setUpPopup(btn3, popup3, span3);
 
 
-        function deleteInput(btn) {
-            let id_verbatim = btn.parentNode.querySelector('input[type="hidden"]').getAttribute('data-id');
-            if (confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')) {
-                fetch('/dashboard/category/deleteVerba/' + id_verbatim, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({id_verbatim: id_verbatim})
-                }).then(response => {
-                    if (response.ok) {
-                        btn.parentNode.remove();
-                    } else {
-                        alert('Une erreur s\'est produite lors de la suppression de l\'élément.');
-                    }
-                }).catch(error => {
-                    alert('Une erreur s\'est produite lors de la suppression de l\'élément : ' + error.message);
-                });
-            }
-        }
 
         jQuery(document).ready(function() {
             jQuery('select[name="id_category"]').on('change',function(){
@@ -634,23 +611,5 @@
                 }
             });
         })
-
-        function swalConfirm(string) {
-            event.preventDefault()
-            return Swal.fire({
-                title: string,
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonText: `Annuler`,
-                cancelButtonColor: '#EE8989',
-                }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-                    Swal.fire('Saved!', '', 'success')
-                } else if (result.isDenied) {
-                    Swal.fire('Changes are not saved', '', 'info')
-                }
-            });
-        };
     </script>
     @endsection

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->bigInteger('neutre');
             $table->bigInteger('negatif');
             $table->bigInteger('position');
-            $table->foreign('id_category')->references('id_category')->on('category');
+            $table->foreign('id_category')->references('id_category')->on('category')->onDelete('set null');
             $table->timestamps();
         });
     }
