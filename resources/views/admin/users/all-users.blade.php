@@ -51,7 +51,7 @@
       Trashed <span class="bg-gray-800 px-2 text-white rounded">{{ count($trashedUsers)}}</span>
       <i class="fa-solid fa-eye-slash"></i>
    </h2>
-   <div id="trashed-usertable" class="hidden">
+   <div id="trashed-usertable" class="hidden mt-2">
       <table class="text-center rounded w-full">
          <thead class="text-white tracking-wider">
             <tr class="bg-gray-800">

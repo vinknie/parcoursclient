@@ -469,7 +469,7 @@
                     </a>
                     <a href="{{ route('admin.deleteCat', ['id_category' => $category->id_category]) }}"
                         class="text-red-300 hover:text-red-600 m-1 rounded"
-                        onclick="return confirm('etes vous sur de vouloir supprimé? ')">
+                        onclick="return swalConfirm('etes vous sur de vouloir supprimé?')">
                         <i class="fa-regular fa-trash-can"></i>
                     </a>
                 </div>
@@ -634,5 +634,23 @@
                 }
             });
         })
+
+        function swalConfirm(string) {
+            event.preventDefault()
+            return Swal.fire({
+                title: string,
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonText: `Annuler`,
+                cancelButtonColor: '#EE8989',
+                }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    Swal.fire('Saved!', '', 'success')
+                } else if (result.isDenied) {
+                    Swal.fire('Changes are not saved', '', 'info')
+                }
+            });
+        };
     </script>
     @endsection

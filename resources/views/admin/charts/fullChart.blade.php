@@ -14,13 +14,14 @@
 
     {{-- custom css --}}
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+
 </head>
 
 <body class="relative">
     <a href="{{ URL::previous() }}"
         style="position: absolute; top: 0; right: 10px; font-size: 38px; z-index: 100">&times;</a>
     <!-- prepare a DOM container with width and height -->
-    <div id="main" style="box-shadow: 10px 5px 5px rgb(141, 141, 141);"></div>
+    <div id="main" style="box-shadow: 10px 5px 5px #8d8d8d;"></div>
 </body>
 
 <script>
@@ -54,9 +55,6 @@
         }
     }
     
-    const test = result.map(item => item.length * 200).reverse();
-    // console.log(test);
-
     const rich = {
         a: {
             backgroundColor: '#2ecc71',
@@ -65,7 +63,7 @@
             width: 0,
             height: 30,
             // textAlign: 'center',
-            lineHeight: 30,
+            // lineHeight: 30,
             fontSize: 12,
             fontWeight: 'bold'
         },
@@ -73,7 +71,7 @@
             width: 0,
             height: 30,
             // textAlign: 'center',
-            lineHeight: 30,
+            // lineHeight: 30,
             fontSize: 12,
             fontWeight: 'bold'
         },
@@ -84,25 +82,34 @@
             width: 0,
             height: 30,
             // textAlign: '',
-            lineHeight: 30,
+            // lineHeight: 30,
             fontSize: 12,
             fontWeight: 'bold'
         }
     };
 
+    const contentLength = result.reduce((acc, item) => acc + item.length, 0);
+    const totalChartWidth = myChart.getWidth();
+
+    // the width of category responsive to chart size
+    const categoryWidth = result.map(item => (item.length / contentLength) * totalChartWidth - 100).reverse();
+
+    // console.log((result[1].length / contentLength) * totalChartWidth);
     const richWithWidth = Object.entries(rich).map(([key, value], index) => {
         return {
             [key]: {
             ...value,
-            width: test[index] // use dynamic width from array
+            width: categoryWidth[index] // use dynamic width from array
             }
         };
     });
 
+
+
     // merge updated widths back into rich object
     const updatedRich = Object.assign({}, ...richWithWidth);
 
-    console.log(updatedRich); 
+    // console.log(updatedRich);
 
     var option = {
         grid: {
@@ -195,7 +202,7 @@
                     },
                     interval: function(index, value) {
                         if(index == 3) {
-                            console.log(index);
+                            // console.log(index);
                             return true;
                         }
                         // return true

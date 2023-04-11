@@ -35,6 +35,9 @@
     {{-- custom css --}}
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 
+    {{-- sweetalert2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     @vite('resources/css/app.css')
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
