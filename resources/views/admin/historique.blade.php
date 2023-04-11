@@ -4,6 +4,7 @@
 <div class="mt-20">
     <h1 class="text-2xl text-center font-semibold page-titles">Compare the datas</h1>
 
+    {{-- @dd($historique_monthYear); --}}
     <div class="">
         {{-- left chart --}}
         <div class="w-full">
@@ -191,7 +192,7 @@
     jQuery(document).ready(function() {
         loadChart('choose_month1', 'myChart1', 'select1-container');
         loadChart('choose_month2', 'myChart2', 'select2-container');
-    })
+    });
 
 </script>
 @endsection

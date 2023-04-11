@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard/user-list/edit/{id_user}', [ProfileController::class, 'editUser'])->name('admin.editUser');
         Route::post('/dashboard/user-list/update/{id_user}', [ProfileController::class, 'updateUser'])->name('admin.updateUser');
         Route::get('/dashboard/user-list/delete/{id_user}', [ProfileController::class, 'deleteUser'])->name('admin.deleteUser');
+        Route::get('/dashboard/user-list/restore/{id_user}', [ProfileController::class, 'restoreUser'])->name('admin.restoreUser');
     });
 
     // Category routes
@@ -84,14 +85,22 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/dashboard/note/deleteDialogue/{id_dialogue}', [NoteController::class, 'deleteDialogue']);
 
-    Route::get('/fullchart/popup/{id_verbatim}', [DashboardController::class, 'popup_chart'])->name('fullchart.popup');
+
 
     // historique routes
     Route::get('/dashboard/historique', [HistoriqueController::class, 'getHistorique'])->name('admin.historique');
     Route::get('/dashboard/historique/fetchChart/{month_year}', [HistoriqueController::class, 'getHistoriqueyByMonth'])->name('admin.historiqueByMonth');
+
+    // chart
+    Route::get('/chart/full', [DashboardController::class, 'fullChart'])->name('fullChart');
+    // chart modal popup route
+    Route::get('/fullchart/popup/{id_verbatim}', [DashboardController::class, 'popup_chart'])->name('fullchart.popup');
+    // test chart
+    Route::get('/chart/fulltest', [DashboardController::class, 'test'])->name('fullcharttest');
 });
-// test
-Route::get('/chart/full', [DashboardController::class, 'fullChart'])->name('fullChart');
-Route::get('/chart/fulltest', [DashboardController::class, 'test'])->name('fullcharttest');
+
+Route::fallback(function () {
+    return view('admin.page-not-found');
+});
 
 require __DIR__ . '/auth.php';

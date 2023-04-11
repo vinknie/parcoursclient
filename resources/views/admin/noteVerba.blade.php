@@ -28,16 +28,16 @@
 
 @section('content')
 
+
+
+<div class="text-center mt-20">
+    <h1 class="text-2xl font-semibold page-titles">{{ $category->title }}</h1>
+</div>
 @if(Auth::check() && Auth::user()->role === 'admin')
 <p class="text-sm font-medium text-green-600 mt-16">
     * Déplacé les cartes pour modifier l'ordre des étapes qui apparaitront dans le graphique
 </p>
 @endif
-
-<div class="text-center mt-20">
-    <h1 class="text-2xl font-semibold page-titles">{{ $category->title }}</h1>
-</div>
-
 <div class="category-list">
     @foreach ($getverbatim as $verbatim)
     {{-- @dd($getverbatim) --}}
@@ -80,7 +80,6 @@
                             <i class="fas fa-equals"></i>
                         </button>
                     </form>
-
                 </div>
                 <div>
                     <form action="{{ route('admin.updatenegatif', $verbatim->id_verbatim) }}" method="POST">
@@ -178,7 +177,10 @@
 
             #reset:hover+.hide {
                 display: inline;
-                color: red;
+                color: #e8e6e6;
+                background: rgb(42, 44, 63);
+                padding: 2px 5px;
+                border-radius: 2px;
             }
         </style>
         @endif
@@ -313,9 +315,6 @@
                 }
             });
         }
-
-
-
 </script>
 
 @endsection

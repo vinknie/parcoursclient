@@ -47,7 +47,7 @@ class DashboardController extends Controller
                 ];
             });
 
-            
+
 
         $verbatimCountByCategory    = Verbatim::selectRaw('count(*) as total_by_cat')
             ->join('category', 'verbatim.id_category', '=', 'category.id_category')
@@ -123,6 +123,7 @@ class DashboardController extends Controller
         return response()->json($dialogues);
     }
 
+    // old chart click bar modal
     public function popup_chart($id_verbatim)
     {
         $dialogues = $this->getDialogues(new Request(['id_verbatim' => $id_verbatim]));
@@ -131,12 +132,13 @@ class DashboardController extends Controller
         return $dialogues;
     }
 
-
-    public function test(){
-        $getCategory= Category::all();
+    public function test()
+    {
+        $getCategory = Category::all();
         $totalEachVerbatim   = DB::table('verbatim')
             ->join('category', 'verbatim.id_category', '=', 'category.id_category')
             ->select(
+                'verbatim.id_verbatim',
                 'verbatim.positif',
                 'verbatim.negatif',
                 'verbatim.neutre',
@@ -152,7 +154,7 @@ class DashboardController extends Controller
             ->groupBy('verbatim.id_verbatim')
             ->get();
 
-            $totalEachCategory   = DB::table('verbatim')
+        $totalEachCategory   = DB::table('verbatim')
             ->join('category', 'verbatim.id_category', '=', 'category.id_category')
             ->select(
                 'category.title',
@@ -165,22 +167,21 @@ class DashboardController extends Controller
             ->groupBy('category.id_category')
             ->get();
 
-            foreach ($totalEachVerbatim as $verbatim) {
-                foreach ($totalEachCategory as $category) {
-                    if ($verbatim->id_category === $category->id_category) {
-                        if ($category->total > 0) {
-                            $percent = ($verbatim->total / $category->total) * 100;
-                        } else {
-                            $percent = 0;
-                        }
+        foreach ($totalEachVerbatim as $verbatim) {
+            foreach ($totalEachCategory as $category) {
+                if ($verbatim->id_category === $category->id_category) {
+                    if ($category->total > 0) {
+                        $percent = ($verbatim->total / $category->total) * 100;
+                    } else {
+                        $percent = 0;
                     }
                 }
-                $verbatim->percent = $percent;
             }
-            if (!isset($percent)) {
-                return view('admin.charts.fullcharttest', compact('getCategory','totalEachCategory','totalEachVerbatim'));
-            }
-            return view('admin.charts.fullcharttest', compact('getCategory','totalEachCategory','totalEachVerbatim','percent'));    
-
+            $verbatim->percent = $percent;
+        }
+        if (!isset($percent)) {
+            return view('admin.charts.fullcharttest', compact('getCategory', 'totalEachCategory', 'totalEachVerbatim'));
+        }
+        return view('admin.charts.fullcharttest', compact('getCategory', 'totalEachCategory', 'totalEachVerbatim', 'percent'));
     }
 }
