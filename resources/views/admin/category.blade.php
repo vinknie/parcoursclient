@@ -120,6 +120,7 @@
             <button class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded">Modifier</button>
         </form>
     </div>
+
     <div class="bg-white rounded-lg shadow-lg p-6">
         <h3 class="text-xl font-medium mb-6 tracking-wide">Modifier les verbatims</h3>
         @if (\Session::has('success1'))
@@ -163,8 +164,7 @@
                     <input class="bg-white border border-gray-400 rounded w-full py-2 px-4" type="text"
                         name="verbatim[]" value="{{ $verbatim->verbatim }}" required>
                     <button type="button"
-                        class="bg-red-400 hover:bg-red-600 text-slate-50 m-1 rounded absolute right-0 px-2"
-                        onclick="deleteInput(this)">
+                        class="bg-red-400 hover:bg-red-600 text-slate-50 m-1 rounded absolute right-0 px-2 verbatim_delete_btns">
                         Supprimer
                     </button>
                 </div>
@@ -453,8 +453,8 @@
     </div>
     @endif
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 category-list">
-        @foreach ($categories as $category)
 
+        @foreach ($categories as $category)
         <div class="bg-white rounded-lg shadow-lg category-card z-0" data-id="{{ $category->id_category }}">
             <div class="p-6 flex justify-between">
                 <h3 class="text-lg font-medium truncate-text tracking-wider">
@@ -468,8 +468,7 @@
                         <i class="fa-regular fa-pen-to-square "></i>
                     </a>
                     <a href="{{ route('admin.deleteCat', ['id_category' => $category->id_category]) }}"
-                        class="text-red-300 hover:text-red-600 m-1 rounded"
-                        onclick="return swalConfirm('etes vous sur de vouloir supprimé?')">
+                        class="text-red-300 hover:text-red-600 m-1 rounded cat_delete_btns">
                         <i class="fa-regular fa-trash-can"></i>
                     </a>
                 </div>
@@ -483,6 +482,8 @@
             </div>
         </div>
         @endforeach
+
+        @if($verbatimsWithoutCatExists)
         <div class="bg-white rounded-lg shadow-lg category-card">
             <div class="p-6 flex justify-between">
                 <h3 class="text-lg font-medium tracking-wider">
@@ -497,6 +498,7 @@
                 <p><span class="bg-gray-800 text-gray-100 px-2 rounded">{{ $noCategoryCount }}</span> verbatims</p>
             </div>
         </div>
+        @endif
     </div>
     @endif
 
@@ -585,27 +587,6 @@
         setUpPopup(btn3, popup3, span3);
 
 
-        function deleteInput(btn) {
-            let id_verbatim = btn.parentNode.querySelector('input[type="hidden"]').getAttribute('data-id');
-            if (confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')) {
-                fetch('/dashboard/category/deleteVerba/' + id_verbatim, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({id_verbatim: id_verbatim})
-                }).then(response => {
-                    if (response.ok) {
-                        btn.parentNode.remove();
-                    } else {
-                        alert('Une erreur s\'est produite lors de la suppression de l\'élément.');
-                    }
-                }).catch(error => {
-                    alert('Une erreur s\'est produite lors de la suppression de l\'élément : ' + error.message);
-                });
-            }
-        }
 
         jQuery(document).ready(function() {
             jQuery('select[name="id_category"]').on('change',function(){
@@ -634,23 +615,5 @@
                 }
             });
         })
-
-        function swalConfirm(string) {
-            event.preventDefault()
-            return Swal.fire({
-                title: string,
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonText: `Annuler`,
-                cancelButtonColor: '#EE8989',
-                }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-                    Swal.fire('Saved!', '', 'success')
-                } else if (result.isDenied) {
-                    Swal.fire('Changes are not saved', '', 'info')
-                }
-            });
-        };
     </script>
     @endsection
