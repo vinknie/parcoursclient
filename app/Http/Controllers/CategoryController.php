@@ -40,7 +40,9 @@ class CategoryController extends Controller
         $getCategory = Category::where('id_user', Auth::user()->id)->orderBy('position')->get();
         $getVerbatim = Verbatim::all();
 
-        return view('admin.category', compact('categories', 'noCategoryCount', 'getCategory', 'getVerbatim'));
+        $verbatimsWithoutCatExists = (Verbatim::whereNull('id_category')->count() > 0) ? true : false;
+
+        return view('admin.category', compact('categories', 'noCategoryCount', 'getCategory', 'getVerbatim', 'verbatimsWithoutCatExists'));
     }
 
     public function verbatim()
@@ -124,9 +126,11 @@ class CategoryController extends Controller
         return redirect()->back()->with('success1', 'Les verbatims ont bien été modifié');
     }
 
+    // verbatim without category
     public function editVerbatimWithoutCat()
     {
         $verbatimsWithoutCategory = Verbatim::whereNull('id_category')->paginate(5);
+        $verbatimWithoutCategoryExists = $verbatimsWithoutCategory ? true : false;
         $getCategory = Category::all();
 
         return view('admin.category', compact('verbatimsWithoutCategory', 'getCategory'));

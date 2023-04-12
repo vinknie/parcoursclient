@@ -120,6 +120,7 @@
             <button class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded">Modifier</button>
         </form>
     </div>
+
     <div class="bg-white rounded-lg shadow-lg p-6">
         <h3 class="text-xl font-medium mb-6 tracking-wide">Modifier les verbatims</h3>
         @if (\Session::has('success1'))
@@ -452,8 +453,8 @@
     </div>
     @endif
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 category-list">
-        @foreach ($categories as $category)
 
+        @foreach ($categories as $category)
         <div class="bg-white rounded-lg shadow-lg category-card z-0" data-id="{{ $category->id_category }}">
             <div class="p-6 flex justify-between">
                 <h3 class="text-lg font-medium truncate-text tracking-wider">
@@ -481,6 +482,8 @@
             </div>
         </div>
         @endforeach
+
+        @if($verbatimsWithoutCatExists)
         <div class="bg-white rounded-lg shadow-lg category-card">
             <div class="p-6 flex justify-between">
                 <h3 class="text-lg font-medium tracking-wider">
@@ -495,6 +498,7 @@
                 <p><span class="bg-gray-800 text-gray-100 px-2 rounded">{{ $noCategoryCount }}</span> verbatims</p>
             </div>
         </div>
+        @endif
     </div>
     @endif
 

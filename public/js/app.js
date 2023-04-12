@@ -60,6 +60,7 @@ if(verbatimDeleteBtns) {
       btn.addEventListener('click', () => {
          Swal.fire({
             title: 'Êtes-vous sûr de vouloir supprimer cet élément ?',
+            text: "Les verbatims seront placés sous la catégorie 'Verbatims sans étape'",
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#EE8989',
