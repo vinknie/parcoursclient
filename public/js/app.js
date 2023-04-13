@@ -108,3 +108,28 @@ if(verbatimDeleteBtns) {
       })
    });
 };
+
+// note verbatim (/dashboard/note/:id)
+const noteResetBtns = document.querySelectorAll('.note-reset-btns');
+if(noteResetBtns) {
+   noteResetBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+         e.preventDefault();
+         Swal.fire({
+            title: 'Êtes vous sur de vouloir Reset les notes?',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonText: `Annuler`,
+            cancelButtonColor: '#EE8989',
+            icon: 'warning'
+         }).then((result) => {
+            if(result.isConfirmed) {
+               const form = e.target.closest('form');
+               form.submit();
+            } else {
+               return false;
+            }
+         });
+      })
+   });
+}

@@ -165,8 +165,9 @@
             @csrf
             @method('PATCH')
 
-            <button onclick="return confirm('Etes vous sur de vouloir Reset les notes?')" type="submit" id="reset"
-                class="text-dark font-bold py-3 px-5 m-1"><i class="fa-solid fa-rotate-left"></i>
+            {{-- reset button --}}
+            <button type="submit" class="text-dark font-bold py-3 px-5 m-1 note-reset-btns">
+                <i class="fa-solid fa-rotate-left"></i>
             </button>
             <span class="hide">Reset</span>
         </form>
@@ -175,7 +176,7 @@
                 display: none;
             }
 
-            #reset:hover+.hide {
+            .note-reset-btns:hover+.hide {
                 display: inline;
                 color: #e8e6e6;
                 background: rgb(42, 44, 63);
@@ -188,7 +189,6 @@
 
     @endforeach
 </div>
-
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
