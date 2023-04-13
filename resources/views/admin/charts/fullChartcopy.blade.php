@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Parcours Client</title>
+    <title>{{ config('app.name', 'Parcours Client') }}</title>
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
 
@@ -23,7 +23,6 @@
 
     {{-- Chart Js --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js"></script>
-
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"
         integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig=="
@@ -43,54 +42,22 @@
             min-height: 100vh;
         }
 
+        .chartContainer {
+            /* background: rgb(189, 189, 189); */
+            /* width: 80%;
+            overflow-x: scroll;
+            height: 100vh; */
+            /* max-height: 1200px; */
+        }
+
         .chartContainerBody {
             width: 100vw;
+            /* max-height: 1200px; */
         }
 
         #myChart {
             height: 95vh !important;
-            width: 100% !important;
-        }
-
-        .chartContainer img:first-child {
-            top: 320px;
-        }
-
-        .chartContainer img:nth-child(2) {
-            top: 50px;
-        }
-
-        .chartContainer img:last-of-type {
-            bottom: 230px
-        }
-
-        @media(min-height: 750px) {
-            .chartContainer img:nth-child(2) {
-                top: 90px;
-            }
-        }
-
-        .dialogue-popup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow-y: scroll;
-
-        }
-
-        .dialogue-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-height: 70%;
+            width: 100vw !important;
         }
     </style>
 </head>
@@ -99,275 +66,233 @@
     <a href="{{ URL::previous() }}">
         <i class="fa-solid fa-xmark fixed z-10 top-0 right-0 text-4xl text-gray-500 cursor-pointer"></i>
     </a>
-
-    {{-- chart js --}}
-    <div class="chartContainer">
+    <div class="chartContainer border-4">
         <div class="chartContainerBody">
             <canvas id="myChart" class="m-2"></canvas>
         </div>
     </div>
 
+
     <script>
         // multiple labels Plugin
-        let verbatimCountByCategory = {
-            !!json_encode($verbatimCountByCategory) !!
-        };
-        let categoryWithVerbatim = {
-            !!json_encode($categoryWithVerbatim) !!
-        }
-
-
-        // data block
-        const data = {
-            labels: [
-                @foreach($categoryWithVerbatim as $key => $catWithVerb)
-                @foreach($catWithVerb['verbatim'] as $key => $verbatim)
-                '{{ $key }}',
-                @endforeach
-                @endforeach
-            ],
-            datasets: [{
-                    label: 'Positif',
-                    backgroundColor: '#3c7cc4',
-                    borderRadius: 30,
-                    barThickness: 16,
-                    stack: 'Stack 0',
-                    data: [
-                        @foreach($categoryWithVerbatim as $key => $catWithVerb)
-                        @foreach($catWithVerb['positif'] as $positif) {
-                            {
-                                $positif.
-                                ','
-                            }
-                        }
+    let verbatimCountByCategory = {!! json_encode($verbatimCountByCategory) !!};
+    let categoryWithVerbatim = {!! json_encode($categoryWithVerbatim) !!}
+    // const subLabels = {
+    //     id: 'subLabels',
+    //     afterDatasetsDraw(chart, args, pluginOptions) {
+    //         const { ctx, chartArea: {left, right, top, bottom, width, height}} = chart;
+    //         let xPosition = [];
+    //         verbatimCountByCategory.forEach((num) => {
+    //             xPosition.push( width / num['total_by_cat']);
+    //         })
+            
+    //         ctx.save();
+    //         // displaying category names (calling subLabelText())
+    //         for(const key in categoryWithVerbatim) {
+    //             subLabelText(categoryWithVerbatim[key]['title'], width / Object.keys(categoryWithVerbatim).length  * categoryWithVerbatim[key]['catPosition'][0])
+    //         }
+    //         function subLabelText(text, x) {
+    //             ctx.font = 'bolder 12px sans-serif';
+    //             ctx.textAlign = 'center';
+    //             ctx.fillStyle = 'rgba(102,102,102,1)';
+    //             // verbatimCountByCategory.forEach(num => {
+    //             //     ctx.fillText(text, x +  num['total_by_cat'], top + 10);
+    //             // })
+    //             ctx.fillText(text, x +  left, top + 10);
+    //         }
+    //         // end of displaying category names
+            
+    //         ctx.strokeStyle  = 'lightgray';
+    //         [left, right].forEach(x => {
+    //             ctx.beginPath();
+    //             ctx.moveTo(x, 100);
+    //             ctx.lineTo(x, top + 20);
+    //             ctx.stroke();
+    //         });
+            
+    //         // console.log(xPosition)
+    //         xPosition.forEach(x => {
+    //             console.log(x)
+    //             ctx.beginPath();
+    //             // verbatimCountByCategory.forEach(num => {
+    //             ctx.moveTo(x, top);
+    //             ctx.lineTo(x, top + 20);
+    //             ctx.stroke();
+    //         })
+    //         ctx.restore();
+    //     }
+    // }
+    // const percentageLabels = {
+    //     id: 'percentageLabels',
+    //     afterDatasetsDraw(chart, args, pluginOptions) {
+    //         const { ctx, chartArea: {left, right, top, bottom, width, height}} = chart;
+    //         let percentData = [
+    //             @foreach($totalEachVerbatim as $test)
+    //                 '{{number_format((float) $test->percent , 2, '.', '')}}',
+    //             @endforeach
+    //         ];
+    //         const xCenter = (left + right) / 2;
+    //         const yCenter = bottom + 20;
+    //         ctx.save();
+    //         ctx.textBaseline = 'middle';
+    //         ctx.textAlign = 'center';
+    //         // console.log(percentData.length)
+    //         for (let i = 0; i < percentData.length; i++) {
+    //             const x = xCenter + (i - percentData.length / 2 + 0.5) * 120;
+    //             const y = yCenter;
+    //             // Draw circle
+    //             ctx.beginPath();
+    //             ctx.arc(x, y, 15, 0, 2 * Math.PI);
+    //             ctx.fillStyle = 'blue';
+    //             ctx.fill();
+    //             // Draw text
+    //             ctx.fillStyle = 'white';
+    //             ctx.fillText(percentData[i], x, y);
+    //         }
+    //         ctx.restore();
+    //     }
+    // }
+    // data block
+    const data = {
+        // labels: [
+        //     @foreach($categoryWithVerbatim as $key => $catWithVerb)
+        //         @foreach($catWithVerb['verbatim'] as $verbatim)
+        //             '{{ $verbatim }}',
+        //         @endforeach
+        //     @endforeach
+        // ],
+        datasets: [
+            {
+                label: 'Positif',
+                backgroundColor: '#3c7cc4',
+                borderRadius: 30,
+                barThickness: 16,
+                stack: 'Stack 0',
+                data: [
+                    @foreach($categoryWithVerbatim as $key=> $catWithVerb)
+                        @foreach($catWithVerb['positif'] as $positif)
+                            {{ $positif.',' }}
                         @endforeach
                         @endforeach
-                    ],
-                    datalabels: {
-                        anchor: 'end',
-                        align: 'top'
-                    }
-                },
-                {
-                    label: 'Negatif',
-                    backgroundColor: '#c4042c',
-                    borderRadius: 30,
-                    barThickness: 16,
-                    stack: 'Stack 0',
-                    data: [
-                        @foreach($categoryWithVerbatim as $key => $catWithVerb)
-                        @foreach($catWithVerb['negatif'] as $negatif) {
-                            {
-                                '-'.$negatif.
-                                ','
-                            }
-                        }
+                ],
+                datalabels: {
+                anchor: 'end',
+                align: 'top'
+                }
+            },
+            {
+                label: 'Negatif',
+                backgroundColor: '#c4042c',
+                borderRadius: 30,
+                barThickness: 16,
+                stack: 'Stack 0',
+                data: [
+                    @foreach($categoryWithVerbatim as $key=> $catWithVerb)
+                        @foreach($catWithVerb['negatif'] as $negatif)
+                            {{ '-'.$negatif.',' }}
                         @endforeach
-                        @endforeach
-                    ],
-                    datalabels: {
-                        anchor: 'start',
-                        align: 'bottom',
-                    }
-                },
-            ]
-        }
-
-        // config block
-        const config = {
-            type: 'bar',
-            data: data,
-            plugins: [ChartDataLabels],
-            options: {
-                // indexAxis: 'y',
-                responsive: false,
-                maintainAspectRatio: false,
-                layout: {
-                    padding: 50
-                },
-
-                scales: {
-                    y: {
-                        max: {
-                            {
-                                $highestLowest - > highest + 4
-                            }
-                        },
-                        min: -{
-                            {
-                                $highestLowest - > lowest + 4
-                            }
-                        },
-                        ticks: {
-                            beginAtZero: true,
-                            stepSize: 0.5,
-                            display: false
-                        },
-                        stacked: true,
-                        grid: {
-                            // drawOnChartArea: false,
-                            drawBorder: false,
-                            color: function(context) {
-                                if (context.tick.value === 0) {
-                                    return 'rgba(0,0,0,0.2)'; // Set color for grid line at zero value
-                                }
-                            },
-                            lineWidth: function(context) {
-                                if (context.tick.value === 0) {
-                                    return 1; // Set line width for grid line at zero value
-                                } else {
-                                    return 0; // Hide other grid lines
-                                }
-                            },
-                            zeroLineColor: 'black', // Set color for zero line
-                            zeroLineWidth: 1, // Set line width for zero line
-                        },
-                        // display: false,
+                    @endforeach
+                ],
+                datalabels: {
+                    anchor: 'start',
+                    align: 'bottom',
+                }
+            },
+        ]
+    }
+   
+    // config block
+    const config = {
+        type: 'bar',
+        data: data,
+        plugins: [ChartDataLabels],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+             layout: {
+                padding: 50
+            },
+            scales: {
+                y: {
+                    max: {{ $highestLowest->highest + 4}},
+                    min: -{{ $highestLowest->lowest + 2}},
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 0.5
                     },
-
-                    // top phrase labales
-                    x: {
-                        labels: [
-                            @foreach($categoryWithVerbatim as $key => $catWithVerb)
+                    stacked: true,
+                    grid: {
+                        drawOnChartArea: false,
+                    },
+                    display: false 
+                },
+                x: {
+                    labels: [
+                        @foreach($categoryWithVerbatim as $key => $catWithVerb)
                             @foreach($catWithVerb['verbatim'] as $verbatim)
-                            "{!! $verbatim !!}",
+                                '{{ $verbatim }}',
                             @endforeach
-                            @endforeach
-                        ],
-                        position: 'top',
-                        grid: {
-                            display: false,
-                        },
-                        ticks: {}
-                    },
-
-                    // percentage labels
-                    x2: {
-                        labels: [
-                            @foreach($totalEachVerbatim as $test)
-                            "{!! number_format((float) $test->percent, 2, '.', '') !!} %",
-                            @endforeach
-                        ],
-                        grid: {
-                            display: false,
-                        },
-                        ticks: {
-                            font: {
-                                size: 12,
-                                family: 'FontAwesome',
-                            },
-                            showLabelBackdrop: true,
-                            backdropPadding: 6,
-                            backdropColor: function(value) {
-                                var percent = parseFloat(value.tick.label);
-                                if (typeof percent === 'number' && !isNaN(percent)) {
-                                    var alpha = percent / 100;
-                                    return 'rgba(30, 144, 255, ' + alpha + ')';
-                                } else {
-                                    return 'gray';
-                                }
-                            },
-                        },
-                    },
-                    // category labels
-                    x3: {
-                        labels: [
-                            @foreach($categoryWithVerbatim as $catWithVerb)
-                            "{!! $catWithVerb['title'] !!} ",
-                            @endforeach
-                        ],
-                        grid: {
-                            display: true,
-                        },
-                        border: {
-                            display: true,
-                            color: '#7dba80',
-                            width: 2
-                        },
-                        ticks: {
-                            showLabelBackdrop: true,
-                            backdropColor: ['#7dba80', '#c6cfc7'],
-                            backdropPadding: 9,
-                            color: ['white', 'black'],
-                        },
+                        @endforeach
+                            ],
+                    position:'top',
+                    grid: {
+                        display:false,
                     },
                 },
+                // percentage labels
+                x2: {
+                    labels: [
+                        @foreach($totalEachVerbatim as $test)
+                            '{{number_format((float) $test->percent , 2, '.', '')}}',
+                        @endforeach
+                    ],
+                    grid: {
+                        display: false,
+                    },
+                    ticks: {
+                        font : {
+                            size: 12
+                        },
+                    }
+                },
+                // category labels
+                x3: {
+                    labels: [
+                        @foreach($categoryWithVerbatim as $catWithVerb)
+                            @foreach($catWithVerb['verbatim'] as $test)
+                            '{{ $catWithVerb['title'] }}', 
+                            @endforeach
+                        @endforeach
+                    ],
+                    grid: {
+                        // display: false
+                    },
+                    barPercentage: 5,
+                    categoryPercentage: 21
+                }, 
+            },
+            plugins : {
+                arbitaryLine: {
+                    arbitaryLineColor : 'blue',
+                    xPosition: 2
+                }
             },
         }
-
-        const ctx = document.getElementById('myChart');
-        const myChart = new Chart(ctx, config);
-
-        const chartContainerBody = document.querySelector('.chartContainerBody');
-
-        // click bar handler
-        const clickableBar = (canvas, click) => {
-            const points = myChart.getElementsAtEventForMode(click, 'nearest', {
-                intersect: true
-            }, true);
-
-            if (points.length) {
-                const firstPoint = points[0];
-                const id_verbatim = myChart.data.labels[firstPoint.index];
-                const url = "/fullchart/popup/" + id_verbatim;
-
-                const xhr = new XMLHttpRequest();
-                xhr.open("GET", url);
-                xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        const data = xhr.responseText;
-                        const popup = document.createElement('div');
-
-
-                        popup.classList.add('dialogue-popup', 'flex', 'items-center', 'justify-center', 'fixed',
-                            'left-0', 'bottom-0', 'w-full', 'h-full', 'bg-gray-800', 'relative');
-
-                        const dialogueContent = document.createElement('div');
-                        dialogueContent.classList.add('dialogue-content', 'bg-white', 'w-2/3', 'lg:max-w-lg', 'mx-auto', 'rounded', 'shadow-lg', 'z-50', 'overflow-y-auto', 'relative');
-
-                        const jsonData = JSON.parse(data);
-                        // Parcourir les dialogues et construire le HTML pour chaque dialogue
-                        let dialogueHtml = '';
-                        dialogueHtml += `<h1 class="text-xl font-bold text-gray-800 m-4 text-center">${jsonData[0] ? jsonData[0].verbatim : 'Pas de dialogue'}</h1>`;
-                        jsonData.forEach(dialogue => {
-                            var sentimentIcon = '';
-                            if (dialogue.positif > 0) {
-                                sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-green-500 text-white flex-shrink-0 mr-2">+</span>';
-                            } else if (dialogue.neutre > 0) {
-                                sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-500 text-white flex-shrink-0 mr-2">=</span>';
-                            } else if (dialogue.negatif > 0) {
-                                sentimentIcon += '<span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-red-500 text-white flex-shrink-0 mr-2">-</span>';
-                            }
-                            dialogueHtml += '<div class="bg-white shadow-md rounded px-8 py-6 m-4">';
-                            dialogueHtml += '<div class="flex items-center mb-4">' + sentimentIcon + '<h2 class="text-lg font-medium text-gray-800">' + dialogue.dialogue + '</h2></div>';
-                            dialogueHtml += '</div>';
-                        });
-
-                        dialogueHtml += '<button class="close-button absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800">&times;</button>';
-
-                        dialogueContent.innerHTML = dialogueHtml;
-
-                        popup.appendChild(dialogueContent);
-
-
-                        document.body.appendChild(popup);
-                        popup.style.display = "block";
-
-                        document.querySelector(".close-button").addEventListener("click", function(e) {
-                            document.querySelector(".dialogue-popup").remove();
-                        });
-
-                        popup.addEventListener("click", function(e) {
-                            document.querySelector(".dialogue-popup").remove();
-
-                        });
-                    }
-                };
-                xhr.send();
-            }
-        }
-        ctx.addEventListener('click', e => clickableBar(ctx, e))
+    }
+    
+    console.log(config.options.scales.x2.ticks)
+    const myChart = new Chart(document.getElementById('myChart'), config);
+    const chartContainerBody = document.querySelector('.chartContainerBody');
+    // const totalLabels  = myChart.data.labels.length 
+    //     if(totalLabels > 7) {
+    //         const newWidth = '100vw' + ((totalLabels - 7) * 100)
+    //         chartContainerBody.style.width = newWidth + 'vw'
+    //     }
+        
+    const numXLabels = config.options.scales.x.labels.length;
     </script>
+
+
 </body>
 
 </html>

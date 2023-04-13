@@ -14,22 +14,19 @@
 
     {{-- custom css --}}
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-
 </head>
 
 <body class="relative">
     <a href="{{ URL::previous() }}"
         style="position: absolute; top: 0; right: 10px; font-size: 38px; z-index: 100">&times;</a>
     <!-- prepare a DOM container with width and height -->
-    <div id="main" style="box-shadow: 10px 5px 5px #8d8d8d;"></div>
+    <div id="main" style="box-shadow: 10px 5px 5px rgb(141, 141, 141);"></div>
 </body>
 
 <script>
     // based on prepared DOM, initialize echarts instance
     var myChart = echarts.init(document.getElementById('main'));
-
     let getAll = {!! json_encode($totalEachVerbatim) !!};
-
     const verbatim = getAll.map(el => el.verbatim);
     const positif = getAll.map(el => el.positif);
     const negatif = getAll.map(el => '-' + el.negatif);
@@ -55,6 +52,8 @@
         }
     }
     
+    const test = result.map(item => item.length * 200).reverse();
+    // console.log(test);
     const rich = {
         a: {
             backgroundColor: '#2ecc71',
@@ -63,7 +62,7 @@
             width: 0,
             height: 30,
             // textAlign: 'center',
-            // lineHeight: 30,
+            lineHeight: 30,
             fontSize: 12,
             fontWeight: 'bold'
         },
@@ -71,7 +70,7 @@
             width: 0,
             height: 30,
             // textAlign: 'center',
-            // lineHeight: 30,
+            lineHeight: 30,
             fontSize: 12,
             fontWeight: 'bold'
         },
@@ -82,34 +81,22 @@
             width: 0,
             height: 30,
             // textAlign: '',
-            // lineHeight: 30,
+            lineHeight: 30,
             fontSize: 12,
             fontWeight: 'bold'
         }
     };
-
-    const contentLength = result.reduce((acc, item) => acc + item.length, 0);
-    const totalChartWidth = myChart.getWidth();
-
-    // the width of category responsive to chart size
-    const categoryWidth = result.map(item => (item.length / contentLength) * totalChartWidth - 100).reverse();
-
-    // console.log((result[1].length / contentLength) * totalChartWidth);
     const richWithWidth = Object.entries(rich).map(([key, value], index) => {
         return {
             [key]: {
             ...value,
-            width: categoryWidth[index] // use dynamic width from array
+            width: test[index] // use dynamic width from array
             }
         };
     });
-
-
-
     // merge updated widths back into rich object
     const updatedRich = Object.assign({}, ...richWithWidth);
-
-    // console.log(updatedRich);
+    console.log(test);
 
     var option = {
         grid: {
@@ -192,7 +179,6 @@
                         }
                     },
                     rich: updatedRich,
-
                 },
                 splitLine: {
                     show: true,
@@ -202,7 +188,7 @@
                     },
                     interval: function(index, value) {
                         if(index == 3) {
-                            // console.log(index);
+                            console.log(index);
                             return true;
                         }
                         // return true
@@ -210,7 +196,6 @@
                 }
             }
         ],
-
         "yAxis": [{
             type: 'value',
             splitLine: {
@@ -249,23 +234,16 @@
             }
         ]
     };
-
     myChart.setOption(option);
-
     myChart.on('click', async (e) => {
         const verbaName = e.name;
         const verbaId = getAll.find(item => item.verbatim === verbaName)?.id_verbatim ?? null;
-
         const url = "/fullchart/popup/" + verbaId;
-
         const response = await fetch(url);
         const data = await response.text();
         const popup = document.createElement('div');
-
-
         popup.classList.add('dialogue-popup', 'flex', 'items-center', 'justify-center', 'fixed',
             'left-0', 'bottom-0', 'w-full', 'h-full', 'bg-gray-800', 'relative');
-
         const dialogueContent = document.createElement('div');
         dialogueContent.classList.add('dialogue-content', 'bg-white', 'w-2/3', 'lg:max-w-lg', 'mx-auto', 'rounded', 'shadow-lg', 'z-50', 'overflow-y-auto', 'relative');
         
@@ -286,20 +264,14 @@
             dialogueHtml += '<div class="flex items-center mb-4">' + sentimentIcon + '<h2 class="text-lg font-medium text-gray-800">' + dialogue.dialogue + '</h2></div>';
             dialogueHtml += '</div>';
         });
-
         dialogueHtml += '<button class="close-button absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800">&times;</button>';
-
         dialogueContent.innerHTML = dialogueHtml;
-
         popup.appendChild(dialogueContent);
-
         document.body.appendChild(popup);
         popup.style.display = "block";
-
         document.querySelector(".close-button").addEventListener("click", function(e) {
             document.querySelector(".dialogue-popup").remove();
         });
-
         popup.addEventListener("click", function(e) {
             document.querySelector(".dialogue-popup").remove();
             
