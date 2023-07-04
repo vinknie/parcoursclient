@@ -22,7 +22,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        $getCategory = Category::where('id_user', Auth::user()->id)->get();
+        $getCategory = Category::get();
 
         return view('profile.edit', [
             'user' => $request->user(), 'getCategory' => $getCategory
@@ -71,7 +71,7 @@ class ProfileController extends Controller
     // create user
     public function createUser()
     {
-        $getCategory = Category::where('id_user', Auth::user()->id)->get();
+        $getCategory = Category::get();
         return view('admin.createUser', compact('getCategory'));
     }
 
@@ -103,7 +103,7 @@ class ProfileController extends Controller
     // get all users (admin)
     public function getUsers()
     {
-        $getCategory = Category::where('id_user', Auth::user()->id)->get();
+        $getCategory = Category::get();
         $users = User::where('role', '!=', 'admin')->paginate(10);
 
         $trashedUsers = User::onlyTrashed()->latest()->paginate(5);
@@ -113,7 +113,7 @@ class ProfileController extends Controller
     // edit user (admin)
     public function editUser($id)
     {
-        $getCategory = Category::where('id_user', Auth::user()->id)->get();
+        $getCategory = Category::get();
         $user = User::find($id);
         return view('admin.users.edit-user', compact('getCategory', 'user'));
     }

@@ -75,8 +75,7 @@
             fontWeight: 'bold'
         },
         c: {
-            backgroundColor: '#2ecc71',
-            color: '#fff',
+            color: '#555',
             // borderRadius: 50,
             width: 0,
             height: 30,
