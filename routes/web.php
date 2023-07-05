@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HistoriqueController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -105,6 +106,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/fullchart/popup/{id_verbatim}', [DashboardController::class, 'popup_chart'])->name('fullchart.popup');
     // test chart
     Route::get('/chart/fulltest', [DashboardController::class, 'test'])->name('fullcharttest');
+
+    // Event Route
+    Route::get('/dashboard/createEvent', [EventController::class, 'createEvent'])->name('admin.createEvent');
+    Route::post('/dashboard/storeEvent', [EventController::class, 'storeEvent'])->name('admin.storeEvent');
+    Route::get('/dashboard/event', [EventController::class, 'getEvent'])->name('admin.getEvent');
+    Route::put('/dashboard/event/{id}', [EventController::class, 'updateEvent'])->name('admin.updateEvent');
+
+
 });
 
 Route::fallback(function () {

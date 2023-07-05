@@ -21,6 +21,11 @@
                 @endif
 
                 @if(Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
+                    <x-responsive-nav-link :href="route('admin.createEvent')"
+                        :active="request()->routeIs('admin.createEvent')">
+                        {{ __('Créer un évènement') }}
+                    </x-responsive-nav-link>
+                </li>
                 <li class="py-2">
                     <x-responsive-nav-link :href="route('admin.createUser')"
                         :active="request()->routeIs('admin.createUser')">

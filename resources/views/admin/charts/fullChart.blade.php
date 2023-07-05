@@ -17,11 +17,25 @@
 </head>
 
 <body class="relative">
-    <a href="{{ URL::previous() }}"
-        style="position: absolute; top: 0; right: 10px; font-size: 38px; z-index: 100">&times;</a>
-    <!-- prepare a DOM container with width and height -->
-    <div id="main" style="box-shadow: 10px 5px 5px rgb(141, 141, 141);"></div>
-</body>
+    {{-- @dd($getCategory) --}}
+        @if ($getCategory->count() === 0)
+            <div class="flex flex-col items-center justify-center h-screen">
+                <span class="text-red-500 text-6xl">
+                <i class="fas fa-times-circle"></i>
+                </span>
+                <h2 class="text-lg font-medium text-gray-900 mb-3">Désolé, il n'y a pas de données disponibles à afficher.</h2>
+                <a href="{{ route('admin.category') }}" class="text-indigo-600 hover:text-indigo-700 font-medium">Retour au tableau de bord</a>
+            </div>
+        @else
+    
+    
+        <a href="{{ URL::previous() }}"
+            style="position: absolute; top: 0; right: 10px; font-size: 38px; z-index: 100">&times;</a>
+        <!-- prepare a DOM container with width and height -->
+        <div id="main" style="box-shadow: 10px 5px 5px #8d8d8d;"></div>
+    
+        @endif
+    </body>
 
 <script>
     // based on prepared DOM, initialize echarts instance
