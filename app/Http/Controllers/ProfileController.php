@@ -22,7 +22,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        $getCategory = Category::where('id_user', Auth::user()->id)->get();
+        $getCategory = Category::get();
 
         return view('profile.edit', [
             'user' => $request->user(), 'getCategory' => $getCategory
@@ -68,11 +68,45 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
+    // create manager
+    public function createManager()
+    {
+        $getCategory = Category::get();
+        return view('admin.createManager', compact('getCategory'));
+    }
+
+
     // create user
     public function createUser()
     {
-        $getCategory = Category::where('id_user', Auth::user()->id)->get();
+        $getCategory = Category::get();
         return view('admin.createUser', compact('getCategory'));
+    }
+
+    // store user
+    public function storeManager(Request $request)
+    {
+        $validation = $request->validate([
+            'name'      => 'required|max:255',
+            'email'     => 'required|max:255|unique:users|email'
+        ]);
+
+        $password = Str::random(8);
+
+        $user = new User;
+        $user->name     = $request->name;
+        $user->email    = $request->email;
+        $user->password = Hash::make($password);
+        $user->role     = 'manager';
+
+        // sending mail to user email
+        // Mail::send('emails.user-created', ['user' => $user, 'password' => $password], function ($message) use ($user) {
+        //     $message->to($user->email)->subject('Welcome to Our Website');
+        // });
+
+        $user->save();
+
+        return redirect()->back()->with('success', 'Manager created successfully.');
     }
 
     // store user
@@ -89,11 +123,12 @@ class ProfileController extends Controller
         $user->name     = $request->name;
         $user->email    = $request->email;
         $user->password = Hash::make($password);
+        $user->role     = 'normal';
 
         // sending mail to user email
-        Mail::send('emails.user-created', ['user' => $user, 'password' => $password], function ($message) use ($user) {
-            $message->to($user->email)->subject('Welcome to Our Website');
-        });
+        // Mail::send('emails.user-created', ['user' => $user, 'password' => $password], function ($message) use ($user) {
+        //     $message->to($user->email)->subject('Welcome to Our Website');
+        // });
 
         $user->save();
 
@@ -103,7 +138,7 @@ class ProfileController extends Controller
     // get all users (admin)
     public function getUsers()
     {
-        $getCategory = Category::where('id_user', Auth::user()->id)->get();
+        $getCategory = Category::get();
         $users = User::where('role', '!=', 'admin')->paginate(10);
 
         $trashedUsers = User::onlyTrashed()->latest()->paginate(5);
@@ -113,7 +148,7 @@ class ProfileController extends Controller
     // edit user (admin)
     public function editUser($id)
     {
-        $getCategory = Category::where('id_user', Auth::user()->id)->get();
+        $getCategory = Category::get();
         $user = User::find($id);
         return view('admin.users.edit-user', compact('getCategory', 'user'));
     }

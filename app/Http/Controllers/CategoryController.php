@@ -30,17 +30,19 @@ class CategoryController extends Controller
     {
         $categories = DB::table('category')
             ->leftJoin('verbatim', 'category.id_category', '=', 'verbatim.id_category')
-            ->leftJoin('users', 'category.id_user', '=', 'users.id')
+            // ->leftJoin('users', 'category.id_user', '=', 'users.id')
             ->select('category.*', DB::raw('count(verbatim.id_verbatim) as verbatim_count'))
             ->groupBy('category.position')
-            ->where('id', '=', Auth::user()->id)
+            // ->where('id', '=', Auth::user()->id)
             ->get();
 
         $noCategoryCount = Verbatim::whereNull('id_category')->count();
-        $getCategory = Category::where('id_user', Auth::user()->id)->orderBy('position')->get();
+        $getCategory = Category::orderBy('position')->get();
         $getVerbatim = Verbatim::all();
 
-        return view('admin.category', compact('categories', 'noCategoryCount', 'getCategory', 'getVerbatim'));
+        $verbatimsWithoutCatExists = (Verbatim::whereNull('id_category')->count() > 0) ? true : false;
+
+        return view('admin.category', compact('categories', 'noCategoryCount', 'getCategory', 'getVerbatim', 'verbatimsWithoutCatExists'));
     }
 
     public function verbatim()
@@ -58,7 +60,7 @@ class CategoryController extends Controller
 
         $category = new Category();
         $category->title = $request->title;
-        $category->id_user = Auth::user()->id;
+        // $category->id_user = Auth::user()->id;
 
         $lastCategory = Category::orderBy('position', 'desc')->first();
         $category->position = $lastCategory ? $lastCategory->position + 1 : 1;
@@ -124,9 +126,11 @@ class CategoryController extends Controller
         return redirect()->back()->with('success1', 'Les verbatims ont bien été modifié');
     }
 
+    // verbatim without category
     public function editVerbatimWithoutCat()
     {
         $verbatimsWithoutCategory = Verbatim::whereNull('id_category')->paginate(5);
+        $verbatimWithoutCategoryExists = $verbatimsWithoutCategory ? true : false;
         $getCategory = Category::all();
 
         return view('admin.category', compact('verbatimsWithoutCategory', 'getCategory'));

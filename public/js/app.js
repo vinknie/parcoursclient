@@ -36,3 +36,100 @@ if(trashedBtn) {
 const success__crossBtn = document.querySelector('.success__cross-btn');
 const successMsg = document.querySelector('.success-msg');
 if(success__crossBtn) success__crossBtn.addEventListener('click', () => successMsg.style.display = 'none');
+
+
+//  S W E E T A L E R T   C O N F I R M   M O D A L
+// category delete (/dashboard/category)
+const categoryDeleteBtns = document.querySelectorAll('.cat_delete_btns');
+
+if(categoryDeleteBtns) {
+   categoryDeleteBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+         e.preventDefault();
+         const href = e.target.closest('a').href;
+
+         Swal.fire({
+            title: 'Êtes vous sur de vouloir supprimé?',
+            text: "Les verbatims seront placés sous la catégorie 'Verbatims sans étape'",
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonText: `Annuler`,
+            cancelButtonColor: '#EE8989',
+            icon: 'warning'
+            }).then((result) => {
+               if(result.isConfirmed) {
+                  window.location.href = href;
+               } else {
+                  return false;
+               }
+         });
+      });
+   })
+}
+
+// verbatim delete (/dashboard/category/editcategory/:id)
+const verbatimDeleteBtns = document.querySelectorAll('.verbatim_delete_btns');
+if(verbatimDeleteBtns) {
+   Array.from(verbatimDeleteBtns).forEach(btn => {
+      btn.addEventListener('click', (e) => {
+         const {parentNode} = btn;
+         const id = parentNode.querySelector('input[type="hidden"]').getAttribute('data-id');
+         
+         Swal.fire({
+            title: 'Etes vous sur de vouloir supprimé?',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonText: `Annuler`,
+            cancelButtonColor: '#EE8989',
+            icon: 'warning'
+            }).then((result) => {
+            if(result.isConfirmed) {
+                // AJAX request to delete the verbatim with the given ID
+                fetch('/dashboard/category/deleteVerba/' + id, {
+                   method: 'DELETE',
+                   headers: {
+                      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                      'Content-Type': 'application/json'
+                   },
+                   body: JSON.stringify({id})
+                }).then(response => {
+                   if (response.ok) {
+                      window.location.reload();
+                   } else {
+                      Swal.fire('Une erreur s\'est produite lors de la suppression de l\'élément.', '', 'error');
+                   }
+                }).catch(error => {
+                   Swal.fire('Une erreur s\'est produite lors de la suppression de l\'élément : ', '', 'error');
+                });
+            } else {
+                Swal.fire('Action annulée', '', 'success');
+            }
+          });
+      })
+   });
+};
+
+// note verbatim (/dashboard/note/:id)
+const noteResetBtns = document.querySelectorAll('.note-reset-btns');
+if(noteResetBtns) {
+   noteResetBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+         e.preventDefault();
+         Swal.fire({
+            title: 'Êtes vous sur de vouloir Reset les notes?',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonText: `Annuler`,
+            cancelButtonColor: '#EE8989',
+            icon: 'warning'
+         }).then((result) => {
+            if(result.isConfirmed) {
+               const form = e.target.closest('form');
+               form.submit();
+            } else {
+               return false;
+            }
+         });
+      })
+   });
+}

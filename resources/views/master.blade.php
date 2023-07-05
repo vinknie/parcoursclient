@@ -6,12 +6,21 @@
         <nav class="w-none md:w-1/6 bg-gray-800 text-slate-50 p-5 mt-5">
 
             <a href="{{ route('profile.edit') }}" class="block h-36 w-36 rounded-full mx-auto my-12"
-                style="background: url({{ asset('images/admin.jpg') }}) left center / cover no-repeat">
+                style="background: #000000; color: #ffffff; text-align: center; display: flex; justify-content: center; align-items: center;">
+                {{ Auth::user()->name }}
             </a>
-            <ul class="divide-y divide-solid divide-slate-600">
 
+            <ul class="divide-y divide-solid divide-slate-600">
                 @if(Auth::user()->role == 'admin')
                 <li class="py-2">
+                    <x-responsive-nav-link :href="route('admin.createManager')"
+                        :active="request()->routeIs('admin.createManager')">
+                        {{ __('Create a Manager') }}
+                    </x-responsive-nav-link>
+                </li>
+                @endif
+
+                @if(Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
                     <x-responsive-nav-link :href="route('admin.createEvent')"
                         :active="request()->routeIs('admin.createEvent')">
                         {{ __('Créer un évènement') }}
@@ -23,14 +32,15 @@
                         {{ __('Créer un utilisateur') }}
                     </x-responsive-nav-link>
                 </li>
+                @endif
 
+                @if(Auth::user()->role == 'admin')
                 <li class="py-2">
                     <x-responsive-nav-link :href="route('admin.getUsers')"
                         :active="request()->routeIs('admin.getUsers')">
                         {{ __('Liste d\'utilisateur') }}
                     </x-responsive-nav-link>
                 </li>
-                @endif
 
                 <li class="py-2">
                     <x-responsive-nav-link :href="route('admin.historique')"
@@ -45,7 +55,9 @@
                         {{ __('Catégories - Verbatims') }}
                     </x-responsive-nav-link>
                 </li>
+                @endif
 
+                {{-- all --}}
                 <li class="py-2">
                     @if (Route::currentRouteNamed(null) || str_contains(Route::currentRouteName(),'note'))
                     <x-responsive-nav-link href="#pageSubmenu" :active=true data-toggle="collapse" aria-expanded="false"
