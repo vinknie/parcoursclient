@@ -11,15 +11,25 @@
             </a>
 
             <ul class="divide-y divide-solid divide-slate-600">
-
                 @if(Auth::user()->role == 'admin')
+                <li class="py-2">
+                    <x-responsive-nav-link :href="route('admin.createManager')"
+                        :active="request()->routeIs('admin.createManager')">
+                        {{ __('Create a Manager') }}
+                    </x-responsive-nav-link>
+                </li>
+                @endif
+
+                @if(Auth::user()->role == 'admin' || Auth::user()->role == 'manager')
                 <li class="py-2">
                     <x-responsive-nav-link :href="route('admin.createUser')"
                         :active="request()->routeIs('admin.createUser')">
                         {{ __('Créer un utilisateur') }}
                     </x-responsive-nav-link>
                 </li>
+                @endif
 
+                @if(Auth::user()->role == 'admin')
                 <li class="py-2">
                     <x-responsive-nav-link :href="route('admin.getUsers')"
                         :active="request()->routeIs('admin.getUsers')">
@@ -42,6 +52,7 @@
                 </li>
                 @endif
 
+                {{-- all --}}
                 <li class="py-2">
                     @if (Route::currentRouteNamed(null) || str_contains(Route::currentRouteName(),'note'))
                     <x-responsive-nav-link href="#pageSubmenu" :active=true data-toggle="collapse" aria-expanded="false"

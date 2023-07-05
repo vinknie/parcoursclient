@@ -32,15 +32,23 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Create user (only accessible by admin)
-    Route::middleware(['auth', 'CheckRole'])->group(function () {
+    Route::middleware(['auth', 'CheckRole:admin'])->group(function () {
+        Route::get('/dashboard/createManager', [ProfileController::class, 'createManager'])->name('admin.createManager');
         Route::get('/dashboard/createUser', [ProfileController::class, 'createUser'])->name('admin.createUser');
         Route::post('/dashboard/storeUser', [ProfileController::class, 'storeUser'])->name('admin.storeUser');
+        Route::post('/dashboard/storeManager', [ProfileController::class, 'storeManager'])->name('admin.storeManager');
+
         // admin user list / edit page route
         Route::get('/dashboard/user-list', [ProfileController::class, 'getUsers'])->name('admin.getUsers');
         Route::get('/dashboard/user-list/edit/{id_user}', [ProfileController::class, 'editUser'])->name('admin.editUser');
         Route::post('/dashboard/user-list/update/{id_user}', [ProfileController::class, 'updateUser'])->name('admin.updateUser');
         Route::get('/dashboard/user-list/delete/{id_user}', [ProfileController::class, 'deleteUser'])->name('admin.deleteUser');
         Route::get('/dashboard/user-list/restore/{id_user}', [ProfileController::class, 'restoreUser'])->name('admin.restoreUser');
+    });
+
+    Route::middleware(['auth', 'CheckRole:admin,manager'])->group(function () {
+        Route::get('/dashboard/createUser', [ProfileController::class, 'createUser'])->name('admin.createUser');
+        Route::post('/dashboard/storeUser', [ProfileController::class, 'storeUser'])->name('admin.storeUser');
     });
 
     // Category routes
