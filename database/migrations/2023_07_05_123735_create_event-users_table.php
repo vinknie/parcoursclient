@@ -13,10 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('category', function (Blueprint $table) {
-            $table->BigIncrements('id_category');
-            $table->string('title');
-            $table->bigInteger('position');
+          Schema::create('event-users', function (Blueprint $table) {
+            $table->BigIncrements('id_event-users');
+         
+            $table->bigInteger('id_user')->unsigned()->nullable();
+            $table->bigInteger('id_event')->unsigned()->nullable();
+            $table->foreign('id_user')->references('id')->on('users');
+            $table->foreign('id_event')->references('id_event')->on('event');
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('category');
+        //
     }
 };

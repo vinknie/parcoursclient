@@ -32,7 +32,7 @@ class DashboardController extends Controller
                 'category.id_category',
                 'category.position',
             )
-            ->where('category.id_user', '=', Auth::user()->id)
+            // ->where('category.id_user', '=', Auth::user()->id)
             ->orderBy('verbatim.position', 'asc')
             ->orderBy('category.position', 'asc')
             ->get()

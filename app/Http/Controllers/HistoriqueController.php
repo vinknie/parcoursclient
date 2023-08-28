@@ -15,7 +15,7 @@ class HistoriqueController extends Controller
     // get the common datas across page, like the sidebar
     private function commonDatas()
     {
-        $getCategory = Category::where('id_user', Auth::user()->id)->get();
+        $getCategory = Category::all();
         $getVerbatim = Verbatim::all();
         $historique_monthYear = Historique::groupBy('month_year')->get('month_year');
 

@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Category;
+use App\Models\CategoryEvent;
 use App\Models\Verbatim;
 use App\Models\Dialogue;
+use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -30,17 +32,18 @@ class CategoryController extends Controller
     {
         $categories = DB::table('category')
             ->leftJoin('verbatim', 'category.id_category', '=', 'verbatim.id_category')
-            ->leftJoin('users', 'category.id_user', '=', 'users.id')
+            // ->leftJoin('users', 'category.id_user', '=', 'users.id')
             ->select('category.*', DB::raw('count(verbatim.id_verbatim) as verbatim_count'))
             ->groupBy('category.position')
-            ->where('id', '=', Auth::user()->id)
+            // ->where('id', '=', Auth::user()->id)
             ->get();
 
         $noCategoryCount = Verbatim::whereNull('id_category')->count();
-        $getCategory = Category::where('id_user', Auth::user()->id)->orderBy('position')->get();
+        $getCategory = Category::orderBy('position')->get();
         $getVerbatim = Verbatim::all();
+        $events = Event::all();
 
-        return view('admin.category', compact('categories', 'noCategoryCount', 'getCategory', 'getVerbatim'));
+        return view('admin.category', compact('categories', 'noCategoryCount', 'getCategory', 'getVerbatim','events'));
     }
 
     public function verbatim()
@@ -51,19 +54,33 @@ class CategoryController extends Controller
 
     public function createCat(Request $request)
     {
-        $existingCategory = Category::where('title', $request->title)->first();
-        if ($existingCategory) {
-            return redirect()->back()->with('error', 'Une étape avec ce titre existe déjà');
-        }
+        $eventId= $request->input('event');
+
+     // Check if the category with the same title exists for the same event
+     $existingCategory = CategoryEvent::where('id_event', $eventId)
+     ->whereHas('category', function ($query) use ($request) {
+         $query->where('title', $request->title);
+     })
+     ->exists();
+
+ if ($existingCategory) {
+     return redirect()->back()->with('error', 'Une étape avec ce titre existe déjà dans cet événement');
+ }
 
         $category = new Category();
         $category->title = $request->title;
-        $category->id_user = Auth::user()->id;
+        // $category->id_user = Auth::user()->id;
+        
 
         $lastCategory = Category::orderBy('position', 'desc')->first();
         $category->position = $lastCategory ? $lastCategory->position + 1 : 1;
 
         $category->save();
+
+        $categoryEvent = new CategoryEvent();
+        $categoryEvent->id_category = $category->id_category; // Use the ID of the newly created category
+        $categoryEvent->id_event = $eventId; // Use the selected event ID from the form
+        $categoryEvent->save();
 
         return redirect()->back()->with('success', 'L\'étape a bien été créé');
     }

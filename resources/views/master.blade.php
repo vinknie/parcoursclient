@@ -4,10 +4,16 @@
         {{-- sidebar --}}
         @if (!request()->is('chart/full'))
         <nav class="w-none md:w-1/6 bg-gray-800 text-slate-50 p-5 mt-5">
-
+            @if(Auth::user()->role == 'admin')
             <a href="{{ route('profile.edit') }}" class="block h-36 w-36 rounded-full mx-auto my-12"
                 style="background: url({{ asset('images/admin.jpg') }}) left center / cover no-repeat">
             </a>
+            @endif
+            @if(Auth::user()->role == 'normal')
+            <a href="{{ route('profile.edit') }}" class="block h-36 w-36 rounded-full mx-auto my-12"
+                style="background: url({{ asset('images/Icon-user.png') }}) left center / cover no-repeat">
+            </a>
+            @endif
             <ul class="divide-y divide-solid divide-slate-600">
 
                 @if(Auth::user()->role == 'admin')
@@ -30,7 +36,7 @@
                         {{ __('Liste d\'utilisateur') }}
                     </x-responsive-nav-link>
                 </li>
-                @endif
+                
 
                 <li class="py-2">
                     <x-responsive-nav-link :href="route('admin.historique')"
@@ -67,13 +73,14 @@
                     </li>
                     @endforeach
                 </ul>
+                @endif
             </ul>
 
             <div class="mt-10">
                 <p>
                     Copyright &copy;<script>
                         document.write(new Date().getFullYear());
-                    </script> All rights reserved </br> Parcours Client Version 1.0
+                    </script> All rights reserved </br> EvalNum Version 1.0
                 </p>
             </div>
         </nav>

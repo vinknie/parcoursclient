@@ -28,4 +28,8 @@ class Category extends Model
         return $this->hasMany('App\Models\Verbatim');
     }
 
+    public function categoryEvents()
+{
+    return $this->hasMany(CategoryEvent::class, 'id_category');
+}
 }
