@@ -16,7 +16,7 @@ class EventController extends Controller
 {
     public function createEvent()
 {
-    $getCategory = Category::where('id_user', Auth::user()->id)->get();
+    $getCategory = Category::orderBy('position')->get();
     $events = Event::paginate(10);
     return view('admin.createEvent', compact('getCategory', 'events'));
 }

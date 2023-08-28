@@ -6,7 +6,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HistoriqueController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +25,19 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get('/dashboard', [CategoryController::class, 'category'])->middleware(['auth', 'verified']);
+// Redirect to profile for non-admin and non-manager users
+
+Route::get('/dashboard', function () {
+
+    if (Auth::user()->role !== 'admin' && Auth::user()->role !== 'manager') {
+
+        return redirect()->route('home');
+
+    }
+
+    return redirect()->route('admin.category');
+
+})->middleware(['auth', 'verified'])->name('dashboard.redirect');
 
 
 
@@ -105,7 +119,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/event', [EventController::class, 'getEvent'])->name('admin.getEvent');
     Route::put('/dashboard/event/{id}', [EventController::class, 'updateEvent'])->name('admin.updateEvent');
 
+    // Home Route
+    Route::get('/accueil', [HomeController::class, 'index'])->name('home');
+    Route::post('/submit-event', [HomeController::class, 'submitEvent'])->middleware(['auth', 'verified'])->name('submitEvent');
 
+    // Satisfaction Route
+    Route::get('/satisfaction', [HomeController::class, 'satisfaction'])->middleware('auth')->name('satisfaction');
+    Route::patch('/satisfaction/updatepositif/{id_verbatim}', [HomeController::class, 'updatepositif'])->name('satisfaction.updatepositif');
+    Route::patch('/satisfaction/updateneutre/{id_verbatim}', [HomeController::class, 'updateneutre'])->name('satisfaction.updateneutre');
+    Route::patch('/satisfaction/updatenegatif/{id_verbatim}', [HomeController::class, 'updatenegatif'])->name('satisfaction.updatenegatif');
 });
 
 Route::fallback(function () {

@@ -37,7 +37,6 @@
         <form class="bg-white p-6 rounded-lg" action="{{ url('/dashboard/createCategory/createCat') }}" method="post"
             enctype="multipart/form-data">
             @csrf
-
             <label class="labels">Titre de l'étape</label>
             <input class="bg-white border border-gray-400 rounded w-full py-2 px-4" type="text" name="title"
                 required="">

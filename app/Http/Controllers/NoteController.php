@@ -18,7 +18,7 @@ class NoteController extends Controller
     {
 
         $category = Category::where('id_category', $id_category)->first();
-        $getCategory = Category::where('id_user', Auth::user()->id)->get();
+        $getCategory = Category::all();
 
         // $getverbatim = DB::select('select id_verbatim ,verbatim, positif , neutre , negatif , position from verbatim where id_category =' . $id_category);
 

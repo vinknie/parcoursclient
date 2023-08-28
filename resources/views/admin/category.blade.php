@@ -266,6 +266,15 @@
                 method="post" enctype="multipart/form-data" onsubmit="history.back();">
                 @csrf
                 <div class="mb-4">
+                    <label class="labels">Sélectionner l'évènement de l'étape:</label>
+                    <select name="event">
+                        <option value="">--Selectionner l'évènement--</option>
+                        @foreach ($events as $event)
+                        <option value="{{ $event->id_event }}"> {{ $event->name }} </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-4">
                     <label class="labels">Titre de l'étape</label>
                     <input class="bg-white border border-gray-400 rounded w-full py-2 px-4" type="text" name="title"
                         required>
