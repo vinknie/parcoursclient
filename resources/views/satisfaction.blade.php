@@ -59,10 +59,10 @@
                             <div class="flex justify-between">
                                 <div>
                                     <h3 class="text-lg font-medium tracking-wider font-semibold">{{ $verbatim->position }}. {{ $verbatim->verbatim }}</h3>
-                                    {{-- Autres contenus pour les verbatims --}}
+                                   
                                 </div>
                                 <div class="flex items-center">
-                                   
+                                  
                                     <form action="{{ route('satisfaction.updatepositif', $verbatim->id_verbatim) }}" method="POST">
                                         @csrf
                                         @method('PATCH')

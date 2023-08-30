@@ -46,8 +46,16 @@ class EventController extends Controller
         $event->name = $request->name;
         $event->save();
     
-        return response()->json(['success' => true]);
+        return redirect()->back()->with('success_update', 'Événement modifié avec succès.');
     }
     
+    public function deleteEvent($id)
+    {
+        $event = Event::findOrFail($id);
+        $event->delete();
+    
+        return redirect()->back()->with('success_delete', 'Événement supprimé avec succès.');
+    }
+
 
 }

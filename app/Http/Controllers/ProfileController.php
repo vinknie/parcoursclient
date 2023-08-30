@@ -10,10 +10,14 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+
+// email
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailNotify;
+use Exception;
 
 class ProfileController extends Controller
 {
@@ -75,30 +79,53 @@ class ProfileController extends Controller
         return view('admin.createUser', compact('getCategory'));
     }
 
-    // store user
-    public function storeUser(Request $request)
-    {
-        $validation = $request->validate([
-            'name'      => 'required|max:255',
-            'email'     => 'required|max:255|unique:users|email'
-        ]);
+   // store user
+   public function storeUser(Request $request)
+   {
+       $validation = $request->validate([
+           'name'      => 'required|max:255',
+           'email'     => 'required|max:255|unique:users|email'
+       ]);
 
-        $password = Str::random(8);
+       $password = Str::random(8);
 
-        $user = new User;
-        $user->name     = $request->name;
-        $user->email    = $request->email;
-        $user->password = Hash::make($password);
+       $user = new User;
 
-        // sending mail to user email
-        Mail::send('emails.user-created', ['user' => $user, 'password' => $password], function ($message) use ($user) {
-            $message->to($user->email)->subject('Welcome to Our Website');
-        });
+       $user->name     = $request->name;
+       $user->email    = $request->email;
+       $user->password = Hash::make($password);
 
-        $user->save();
 
-        return redirect()->back()->with('success', 'User created successfully.');
-    }
+       // sending mail to user email
+       $data = [
+        'subject' => 'Compte créé - EvalNum',
+        'title' => 'Bonjour ' . $user->name,
+        'body' => "Votre compte a été créé sur notre site web prij.parcoursnum.fr. Voici vos informations de connexion :
+            Email : " . $user->email . "
+            Mot de passe : " . $password .  "
+            Nous espérons que vous apprécierez l'utilisation de notre site web !",
+    ];
+
+       try {
+           Mail::to($user->email)->send(new MailNotify($data));
+           $user->save();
+           return redirect()->back()->with('success', 'User created successfully.');
+       } catch (Exception $e) {
+           throw $e;
+           return redirect()->back()->with('error', 'Could not create user.');
+       }
+
+       /***
+        * developement mail sending
+        */
+       // Mail::send('emails.user-created', ['user' => $user, 'password' => $password], function ($message) use ($user) {
+       //     $message->to($user->email)->subject('Welcome to Our Website');
+       // });
+
+       
+
+   }
+
 
     // get all users (admin)
     public function getUsers()

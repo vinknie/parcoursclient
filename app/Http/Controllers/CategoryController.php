@@ -31,19 +31,30 @@ class CategoryController extends Controller
     public function category()
     {
         $categories = DB::table('category')
-            ->leftJoin('verbatim', 'category.id_category', '=', 'verbatim.id_category')
-            // ->leftJoin('users', 'category.id_user', '=', 'users.id')
-            ->select('category.*', DB::raw('count(verbatim.id_verbatim) as verbatim_count'))
-            ->groupBy('category.position')
-            // ->where('id', '=', Auth::user()->id)
-            ->get();
+        ->leftJoin('category-event', 'category.id_category', '=', 'category-event.id_category')
+        ->leftJoin('event', 'event.id_event', '=', 'category-event.id_event')
+        ->leftJoin('verbatim', 'category.id_category', '=', 'verbatim.id_category')
+        ->select(
+            'category.*',
+            'event.name as event_name',
+            DB::raw('count(verbatim.id_verbatim) as verbatim_count')
+        )
+        ->groupBy('event_name', 'category.position')
+        ->orderBy('event_name') // Tri par le nom d'événement
+        ->get();
 
         $noCategoryCount = Verbatim::whereNull('id_category')->count();
         $getCategory = Category::orderBy('position')->get();
+        $getCategory2 = DB::table('category')
+    ->leftJoin('category-event', 'category.id_category', '=', 'category-event.id_category')
+    ->leftJoin('event', 'event.id_event', '=', 'category-event.id_event')
+    ->select('category.id_category', 'event.name as event_name', 'category.title as category_title')
+    ->orderBy('event_name') // Tri par le nom de l'événement
+    ->get();
         $getVerbatim = Verbatim::all();
         $events = Event::all();
-
-        return view('admin.category', compact('categories', 'noCategoryCount', 'getCategory', 'getVerbatim','events'));
+     
+        return view('admin.category', compact('categories', 'noCategoryCount', 'getCategory','getCategory2', 'getVerbatim','events'));
     }
 
     public function verbatim()

@@ -15,8 +15,14 @@ class HomeController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $events = Event::all();
+          // Joindre la table "category_event" pour filtrer les événements liés à une catégorie
+    $events = Event::join('category-event', 'event.id_event', '=', 'category-event.id_event')
+    ->select('event.*')
+    ->whereNotNull('category-event.id_category') // Filtrer les événements liés à une catégorie
+    ->groupBy('event.name') // Regrouper les événements par leur nom
+    ->get();
 
+    
         return view('accueil', compact('user', 'events'));
     }
 
@@ -54,16 +60,21 @@ public function satisfaction()
         $verbatimsByCategory[$category->id_category] = $verbatims;
     }
 
+    
     // Passer les catégories et les verbatims à la vue
     return view('satisfaction', compact('categories', 'verbatimsByCategory'));
 }
 
-
-
-public function updatepositif(Request $request, $id_verbatim)
+public function updateVote(Request $request, $id_verbatim, $voteType)
 {
-    
+    $validVoteTypes = ['positif', 'neutre', 'negatif'];
+
+    if (!in_array($voteType, $validVoteTypes)) {
+        return redirect()->back()->with('error', 'Type de vote non valide.');
+    }
+
     $verbatim = Verbatim::findOrFail($id_verbatim);
+
     $userId = auth()->user()->id;
 
     $existingVote = UserVote::where('user_id', $userId)
@@ -71,77 +82,34 @@ public function updatepositif(Request $request, $id_verbatim)
                              ->first();
 
     if ($existingVote) {
-        // L'utilisateur a déjà voté, peut-être vous voulez le rediriger vers une page d'erreur
         return redirect()->back()->with('error', 'Vous avez déjà voté pour ce verbatim.');
     }
 
-    // L'utilisateur n'a pas encore voté, enregistrez le vote
     UserVote::create([
         'user_id' => $userId,
         'verbatim_id' => $id_verbatim,
-        'vote_type' => 'positif',
+        'vote_type' => $voteType,
     ]);
 
-    // Mettez à jour le compteur positif dans le verbatim
-    $verbatim->increment('positif');
-    
+    $verbatim->increment($voteType);
 
     return redirect()->back();
+}
+
+public function updatepositif(Request $request, $id_verbatim)
+{
+    return $this->updateVote($request, $id_verbatim, 'positif');
 }
 
 public function updateneutre(Request $request, $id_verbatim)
 {
-    $verbatim = Verbatim::findOrFail($id_verbatim);
-
-    $userId = auth()->user()->id;
-
-    $existingVote = UserVote::where('user_id', $userId)
-                             ->where('verbatim_id', $id_verbatim)
-                             ->first();
-
-    if ($existingVote) {
-        // L'utilisateur a déjà voté, peut-être vous voulez le rediriger vers une page d'erreur
-        return redirect()->back()->with('error', 'Vous avez déjà voté pour ce verbatim.');
-    }
-
-    // L'utilisateur n'a pas encore voté, enregistrez le vote
-    UserVote::create([
-        'user_id' => $userId,
-        'verbatim_id' => $id_verbatim,
-        'vote_type' => 'neutre',
-    ]);
-
-    // Mettez à jour le compteur positif dans le verbatim
-    $verbatim->increment('neutre');
-
-    return redirect()->back();
+    return $this->updateVote($request, $id_verbatim, 'neutre');
 }
 
 public function updatenegatif(Request $request, $id_verbatim)
 {
-    $verbatim = Verbatim::findOrFail($id_verbatim);
-
-    $userId = auth()->user()->id;
-
-    $existingVote = UserVote::where('user_id', $userId)
-                             ->where('verbatim_id', $id_verbatim)
-                             ->first();
-
-    if ($existingVote) {
-        // L'utilisateur a déjà voté, peut-être vous voulez le rediriger vers une page d'erreur
-        return redirect()->back()->with('error', 'Vous avez déjà voté pour ce verbatim.');
-    }
-
-    // L'utilisateur n'a pas encore voté, enregistrez le vote
-    UserVote::create([
-        'user_id' => $userId,
-        'verbatim_id' => $id_verbatim,
-        'vote_type' => 'negatif',
-    ]);
-
-    // Mettez à jour le compteur positif dans le verbatim
-    $verbatim->increment('negatif');
-
-    return redirect()->back();
+    return $this->updateVote($request, $id_verbatim, 'negatif');
 }
+
+
 }

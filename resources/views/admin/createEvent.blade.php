@@ -31,6 +31,18 @@
 <div class="w-1/2 pr-4">
     <div class="text-center mt-20 mb-4">
         <h1 class="text-2xl font-semibold page-titles">Evènements</h1>
+        @if(session('success_update'))
+        <div class="success-msg">
+            <p>{{ session('success_update') }}</p>
+            <span class="success__cross-btn"><i class="fa-solid fa-xmark"></i></span>
+        </div>
+@endif
+@if(session('success_delete'))
+<div class="success-msg">
+    <p>{{ session('success_delete') }}</p>
+    <span class="success__cross-btn"><i class="fa-solid fa-xmark"></i></span>
+</div>
+@endif
     </div>
     <div class="event-table">
         @if(session('success'))
@@ -53,9 +65,15 @@
                         <span class="event-name">{{ $event->name }}</span>
                     </td>
                     <td class="py-2">
-                        <a href="#" class="edit-event"><i class="fa-solid fa-pen text-gray-700"></i></a>
-                        <span class="font-bold text-lg">/</span>
-                        <a href="#"><i class="fa-solid fa-xmark text-red-700"></i></a>
+                        <div class="d-flex align-items-center">
+                            <a href="#" class="edit-event mr-2" data-event="{{ json_encode($event) }}"><i class="fa-solid fa-pen text-gray-700"></i></a>
+                            <span class="font-bold text-lg mr-2">/</span>
+                            <form action="{{ route('admin.deleteEvent', ['id' => $event->id_event]) }}" method="POST" class="delete-event-form">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="delete-button ml-2"><i class="fa-solid fa-xmark text-red-700"></i></button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 @endforeach
@@ -64,6 +82,22 @@
     </div>
 </div>
 </div>
+<!-- Ajoutez ce script pour gérer l'événement de clic sur le bouton éditer -->
+<script>
+    document.querySelectorAll('.edit-event').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            const eventData = JSON.parse(button.getAttribute('data-event'));
+            const form = document.querySelector('form[action="{{ route('admin.storeEvent') }}"]');
+            form.setAttribute('action', `{{ route('admin.updateEvent', ['id' => '_event_id_']) }}`.replace('_event_id_', eventData.id_event));
+            form.querySelector('#name').value = eventData.name;
+            const submitButton = form.querySelector('.ml-4');
+            submitButton.textContent = 'Modifier';
+        });
+    });
 
+
+</script>
 @endsection
+
 
