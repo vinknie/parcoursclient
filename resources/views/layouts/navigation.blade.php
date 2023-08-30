@@ -30,13 +30,13 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div> --}}
-                @if(Auth::check() && Auth::user()->role === 'admin')
+                {{-- @if(Auth::check() && Auth::user()->role === 'admin')
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                         <x-nav-link :href="route('fullChart')" :active="request()->routeIs('fullChart')">
                             {{ __('Charte graphique') }}
                         </x-nav-link>
                     </div>
-                @endif
+                @endif --}}
             </div>
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">

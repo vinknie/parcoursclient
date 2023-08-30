@@ -30,7 +30,7 @@
  <!-- Authentication -->
      @include('layouts.navigation')
     <div class="container mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold mb-4">Bienvenue, {{ $user->name }}!</h1>
+        <h1 class="text-4xl font-bold mb-4 my-10">Bienvenue, {{ $user->name }}!</h1>
 
         <div class="bg-gray-100 p-8 rounded-lg shadow-lg">
             <div class="flex items-center justify-between mb-4">

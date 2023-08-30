@@ -117,7 +117,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/createEvent', [EventController::class, 'createEvent'])->name('admin.createEvent');
     Route::post('/dashboard/storeEvent', [EventController::class, 'storeEvent'])->name('admin.storeEvent');
     Route::get('/dashboard/event', [EventController::class, 'getEvent'])->name('admin.getEvent');
-    Route::put('/dashboard/event/{id}', [EventController::class, 'updateEvent'])->name('admin.updateEvent');
+    Route::post('/dashboard/event/{id}', [EventController::class, 'updateEvent'])->name('admin.updateEvent');
+    Route::delete('/dashboard/event/{id}', [EventController::class, 'deleteEvent'])->name('admin.deleteEvent');
+
 
     // Home Route
     Route::get('/accueil', [HomeController::class, 'index'])->name('home');

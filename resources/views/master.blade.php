@@ -52,7 +52,7 @@
                     </x-responsive-nav-link>
                 </li>
 
-                <li class="py-2">
+                {{-- <li class="py-2">
                     @if (Route::currentRouteNamed(null) || str_contains(Route::currentRouteName(),'note'))
                     <x-responsive-nav-link href="#pageSubmenu" :active=true data-toggle="collapse" aria-expanded="false"
                         class="dropdown-toggle">
@@ -63,8 +63,8 @@
                         aria-expanded="false" class="dropdown-toggle">
                         {{ __('Noter les verbatim') }}
                     </x-responsive-nav-link>
-                </li>
-                @endif
+                </li> --}}
+                {{-- @endif --}}
                 <ul class="collapse list-unstyled" id="pageSubmenu">
                     @foreach($getCategory as $category)
                     <li class="py-2 px-2 text-white cursor-pointer hover:bg-sky-700">

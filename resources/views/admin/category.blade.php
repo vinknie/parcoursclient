@@ -324,9 +324,11 @@
                 <div class="mb-4">
                     <label class="labels">Etape du Verbatim</label>
                     <select name="id_category">
-                        <option value="">--Selectionner l'étape--</option>
-                        @foreach ($getCategory as $category)
-                        <option value="{{ $category->id_category }}"> {{ $category->title }} </option>
+                        <option value="">-- Sélectionner l'étape --</option>
+                        @foreach ($getCategory2 as $category)
+                            <option value="{{ $category->id_category }}">
+                                {{ $category->event_name }} - {{ $category->category_title }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
@@ -462,38 +464,56 @@
     </div>
     @endif
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 category-list">
+        @php
+        $currentEvent = null;
+        @endphp
+    
         @foreach ($categories as $category)
-
-        <div class="bg-white rounded-lg shadow-lg category-card z-0" data-id="{{ $category->id_category }}">
-            <div class="p-6 flex justify-between">
-                <h3 class="text-lg font-medium truncate-text tracking-wider">
-                    <a href="{{ route('admin.editCategory', ['id_category' => $category->id_category]) }}"> {{
-                        $category->position }}. {{ $category->title }}
-                    </a>
-                </h3>
-                <div>
-                    <a href="{{ route('admin.editCategory', ['id_category' => $category->id_category]) }}"
-                        class="text-gray-400 hover:text-gray-600 m-1 rounded">
-                        <i class="fa-regular fa-pen-to-square "></i>
-                    </a>
-                    <a href="{{ route('admin.deleteCat', ['id_category' => $category->id_category]) }}"
-                        class="text-red-300 hover:text-red-600 m-1 rounded"
-                        onclick="return swalConfirm('etes vous sur de vouloir supprimé?')">
-                        <i class="fa-regular fa-trash-can"></i>
-                    </a>
+            @if ($category->event_name !== $currentEvent)
+                @php
+                $currentEvent = $category->event_name;
+                @endphp
+    
+                <div class="col-span-3">
+                    <h2 class="text-2xl font-semibold mb-4">{{ $currentEvent }}</h2>
+                </div>
+            @endif
+    
+            <div class="bg-white rounded-lg shadow-lg category-card z-0" data-id="{{ $category->id_category }}">
+                <div class="p-6 flex justify-between items-center">
+                    <h3 class="text-lg font-medium truncate-text tracking-wider">
+                        <a href="{{ route('admin.editCategory', ['id_category' => $category->id_category]) }}">
+                            {{ $category->position }}. {{ $category->title }}
+                        </a>
+                    </h3>
+                    <div class="flex">
+                        <a href="{{ route('admin.editCategory', ['id_category' => $category->id_category]) }}"
+                            class="text-gray-400 hover:text-gray-600 m-1 rounded">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </a>
+                        <a href="{{ route('admin.deleteCat', ['id_category' => $category->id_category]) }}"
+                            class="text-red-300 hover:text-red-600 m-1 rounded"
+                            onclick="return swalConfirm('etes vous sur de vouloir supprimé?')">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </a>
+                    </div>
+                </div>
+    
+                <div class="p-6">
+                    <p>
+                        <span class="bg-gray-800 text-gray-100 px-2 rounded">{{ $category->verbatim_count }}</span>
+                        verbatims
+                    </p>
                 </div>
             </div>
-
-            <div class="p-6">
-                <p>
-                    <span class="bg-gray-800 text-gray-100 px-2 rounded">{{ $category->verbatim_count }}</span>
-                    verbatims
-                </p>
-            </div>
-        </div>
         @endforeach
+    
+        <div class="col-span-3">
+            <h2 class="text-2xl font-semibold mt-8">Verbatims sans étape</h2>
+        </div>
+    
         <div class="bg-white rounded-lg shadow-lg category-card">
-            <div class="p-6 flex justify-between">
+            <div class="p-6 flex justify-between items-center">
                 <h3 class="text-lg font-medium tracking-wider">
                     <a href="{{ route('admin.verbatimsWithoutCategory') }}">Verbatims sans étape</a>
                 </h3>
