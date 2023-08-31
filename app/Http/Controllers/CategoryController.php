@@ -233,11 +233,11 @@ class CategoryController extends Controller
     public function deleteVerba($id_verbatim)
     {
         $delete = DB::table('verbatim')->where('id_verbatim', $id_verbatim)->delete();
+        
         if ($delete) {
-            return response()->json(['success' => 'Verbatim supprimé avec succès']);
+            return response()->json(['message' => 'Verbatim supprimé avec succès'], 200);
         } else {
-            dd('La suppression a échoué');
-            return response()->json(['error' => 'La suppression a échoué']);
+            return response()->json(['error' => 'La suppression a échoué'], 500);
         }
     }
 

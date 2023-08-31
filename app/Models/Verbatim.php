@@ -13,4 +13,14 @@ class Verbatim extends Model
     protected $primaryKey = 'id_verbatim';
 
     protected $fillable =['id_category','verbatim','positif','neutre','negatif'];
+
+    public function votes()
+    {
+        return $this->hasMany(UserVote::class, 'verbatim_id');
+    }
+
+    public function userVote($userId)
+    {
+        return $this->votes()->where('user_id', $userId)->first();
+    }
 }

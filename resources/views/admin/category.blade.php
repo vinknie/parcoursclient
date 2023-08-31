@@ -491,11 +491,10 @@
                             class="text-gray-400 hover:text-gray-600 m-1 rounded">
                             <i class="fa-regular fa-pen-to-square"></i>
                         </a>
-                        <a href="{{ route('admin.deleteCat', ['id_category' => $category->id_category]) }}"
-                            class="text-red-300 hover:text-red-600 m-1 rounded"
-                            onclick="return swalConfirm('etes vous sur de vouloir supprimé?')">
-                            <i class="fa-regular fa-trash-can"></i>
-                        </a>
+                        <a href="#" class="text-red-300 hover:text-red-600 m-1 rounded"
+   onclick="swalConfirm('Êtes-vous sûr de vouloir supprimer?', '{{ route('admin.deleteCat', ['id_category' => $category->id_category]) }}')">
+   <i class="fa-regular fa-trash-can"></i>
+</a>
                     </div>
                 </div>
     
@@ -664,22 +663,23 @@
             });
         })
 
-        function swalConfirm(string) {
-            event.preventDefault()
-            return Swal.fire({
-                title: string,
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonText: `Annuler`,
-                cancelButtonColor: '#EE8989',
-                }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-                    Swal.fire('Saved!', '', 'success')
-                } else if (result.isDenied) {
-                    Swal.fire('Changes are not saved', '', 'info')
-                }
-            });
-        };
+        function swalConfirm(string, deleteUrl) {
+    Swal.fire({
+        title: string,
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonText: 'Annuler',
+        cancelButtonColor: '#EE8989',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Si l'utilisateur confirme, redirige vers l'URL de suppression
+            window.location.href = deleteUrl;
+        } else if (result.isDenied) {
+            Swal.fire('Suppression annulée', '', 'info');
+        } else {
+            // Si l'utilisateur ferme la boîte de dialogue, la navigation se poursuit normalement
+        }
+    });
+}
     </script>
     @endsection
