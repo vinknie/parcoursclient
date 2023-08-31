@@ -62,7 +62,12 @@
                                    
                                 </div>
                                 <div class="flex items-center">
-                                  
+                                    @php
+                                    $userVote = $verbatim->userVote(auth()->user()->id); // Ajoutez cette méthode dans le modèle Verbatim
+                                    @endphp
+                                     @if ($userVote)
+                                     <p>Déjà voté : {{ $userVote->vote_type }}</p>
+                                 @else
                                     <form action="{{ route('satisfaction.updatepositif', $verbatim->id_verbatim) }}" method="POST">
                                         @csrf
                                         @method('PATCH')
@@ -90,7 +95,7 @@
                                             <i class="fa-regular fa-thumbs-down"></i>
                                         </button>
                                     </form>
-                                    
+                                    @endif
                                 </div>
                             </div>
                         </div>
