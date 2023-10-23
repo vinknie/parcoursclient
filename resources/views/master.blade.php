@@ -38,12 +38,12 @@
                 </li>
                 
 
-                <li class="py-2">
+                {{-- <li class="py-2">
                     <x-responsive-nav-link :href="route('admin.historique')"
                         :active="request()->routeIs('admin.historique')">
                         {{ __('Historique') }}
                     </x-responsive-nav-link>
-                </li>
+                </li> --}}
 
                 <li class="py-2">
                     <x-responsive-nav-link :href="route('admin.category')"
@@ -65,14 +65,20 @@
                     </x-responsive-nav-link>
                 </li> --}}
                 {{-- @endif --}}
-                <ul class="collapse list-unstyled" id="pageSubmenu">
+                {{-- <ul class="collapse list-unstyled" id="pageSubmenu">
                     @foreach($getCategory as $category)
                     <li class="py-2 px-2 text-white cursor-pointer hover:bg-sky-700">
                         <a href="{{ route('admin.noteVerba',['id_category' => $category->id_category]) }}">{{
                             $category->title }}</a>
                     </li>
                     @endforeach
-                </ul>
+                </ul> --}}
+                <li class="py-2">
+                    <x-responsive-nav-link :href="route('admin.result')"
+                        :active="request()->routeIs('admin.result')">
+                        {{ __('Résultats') }}
+                    </x-responsive-nav-link>
+                </li>
                 @endif
             </ul>
 

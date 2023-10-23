@@ -246,15 +246,15 @@
         apparaitront dans le graphique</span>
     @endif
     <div class="flex justify-between my-6">
-        <button id="myBtn" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded">
+        <button id="myBtn0" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded">
             <i class="fa-solid fa-plus"></i> Créer une étape
         </button>
         <button id="myBtn1" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded">
             <i class="fa-solid fa-plus"></i> Créer une verbatim
         </button>
-        <button id="myBtn3" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded">
+        {{-- <button id="myBtn3" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded">
             <i class="fa-solid fa-plus"></i> Créer un dialogue
-        </button>
+        </button> --}}
     </div>
     <div id="myPopup" class="popup">
         <div class="popup-content">
@@ -592,7 +592,7 @@
         }
 
         // Get the button and popup for the first popup
-        var btn = document.getElementById("myBtn");
+        var btn = document.getElementById("myBtn0");
         var popup = document.getElementById("myPopup");
 
         // Set up the first popup
