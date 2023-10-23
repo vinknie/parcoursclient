@@ -7,6 +7,7 @@ use App\Http\Controllers\HistoriqueController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ResultController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -130,6 +131,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/satisfaction/updatepositif/{id_verbatim}', [HomeController::class, 'updatepositif'])->name('satisfaction.updatepositif');
     Route::patch('/satisfaction/updateneutre/{id_verbatim}', [HomeController::class, 'updateneutre'])->name('satisfaction.updateneutre');
     Route::patch('/satisfaction/updatenegatif/{id_verbatim}', [HomeController::class, 'updatenegatif'])->name('satisfaction.updatenegatif');
+
+    Route::get('/dashboard/result', [ResultController::class, 'index'])->name('admin.result');
+    Route::get('/admin/result/categories', [ResultController::class, 'getCategories']);
+
 });
 
 Route::fallback(function () {
